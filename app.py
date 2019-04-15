@@ -10,3 +10,7 @@ def index():
 @app.route('/genre/<genre>')
 def show_genre(genre):
     return 'Genre %s' % genre
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
