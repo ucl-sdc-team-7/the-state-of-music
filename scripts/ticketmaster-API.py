@@ -4,7 +4,7 @@ import mysql.connector as mysql
 import configparser
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('../config.ini')
 
 db = mysql.connect(
     host=config['mysql']['host'],
