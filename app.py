@@ -1,10 +1,12 @@
 from flask import Flask
 from flask_mysqldb import MySQL
 import configparser
+import os
 app = Flask(__name__)
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
+config.read(os.path.join(PROJECT_ROOT, 'config.ini'))
 
 # move to config file
 app.config['MYSQL_HOST'] = config['mysql']['host']
