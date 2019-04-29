@@ -1,0 +1,124 @@
+html, body, #wrapper{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+#cityMap{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+
+ul#logo{
+  position: absolute;
+  top:0px;
+  display: flex;
+}
+
+ul#logo li{
+  text-align: left;
+  display: block;
+  opacity: 1;
+}
+
+ul#navbar{
+  position: absolute;
+  top:0px;
+  margin-left: 350px;
+  display: flex;
+}
+
+
+ul#navbar li{
+  text-align: centre;
+  padding: 0 25px;
+  display: block;
+  opacity: 0.7;
+}
+
+ul#navbar li:hover{
+  opacity: 1;
+}
+
+
+#displayInfo{
+    position: absolute;
+    font-family: 'Roboto', sans-serif;
+    background-color: #555a66;
+    opacity: 0.7;
+    padding: 10px;
+    font-size: 15px;
+    top: 150px;
+    left: 20px;
+    color: white;
+    width: 300px;
+    height: 200px;
+}
+
+#displayStats{
+    position: absolute;
+    font-family: 'Roboto', sans-serif;
+    background-color: rgb(255,255,255,0.7);
+    padding: 10px;
+    font-size: 15px;
+    top: 400px;
+    left: 20px;
+    color: #555a66;
+    width: 300px;
+    height: 200px;
+}
+
+svg#statesvg{
+  width: 960px;
+  height: 600px;
+  margin-top: 150px;
+  margin-left: 400px;
+}
+
+.state{
+		fill: none;
+		stroke: white;
+		stroke-width: 2;
+    fill-opacity: 0.7;
+	}
+	.state:hover{
+		fill-opacity:1;
+	}
+	#tooltip {
+		position: absolute;
+		text-align: left;
+		padding: 20px;
+		margin: 10px;
+		font: 12px sans-serif;
+		border-radius: 2px;
+		pointer-events: none;
+	}
+	#tooltip h4{
+		margin:0;
+		font-size:14px;
+	}
+	#tooltip{
+		background:#555a66;
+		border:1px solid grey;
+		border-radius:5px;
+		font-size:12px;
+		width:auto;
+		padding:4px;
+		color:white;
+		opacity:0;
+	}
+	#tooltip table{
+		table-layout:fixed;
+	}
+	#tooltip tr td{
+		padding:0;
+		margin:0;
+	}
+	#tooltip tr td:nth-child(1){
+		width:50px;
+	}
+	#tooltip tr td:nth-child(2){
+		text-align:center;
+	}

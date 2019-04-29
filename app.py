@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_mysqldb import MySQL
+from flask import render_template
 import configparser
 import os
 app = Flask(__name__)
@@ -19,7 +20,7 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-    return 'Hi International SuperFriends. We have a website running!'
+    return render_template('index.html')
 
 
 @app.route('/genre/<genre>')

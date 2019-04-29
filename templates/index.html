@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<head>
+	<title>The State of Music</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel='stylesheet' id='font-css'  href='http://fonts.googleapis.com/css?family=Roboto:400,300,100' type='text/css' media='all' />
+	<link rel="stylesheet" href="{{url_for('static',filename = 'style.css')}}">
+</head>
+
+
+<div id='wrapper'>
+
+		<div id="tooltip"></div><!-- div to hold tooltip. -->
+		<svg id="statesvg"></svg> <!-- svg to hold the map. -->
+
+		<div id = "cityMap"></div><!-- div to hold map at city level -->
+
+		<!-- the state of music logo - to navigate to home page-->
+		<ul id= "logo">
+			<li>
+				<a href=#>
+					<img src="{{url_for('static',filename = 'images/logo.png')}}" alt="the state of music logo" height="100"></a>
+			</li>
+
+			<li>
+				<a href=#>
+					<img src="{{url_for('static',filename = 'images/logo2.png')}}" alt="the state of music logo" height="100"></a>
+			</li>
+		</ul>
+
+		<!-- icons to allow toggle between genres - hrefs to be updated -->
+		<ul id = 'navbar'>
+			<li>
+				<a href=#>
+					<img src="{{url_for('static',filename = 'images/pop.png')}}" alt="pop music icon" height="105"></a>
+			</li>
+
+			<li>
+				<a href=#>
+					<img src="{{url_for('static',filename = 'images/indie.png')}}" alt="indie music icon" height="105"></a>
+			</li>
+
+			<li>
+				<a href=#>
+					<img src="{{url_for('static',filename = 'images/country.png')}}" alt="country music icon" height="105"></a>
+			</li>
+
+			<li>
+				<a href=#>
+					<img src="{{url_for('static',filename = 'images/classic.png')}}" alt="classic music icon" height="105"></a>
+			</li>
+
+			<li>
+				<a href=#>
+					<img src="{{url_for('static',filename = 'images/hiphop.png')}}" alt="hiphop music icon" height="105"></a>
+			</li>
+
+			<li>
+				<a href=#>
+					<img src="{{url_for('static',filename = 'images/metal.png')}}" alt="metal music icon" height="105"></a>
+			</li>
+		</ul>
+
+		 <!--about section - text to be updated-->
+		<div id="displayInfo">
+     	<div>
+				<h3>About</h3>
+				<small>
+     			This is some stuff about music in the US.
+					This is some stuff about music in the US.
+					This is some stuff about music in the US.
+					This is some stuff about music in the US.
+					This is some stuff about music in the US.
+					This is some stuff about music in the US.
+					This is some stuff about music in the US.
+     	</div>
+     </div>
+
+		 <div id="displayStats">
+				 <div>
+				 <h3>These states love music:</h3>
+				 <small>
+				 This is some stuff about music in the US.
+				 This is some stuff about music in the US.
+				 This is some stuff about music in the US.
+				 This is some stuff about music in the US.
+				 This is some stuff about music in the US.
+				 This is some stuff about music in the US.
+				 This is some stuff about music in the US.
+				 </div>
+		 </div>
+
+</div>
+</body>
+
+
+<!-- SOURCE: https://gist.github.com/NPashaP/a74faf20b492ad377312 -->
+<script src="{{url_for('static',filename = 'uStates.js')}}"></script> <!-- creates uStates. -->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+	function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
+		return "<h4>"+n+"</h4><table>"+
+			"<tr><td>Low</td><td>"+(d.low)+"</td></tr>"+
+			"<tr><td>Average</td><td>"+(d.avg)+"</td></tr>"+
+			"<tr><td>High</td><td>"+(d.high)+"</td></tr>"+
+			"<small>(click to zoom)</small>"+
+			"</table>";
+	}
+
+	var classicData ={};	/* Sample random data. */
+	["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
+	"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
+	"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT",
+	"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN",
+	"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+		.forEach(function(d){
+			var low=Math.round(100*Math.random()),
+				mid=Math.round(100*Math.random()),
+				high=Math.round(100*Math.random());
+			classicData[d]={low:d3.min([low,mid,high]), high:d3.max([low,mid,high]),
+					avg:Math.round((low+mid+high)/3), color:d3.interpolate("#b51062", "white")(low/100)};
+		});
+
+	/* draw states on id #statesvg */
+	uStates.draw("#statesvg", classicData, tooltipHtml);
+
+	d3.select(self.frameElement).style("height", "600px");
+</script>
+
+</html>
