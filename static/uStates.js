@@ -64,7 +64,7 @@
 				.style("left", (d3.event.pageX - 345) + "px")
 				.style("top", (d3.event.pageY - 120) + "px");
 		}
-		console.log[uStates[data]]
+
 
 		function mouseOut(){
 			d3.select("#tooltip").transition().duration(500).style("opacity", 0);

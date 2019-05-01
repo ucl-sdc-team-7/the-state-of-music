@@ -4,11 +4,33 @@ html, body, {
     margin: 0;
 }
 
-#mapCanvas{
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    text-align: center;
+#logo{
+  text-align: left;
+  margin: 10px 10px;
+}
+
+#displayInfo{
+  font-family: 'Roboto', sans-serif;
+  margin: 20px 10px 10px 10px;
+  padding: 10px;
+  font-size: 15px;
+  color: white;
+  background-color: #555a66;
+  opacity: 0.7;
+}
+
+#displayStats{
+    margin: 10px 10px 10px 10px;
+    font-family: 'Roboto', sans-serif;
+    padding: 10px;
+    font-size: 15px;
+    color: #555a66;
+    background-color: rgb(255,255,255,0.7);
+}
+
+#mainPanel{
+  padding:0px;
+  margin:0px;
 }
 
 #navbar{
@@ -19,53 +41,21 @@ html, body, {
 a#icon{
   text-align: center;
   opacity: 0.7;
+  width: 80%;
 }
-
 
 a#icon:hover{
-  opacity: 1;
+  opacity: 0.9999; /*chrome doesn't seem to like hovering to opacity: 1*/
 }
 
-#sidePanel{
-  text-align: left;
-  padding-left: 20px;
+#mapCanvas{
+  display: inline-block;
+  position: relative;
+  height: 100%;
   width: 100%;
-}
-
-#about{
-  margin:10px;
-  background-color: #555a66;
-  opacity: 0.7;
-  height: 200px;
-  overflow: auto
-}
-
-#displayInfo{
-  font-family: 'Roboto', sans-serif;
-  padding: 10px;
-  font-size: 15px;
-  color: white;
-}
-
-#stats{
-  margin:20px 10px 10px 10px;
-  background-color: rgb(255,255,255,0.7);
-  height: 400px;
-  overflow: auto
-}
-
-#displayStats{
-    font-family: 'Roboto', sans-serif;
-    padding: 10px;
-    font-size: 15px;
-    color: #555a66;
-}
-
-
-svg#statesvg{
-  width: 960px;
-  height: 600px;
+  vertical-align: top;
   margin-top: 20px;
+  text-align: center;
 }
 
 .state{
@@ -76,7 +66,7 @@ svg#statesvg{
 }
 
 .state:hover{
-	fill-opacity:1;
+	fill-opacity: 0.9999; /*chrome doesn't seem to like hovering to opacity: 1*/
 	}
 
 #tooltip {
@@ -87,13 +77,7 @@ svg#statesvg{
   font: 12px sans-serif;
   border-radius: 2px;
   pointer-events: none;
-}
 
-#tooltip h4{
-  margin:0;
-  font-size:14px;
-}
-#tooltip{
   background:rgba(0,0,0,0.9);
   border:1px solid grey;
   border-radius:5px;
@@ -103,6 +87,12 @@ svg#statesvg{
   color:white;
   opacity:0;
 }
+
+#tooltip h4{
+  margin:0;
+  font-size:14px;
+}
+
 
 #tooltip table{
 	table-layout:fixed;
