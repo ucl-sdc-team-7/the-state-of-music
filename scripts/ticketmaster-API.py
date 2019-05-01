@@ -23,19 +23,19 @@ us_states = [#"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE",
              #"MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY",
              #"NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
              #"SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI",
-             "NY"]
+             "DE"]
 
-apikey = "sDeUMZRAoiaKBkELqJqSCS2phLMxJj4A"
-#apikey2 = "s10q0X1HOmg4rgAtNS5wuhgekEcFaGYC"
 classificationName = "music"
 size = 200
+apikey = config['ticketmaster']['apikey']
+apikey2 = config['ticketmaster']['apikey2']
 
 for us_state in us_states:
     params = {'stateCode': us_state,
               'classificationName': classificationName,
               'apikey': apikey,
-              'startEndDateTime': ['2019-05-01T00:00:00Z',
-                                   '2019-05-31T23:59:59Z'],
+              'startEndDateTime': ['2019-05-02T00:00:00Z',
+                                   '2019-06-01T23:59:59Z'],
               'size': size}
 
     r = requests.get(url=URL, params=params)
@@ -43,22 +43,14 @@ for us_state in us_states:
     data = r.json()
 
     pages_num = data['page']['totalPages']
-    if pages_num == 1:
-        pages_list = [0]
-    else:
-        pages_list = range(0,pages_num-1)
-
-    #print(us_state)
-    #print(pages_num)
-
-    entry = 1
+    pages_list = range(0,pages_num-1) if pages_num > 1 else [0]
 
     for page in pages_list:
         params = {'stateCode': us_state,
                   'classificationName': classificationName,
                   'apikey': apikey,
-                  'startEndDateTime': ['2019-05-01T00:00:00Z',
-                                       '2019-05-31T23:59:59Z'],
+                  'startEndDateTime': ['2019-05-02T00:00:00Z',
+                                       '2019-06-01T23:59:59Z'],
                   'size': size,
                   'page': page
                   }
@@ -68,8 +60,6 @@ for us_state in us_states:
         data = r.json()
 
         events = data['_embedded']['events']
-
-        #print(us_state,page)
 
         for index, event in enumerate(events):
             local_date = event['dates']['start']['localDate']
@@ -91,10 +81,8 @@ for us_state in us_states:
 
             artists = event['_embedded'].get('attractions')
             main_artist_id = artists[0]['id'] if artists else ''
-            try:main_artist_name = artists[0]['name'] if artists else ''
-            except: main_artist_name = ''
-            try: main_artist_genre = artists[0]['classifications'][0]['genre']['name'] if artists else ''
-            except: main_artist_genre = ''
+            main_artist_name = artists[0]['name'] if artists is not None and 'name' in artists[0] else ''
+            main_artist_genre = artists[0]['classifications'][0]['genre']['name'] if artists is not None and 'classifications' in artists[0] else ''
 
             query = """INSERT INTO ticketmaster_events
                         (ticketmaster_id, local_date, event_genre,
@@ -107,6 +95,4 @@ for us_state in us_states:
 
             cursor.execute(query, values)
             db.commit()
-            print("page",page,"   ","entry",entry,"   ","artist",main_artist_name)
-            entry = entry + 1
         time.sleep(1)
