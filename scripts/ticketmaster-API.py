@@ -24,18 +24,18 @@ us_states = [
              "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS",
              "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY",
              "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-             "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI"]
+             "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WI",
+             "WV", "WY"
+             ]
 
 classificationName = "music"
 size = 200
 apikey = config['ticketmaster']['apikey']
-apikey2 = config['ticketmaster']['apikey2']
 
 start_date = datetime.datetime.today()
 date_range = [start_date + datetime.timedelta(days=x) for x in range(0, 30)]
-date_list = list()
-for i in date_range:
-    date_list.append([(str(i)[:10]+"T00:00:00Z"),(str(i)[:10]+"T23:59:59Z")])
+date_list = list(map(lambda x: [x.strftime("%Y-%m-%d"+"T00:00:00Z"),x.strftime(
+    "%Y-%m-%d"+"T23:59:59Z")],date_range))
 
 
 for us_state in us_states:
@@ -78,11 +78,11 @@ for us_state in us_states:
 
                 artists = event['_embedded'].get('attractions')
                 main_artist_id = artists[0]['id'] if artists else ''
-                main_artist_name = artists[0]['name'] if (artists is not None and
-                  'name' in artists[0]) else ''
+                main_artist_name = artists[0]['name'] if (artists and 'name' in
+                    artists[0]) else ''
                 main_artist_genre = artists[0]['classifications'][0]['genre'][
-                  'name'] if artists is not None and 'classifications' in artists[
-                  0] and 'genre' in artists[0]['classifications'][0] else ''
+                  'name'] if (artists and 'classifications' in artists[
+                  0] and 'genre' in artists[0]['classifications'][0]) else ''
 
                 query = """INSERT INTO ticketmaster_events
                             (ticketmaster_id, local_date, event_genre,
