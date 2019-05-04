@@ -1,124 +1,132 @@
-html, body, #wrapper{
+html, body, {
     height: 100%;
     width: 100%;
     margin: 0;
 }
 
-#cityMap{
-    height: 100%;
-    width: 100%;
-    margin: 0;
-}
-
-
-ul#logo{
-  position: absolute;
-  top:0px;
-  display: flex;
-}
-
-ul#logo li{
+#logo{
   text-align: left;
-  display: block;
-  opacity: 1;
+  margin: 10px 10px;
 }
 
-ul#navbar{
-  position: absolute;
-  top:0px;
-  margin-left: 350px;
-  display: flex;
-}
-
-
-ul#navbar li{
-  text-align: centre;
-  padding: 0 25px;
-  display: block;
+#displayInfo{
+  font-family: 'Roboto', sans-serif;
+  margin: 20px 10px 10px 10px;
+  padding: 10px;
+  font-size: 15px;
+  color: white;
+  background-color: #555a66;
   opacity: 0.7;
 }
 
-ul#navbar li:hover{
-  opacity: 1;
-}
-
-
-#displayInfo{
-    position: absolute;
-    font-family: 'Roboto', sans-serif;
-    background-color: #555a66;
-    opacity: 0.7;
-    padding: 10px;
-    font-size: 15px;
-    top: 150px;
-    left: 20px;
-    color: white;
-    width: 300px;
-    height: 200px;
-}
-
 #displayStats{
-    position: absolute;
+    margin: 10px 10px 10px 10px;
     font-family: 'Roboto', sans-serif;
-    background-color: rgb(255,255,255,0.7);
     padding: 10px;
     font-size: 15px;
-    top: 400px;
-    left: 20px;
     color: #555a66;
-    width: 300px;
-    height: 200px;
+    background-color: rgb(255,255,255,0.7);
 }
 
-svg#statesvg{
-  width: 960px;
-  height: 600px;
-  margin-top: 150px;
-  margin-left: 400px;
+#mainPanel{
+  padding:0px;
+  margin:0px;
+}
+
+#logo{
+  width: 80%
+}
+
+#navbar{
+  text-align: center;
+  padding: 10px;
+}
+
+.icon{
+  text-align: center;
+  opacity: 0.7;
+  width: 80%;
+}
+
+.icon:hover{
+  opacity: 0.9999; /*chrome doesn't seem to like hovering to opacity: 1*/
+}
+
+*:focus {
+  opacity:0.99999;
+  outline: none;
+}
+
+#mapCanvas{
+  display: block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  vertical-align: top;
+  margin-top: 10px;
+  align-items: center;
 }
 
 .state{
-		fill: none;
-		stroke: white;
-		stroke-width: 2;
-    fill-opacity: 0.7;
+	fill: none;
+	stroke: white;
+	stroke-width: 2;
+  fill-opacity: 0.7;
+}
+
+.state:hover{
+	fill-opacity: 0.9999; /*chrome doesn't seem to like hovering to opacity: 1*/
 	}
-	.state:hover{
-		fill-opacity:1;
-	}
-	#tooltip {
-		position: absolute;
-		text-align: left;
-		padding: 20px;
-		margin: 10px;
-		font: 12px sans-serif;
-		border-radius: 2px;
-		pointer-events: none;
-	}
-	#tooltip h4{
-		margin:0;
-		font-size:14px;
-	}
-	#tooltip{
-		background:#555a66;
-		border:1px solid grey;
-		border-radius:5px;
-		font-size:12px;
-		width:auto;
-		padding:4px;
-		color:white;
-		opacity:0;
-	}
-	#tooltip table{
-		table-layout:fixed;
-	}
-	#tooltip tr td{
-		padding:0;
-		margin:0;
-	}
-	#tooltip tr td:nth-child(1){
-		width:50px;
-	}
-	#tooltip tr td:nth-child(2){
-		text-align:center;
-	}
+
+
+#legend {
+  display: inline-block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  vertical-align: top;
+  margin-top: 10px;
+  align-items: center;
+}
+
+#tooltip {
+  position: absolute;
+  text-align: left;
+  padding: 20px;
+  margin: 10px;
+  font: 12px sans-serif;
+  border-radius: 2px;
+  pointer-events: none;
+
+  background:rgba(0,0,0,0.9);
+  border:1px solid grey;
+  border-radius:5px;
+  font-size:12px;
+  width:auto;
+  padding:4px;
+  color:white;
+  opacity:0;
+}
+
+#tooltip h4{
+  margin:0;
+  font-size:14px;
+}
+
+
+#tooltip table{
+	table-layout:fixed;
+}
+
+#tooltip tr td{
+	padding:0;
+	margin:0;
+}
+
+#tooltip tr td:nth-child(1){
+	width:50px;
+}
+
+#tooltip tr td:nth-child(2){
+	text-align:center;
+}
