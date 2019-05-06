@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <head>
 	<title>The State of Music</title>
 	<meta charset="utf-8">
@@ -10,172 +11,159 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<!--loading roboto font -->
-	<link rel='stylesheet' id='font-css'  href='http://fonts.googleapis.com/css?family=Roboto:400,300,100' type='text/css' media='all' />
+	<link rel='stylesheet' id='font-css' href='http://fonts.googleapis.com/css?family=Roboto:400,300,100' type='text/css' media='all' />
 
-	<link rel="stylesheet" href="{{url_for('static',filename = 'style.css')}}">
+	<link rel="stylesheet" href="{{url_for('static',filename = 'css/style.css')}}">
 </head>
 
 <body>
-<div id='container'>
+	<div id='container'>
 
-	<!--<div id = "cityMap"></div> div to hold map at city level -->
+		<!--<div id = "cityMap"></div> div to hold map at city level -->
 
-	<div class = "row">
-		<div class = "col-md-3" id = "sidePanel">
-			<!-- loading logos here -->
-			<div id = "logo">
-				<INPUT type="image" src="{{url_for('static',filename = 'images/logo.png')}}"
-				onclick="updateData()" width="100%">
-			</div>
+		<div class="row">
+			<div class="col-md-3" id="sidePanel">
+				<!-- loading logos here -->
+				<div id="logo">
+					<input type="image" src="{{url_for('static',filename = 'images/logo.png')}}" onclick="updatelogo()" width="100%">
+				</div>
 
-			<div id="displayInfo">
-				<h3>About</h3>
-				<h4>the State of Music</h4>
-				<small>
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-				</small>
-			</div>
+				<div id="displayInfo">
+					<h3>About</h3>
+					<h4>the State of Music</h4>
+					<small>
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+					</small>
+				</div>
 
-			<div id="displayStats">
-				<h4>These states love music:</h4>
-				<small>
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-					This is some stuff about music in the US.
-				</small>
-			</div>
-		</div>
-		<div class = "col-md-9" id = "mainPanel">
-			<!-- loading icons here -->
-			<div class = "row" id = "navbar">
-			<div class="col-md-2">
-				<div class = 'icon' id='pop' >
-					<INPUT type="image" src="{{url_for('static',filename = 'images/pop.png')}}"
-					onclick="updateData()" width="85%">
+				<div id="displayStats">
+					<h4>These states love music:</h4>
+					<small>
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+						This is some stuff about music in the US.
+					</small>
 				</div>
 			</div>
+			<div class="col-md-9" id="mainPanel">
+				<!-- loading icons here -->
+				<div class="row" id="navbar">
 
-			<div class="col-md-2">
-				<div class = 'icon' id='indie' href=#>
-					<INPUT type="image" src="{{url_for('static',filename = 'images/indie.png')}}"
-					onclick="updateData()" width="85%">
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-3">
+								<div class='genre-icon' id='pop'>
+									<input type="image" src="{{url_for('static',filename = 'images/pop.png')}}" onclick="updateData()" width="100%">
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class='genre-icon' id='rock_metal'>
+									<input type="image" src="{{url_for('static',filename = 'images/rock_metal.png')}}" onclick="updateData()" width="100%">
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class='genre-icon' id='indie'>
+									<input type="image" src="{{url_for('static',filename = 'images/indie.png')}}" value="" onclick="updateData()" width="100%">
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class='genre-icon' id='hiphop'>
+									<input type="image" src="{{url_for('static',filename = 'images/hiphop.png')}}" onclick="updateData()" width="100%">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-3">
+								<div class='genre-icon' id='rnb'>
+									<input type="image" src="{{url_for('static',filename = 'images/rnb.png')}}" onclick="updateData()" width="100%">
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class='genre-icon' id='classical_jazz'>
+									<input type="image" src="{{url_for('static',filename = 'images/classical_jazz.png')}}" onclick="updateData()" width="100%">
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class='genre-icon' id='electronic_dance'>
+									<input type="image" src="{{url_for('static',filename = 'images/electronic_dance.png')}}" onclick="updateData()" width="100%">
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class='genre-icon' id='country_folk'>
+									<input type="image" src="{{url_for('static',filename = 'images/country_folk.png')}}" onclick="updateData()" width="100%">
+								</div>
+							</div>
+						</div>
+					</div>
+
 				</div>
-			</div>
 
-			<div class="col-md-2">
-				<div class='icon' id='country' href=#>
-					<INPUT type="image" src="{{url_for('static',filename = 'images/country.png')}}"
-					value="" onclick="updateData()" width="85%">
+				<div class="row">
+					<div class="col-md-11" id="mapCanvas">
+						<div>
+							<!-- div and svg to hold the map. -->
+							<svg id="statesvg" viewBox="0 0 960 630" preserveAspectRatio="xMidYMid meet"></svg>
+						</div>
+						<div id="tooltip"></div><!-- div to hold tooltip. -->
+					</div>
 				</div>
-			</div>
 
-			<div class="col-md-2">
-				<div class='icon' id='classic' href=#>
-					<INPUT type="image" src="{{url_for('static',filename = 'images/classic.png')}}"
-					onclick="updateData()" width="85%">
-				</div>
 			</div>
-
-			<div class="col-md-2">
-				<div class='icon' id='hiphop' href=#>
-					<INPUT type="image" src="{{url_for('static',filename = 'images/hiphop.png')}}"
-					onclick="updateData()" width="85%">
-				</div>
-			</div>
-
-			<div class="col-md-2">
-				<div class='icon' id='metal' href=#>
-					<INPUT type="image" src="{{url_for('static',filename = 'images/metal.png')}}"
-					onclick="updateData()" width="85%">
-				</div>
-			</div>
-
-		</div>
-		<div class= "row">
-		<div class= "col-md-11" id="mapCanvas">
-			<div> <!-- div and svg to hold the map. -->
-				<svg id = "statesvg" viewBox = "0 0 960 630" preserveAspectRatio="xMidYMid meet"></svg>
-			</div>
-			<div id="tooltip"></div><!-- div to hold tooltip. -->
-		</div>
-		<div class = col-md-1 id="legend"></div><!-- div to hold legend. -->
-		</div>
-
-</div>
 </body>
 
 
-<script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script><!-- D3 graphing library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script><!-- D3 graphing library -->
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-<script src = "https://d3js.org/topojson.v1.min.js"></script><!-- topojson library -->
-<script src="{{url_for('static',filename = 'uStates.js')}}"></script><!-- creates uStates. -->
+<script src="https://d3js.org/topojson.v1.min.js"></script><!-- topojson library -->
+<script src="{{url_for('static',filename = 'js/uStates.js')}}"></script><!-- creates uStates. -->
 <script>
-
-	uStates.draw("most_pop")
+	uStates.draw("top")
 
 	//Update data section (Called from the onclick)
 	function updateData() {
+		d3.select(".genre-icon")
+			.on('click', function() {
+				console.log("hello")
+				var genre_id = d3.select(this).attr('id')
+				console.log(genre_id)
+				d3.selectAll("svg > *").remove();
+				uStates.draw(genre_id);
+			});
+	}
+
+	function updatelogo() {
 		d3.select('#logo')
-		.on('click', function() {
-	 		d3.selectAll("svg > *").remove();
-			uStates.draw("most_pop");
-		});
-
-		d3.select('#pop')
-		.on('click', function() {
-			d3.selectAll("svg > *").remove();
-			uStates.draw("pop");
-		});
-
-		d3.select('#indie')
-	 .on('click', function() {
-		 d3.selectAll("svg > *").remove();
-		 uStates.draw("indie");
-	 });
-
-		d3.select('#country')
-		.on('click', function() {
-	 		d3.selectAll("svg > *").remove();
-			uStates.draw("country");
-		});
-
-		d3.select('#classic')
-		.on('click', function() {
-			d3.selectAll("svg > *").remove();
-			uStates.draw("classical");
-		});
-
-		d3.select('#hiphop')
-		.on('click', function() {
-			d3.selectAll("svg > *").remove();
-			uStates.draw("hiphop");
-		});
-
-		d3.select('#metal')
-		.on('click', function() {
-			d3.selectAll("svg > *").remove();
-			uStates.draw("metal");
-		});
-
-}
-
+			.on('click', function() {
+				d3.selectAll("svg > *").remove();
+				uStates.draw("top");
+			});
+	}
 </script>
 
 </html>
