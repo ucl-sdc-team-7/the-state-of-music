@@ -20,12 +20,22 @@ html, body, {
 }
 
 #displayStats {
-  margin: 10px 10px 10px 10px;
   font-family: 'Roboto', sans-serif;
-  padding: 10px;
-  font-size: 15px;
+  display: inline-block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  vertical-align: top;
+  padding: 20px;
   color: #555a66;
-  background-color: rgb(255, 255, 255, 0.7);
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #555a66;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
 }
 
 #mainPanel {
@@ -80,29 +90,17 @@ html, body, {
   /*chrome doesn't seem to like hovering to opacity: 1*/
 }
 
-#legend {
-  display: inline-block;
-  position: relative;
-  height: 100%;
-  width: 100%;
-  vertical-align: top;
-  margin-top: 10px;
-  align-items: center;
-}
-
 #tooltip {
   position: absolute;
-  text-align: left;
+  text-align: center;
   padding: 20px;
   margin: 10px;
   font: 12px sans-serif;
   border-radius: 2px;
   pointer-events: none;
   background: rgba(0, 0, 0, 0.9);
-  border: 1px solid grey;
   border-radius: 5px;
   font-size: 12px;
-  width: auto;
   padding: 4px;
   color: white;
   opacity: 0;
@@ -114,12 +112,15 @@ html, body, {
 }
 
 #tooltip table {
-  table-layout: fixed;
+  text-align: center;
+  width: 100%;
+  white-space: nowrap;
 }
 
 #tooltip tr td {
-  padding: 0;
+  padding: 10px;
   margin: 0;
+  opacity: 0.6;
 }
 
 #tooltip tr td:nth-child(1) {

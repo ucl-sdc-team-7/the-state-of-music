@@ -17,51 +17,73 @@
   var path = d3.geoPath()
     .projection(projection);
 
-  var genres = ['pop', 'indie', 'country', 'classical', 'hiphop', 'metal']
+  var genres = ['pop', 'rock_metal', 'indie', 'hiphop', 'rnb', 'classical_jazz', 'electronic_dance', 'country_folk'];
+
   var colors = {
     pop: "#002f81",
+    rock_metal: "#2a7187",
     indie: "#0381b4",
-    country: "#4a2777",
-    classical: "#b41162",
-    hiphop: "#bf9076",
-    metal: "#545a66",
+    hiphop: "#4a2777",
+    rnb: "#b41162",
+    classical_jazz: "#bf9076",
+    electronic_dance: "#56371b",
+    country_folk: "#545a66",
   }
 
+  var tool_txt = {
+    pop: "Pop",
+    rock_metal: "Rock & Metal",
+    indie: "Indie",
+    hiphop: "Hip Hop",
+    rnb: "R&B",
+    classical_jazz: "Classical & Jazz",
+    electronic_dance: "Electronic & Dance",
+    country_folk: "Country & Folk"
+  }
+
+
   var uStates = {};
-  uStates.draw = function(genre_) {
+  uStates.draw = function(genre_, toolTip) {
     //Loading in genre data
     var request_url = "states/genre/" + genre_
-    d3.json(request_url, function(data_) {
+    d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/state_pop.json", function(error, data_) {
+      if (error) console.log(error);
 
       /////////////////////////////////SETTING COLOUR RANGES/////////////////////////////////
 
       //setting colour range for main page
       var color_cat = d3.scaleOrdinal().domain(genres)
-        .range(['#002f81', '#0381b4', '#4a2777', '#b41162', '#bf9076', '#545a66'])
+        .range(['#002f81', '#2a7187', '#0381b4', '#4a2777', '#b41162', '#bf9076', '#56371b', '#545a66'])
 
       //setting colour range for genres
-      var min = d3.min(data_.values());
-      var max = d3.max(data_.values());
-      var color_genre = d3.scaleLinear().domain([min, max]).range(genre_)
+      var data = data_.features
+      var val_arr = [];
+      for (var j = 0; j < data.length; j++) {
+        var value = +data[j].value;
+        val_arr.push(value)
+      }
 
-      console.log(genre_)
-      console.log(data_.values())
+      var min = d3.min(val_arr);
+      var max = d3.max(val_arr);
+      var color_genre = d3.scaleLinear().domain([min, max]).range(["white", colors[genre_]])
 
       ///////////////////////////////JOINING GENRE DATA TO JSON//////////////////////////////
 
       //loading in us json data
-      d3.json("https://gist.githubusercontent.com/wboykinm/dbbe50d1023f90d4e241712395c27fb3/raw/9753ba3a47f884384ab585a42fc1be84a4a474ca/us-states.json",
-        function read_json(json_) {
+      d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/uStates.json",
+        function(json_) {
           // Looping through each state data value in the .csv file
-          for (var i = 0; i < data_.length; i++) {
+          for (var i = 0; i < data.length; i++) {
             // Grabing State Name
-            var dataState = data_[i].state_name;
-            // Grabbing genre scores
-            var value = data_[i].value;
+            var dataState = data[i].abbr;
+
+            //Grabbing data value
+            var value = data[i].value;
+
             // Finding the corresponding state inside the JSON
             var states = json_.features
             for (var j = 0; j < states.length; j++) {
-              var jsonState = states[j].properties.name;
+              var jsonState = states[j].properties.abbr;
               if (dataState == jsonState) {
                 // Copying all genre scores into the JSON
                 states[j].properties.value = value;
@@ -72,6 +94,28 @@
           };
 
           ///////////////////CREATING SVG ELEMENT AND APPEND MAP TO SVG////////////////////
+
+          //tooptip for top genre page
+          function mouseOver_topgenre(d) {
+            d3.select("#tooltip").transition().duration(200).style("opacity", 0.8);
+            d3.select("#tooltip").html(toolTip(d.properties.name, d.properties.abbr, d.properties.value, tool_txt[d.properties.value]))
+              //tooltip position hard-coded. Needs update.
+              .style("left", (d3.event.pageX - 345) + "px")
+              .style("top", (d3.event.pageY - 120) + "px");
+          }
+
+          //tooltip for all genres
+          function mouseOver_genre(d) {
+            d3.select("#tooltip").transition().duration(200).style("opacity", 0.8);
+            d3.select("#tooltip").html(toolTip(d.properties.name, d.properties.abbr, d.properties.value, tool_txt[genre_]))
+              //tooltip position hard-coded. Needs update.
+              .style("left", (d3.event.pageX - 345) + "px")
+              .style("top", (d3.event.pageY - 120) + "px");
+          }
+
+          function mouseOut() {
+            d3.select("#tooltip").transition().duration(500).style("opacity", 0);
+          }
 
           var map = d3.select("#statesvg").append("svg")
             //Binding the data to the SVG and create one path per json feature
@@ -86,14 +130,16 @@
 
 
           // applying colour scheme based on html input for 'genre_'
-          if (genre_ == "top") {
-            map.style("fill", function(d) {
-              return color_cat(d.properties.value)
-            })
+          if (genre_ == "topgenre") {
+            map.on("mouseover", mouseOver_topgenre).on("mouseout", mouseOut)
+              .style("fill", function(d) {
+                return color_cat(d.properties.value)
+              });
           } else {
-            map.style("fill", function(d) {
-              return color_genre(d.properties.value)
-            })
+            map.on("mouseover", mouseOver_genre).on("mouseout", mouseOut)
+              .style("fill", function(d) {
+                return color_genre(d.properties.value)
+              });
           }
 
         });

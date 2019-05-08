@@ -44,23 +44,10 @@
 				</div>
 
 				<div id="displayStats">
-					<h4>These states love music:</h4>
-					<small>
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-					</small>
+					<h5>Top 5 states:</h5>
+					<svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet"></svg>
 				</div>
+
 			</div>
 			<div class="col-md-9" id="mainPanel">
 				<!-- loading icons here -->
@@ -125,13 +112,11 @@
 				</div>
 
 				<div class="row">
-					<div class="col-md-11" id="mapCanvas">
-						<div>
-							<!-- div and svg to hold the map. -->
-							<svg id="statesvg" viewBox="0 0 960 630" preserveAspectRatio="xMidYMid meet"></svg>
-						</div>
-						<div id="tooltip"></div><!-- div to hold tooltip. -->
+					<div id="mapCanvas">
+						<!-- div and svg to hold the map. -->
+						<svg id="statesvg" viewBox="0 0 960 630" preserveAspectRatio="xMidYMid meet"></svg>
 					</div>
+					<div id="tooltip"></div><!-- div to hold tooltip. -->
 				</div>
 
 			</div>
@@ -142,26 +127,48 @@
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="https://d3js.org/topojson.v1.min.js"></script><!-- topojson library -->
 <script src="{{url_for('static',filename = 'js/uStates.js')}}"></script><!-- creates uStates. -->
+<script src="{{url_for('static',filename = 'js/statistics.js')}}"></script><!-- creates statistics in side bar. -->
 <script>
-	uStates.draw("top")
+	//tooltip function for top genres
+	function tooltip_topgenre(name, abbr, value, genre) {
+		/* function to create html content string in tooltip div. */
+		return "<h4>" + name + ", " + abbr + "</h4>" +
+			"<table><tr><td> Top Genre:</td><td>" + genre + "</td></tr>" +
+			"</table>" +
+			"<small>(click to zoom)</small>";
+	}
+
+	//tooltip function for all genres
+	function tooltip_genre(name, abbr, value, genre) {
+		/* function to create html content string in tooltip div. */
+		return "<h4>" + name + ", " + abbr + "</h4>" +
+			"<table><tr><td>" + genre + "</td><td>" + value * 100 + "%</td></tr>" +
+			"</table>" +
+			"<small>(click to zoom)</small>";
+	}
+
+	uStates.draw("topgenre", tooltip_topgenre)
+	stats.draw("topgenre")
 
 	//Update data section (Called from the onclick)
 	function updateData() {
-		d3.select(".genre-icon")
+
+		d3.selectAll(".genre-icon")
 			.on('click', function() {
-				console.log("hello")
 				var genre_id = d3.select(this).attr('id')
-				console.log(genre_id)
 				d3.selectAll("svg > *").remove();
-				uStates.draw(genre_id);
+				uStates.draw(genre_id, tooltip_genre);
+				stats.draw(genre_id)
+
 			});
 	}
 
 	function updatelogo() {
-		d3.select('#logo')
+		d3.selectAll('#logo')
 			.on('click', function() {
 				d3.selectAll("svg > *").remove();
-				uStates.draw("top");
+				uStates.draw("topgenre", tooltip_topgenre);
+				stats.draw("topgenre")
 			});
 	}
 </script>
