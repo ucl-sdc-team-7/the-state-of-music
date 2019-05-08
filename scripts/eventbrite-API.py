@@ -1,7 +1,8 @@
 import requests
-# import time
+import datetime
 import mysql.connector as mysql
 import configparser
+import csv
 
 config = configparser.ConfigParser()
 config.read('../config.ini')
@@ -17,82 +18,93 @@ cursor = db.cursor()
 
 base_url = "https://www.eventbriteapi.com/v3/"
 
-####
-# TODO: instead of passing a giant viewport for the whole US,
-# iterate through the states.
-# An approach that could work is to get the centroid for every
-# state and have a really wide "within" param.
-# There's going to be overlap between states with that approach,
-# but we can eliminate duplicates in the DB afterwards.
-####
-# us_states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE",
-#              "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS",
-#              "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS",
-#              "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY",
-#              "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-#              "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+us_states_and_viewports = list()
+with open('state_bounding_boxes.csv', 'r') as csvfile:
+    states_and_viewports = csv.reader(csvfile, delimiter=',')
+    for row in states_and_viewports:
+        us_states_and_viewports.append(row)
+
+date_range = [datetime.datetime.today() + datetime.timedelta(days=x) for x in
+    range(0, 30)]
+start_date = date_range[0].strftime("%Y-%m-%d"+"T00:00:00Z")
+end_date = date_range[-1].strftime("%Y-%m-%d"+"T23:59:59Z")
 
 token = config['eventbrite']['token']
 categories = '103'  # music
 formats = '6'  # concerts and performances
-location_lat_ne = '46.406436'  # random northeast point
-location_long_ne = '-65.7526587'
-location_lat_sw = '28.06344'  # random southwest point
-location_long_sw = '-123.3917947'
-date_range_start = '2019-05-01T00:00:00'
-date_range_end = '2019-05-31T23:59:59'
 
-params = {'token': token,
-          'categories': categories,
-          'formats': formats,
-          'location.viewport.northeast.latitude': location_lat_ne,
-          'location.viewport.northeast.longitude': location_long_ne,
-          'location.viewport.southwest.latitude': location_lat_sw,
-          'location.viewport.southwest.longitude': location_long_sw,
-          'start_date.range_start': date_range_start,
-          'start_date.range_end': date_range_end,
-          }
+for us_state_and_viewport in us_states_and_viewports[1:]:
+            params = {'token': token,
+                      'categories': categories,
+                      'formats': formats,
+                      'location.viewport.northeast.latitude': us_state_and_viewport[4],
+                      'location.viewport.northeast.longitude': us_state_and_viewport[3],
+                      'location.viewport.southwest.latitude': us_state_and_viewport[2],
+                      'location.viewport.southwest.longitude': us_state_and_viewport[1],
+                      'start_date.range_start': start_date,
+                      'start_date.range_end': end_date
+                      }
 
-r = requests.get(url=base_url + 'events/search/', params=params)
+            r = requests.get(url=base_url + 'events/search/', params=params)
 
-data = r.json()
+            data = r.json()
 
-total_events = data['pagination']['object_count']
+            total_events = data['pagination']['object_count']
+            pages_list = [1] if data['pagination']['page_count'] == 1 else list(
+                range(1,data['pagination']['page_count']+1))
 
-if total_events > 0:
-    events = data['events']
-    for event in events:
-        event_id = event['id']
-        event_name = event['name']['text']
-        event_date = event['start']['local']
-        venue_id = event['venue_id']
-        subcategory_id = event['subcategory_id']
+            if total_events > 0:
+                for page in pages_list:
+                    params = {'token': token,
+                              'categories': categories,
+                              'formats': formats,
+                              'location.viewport.northeast.latitude': us_state_and_viewport[4],
+                              'location.viewport.northeast.longitude': us_state_and_viewport[3],
+                              'location.viewport.southwest.latitude': us_state_and_viewport[2],
+                              'location.viewport.southwest.longitude': us_state_and_viewport[1],
+                              'start_date.range_start': start_date,
+                              'start_date.range_end': end_date,
+                              'page': page
+                              }
 
-        venue_url = base_url + 'venues/' + venue_id
-        venue_req = requests.get(url=venue_url, params={'token': token})
-        venue_data = venue_req.json()
+                    r = requests.get(url=base_url + 'events/search/', params=params)
 
-        venue_name = venue_data['name']
-        venue_lat = venue_data['latitude']
-        venue_long = venue_data['longitude']
+                    data = r.json()
 
-        if subcategory_id:
-            subcategory_url = base_url + 'subcategories/' + subcategory_id
-            subcategory_req = requests.get(
-                url=subcategory_url,
-                params={'token': token}
-            )
-            subcategory_data = subcategory_req.json()
-            subcategory_name = subcategory_data['name']
-        else:
-            subcategory_name = ''
+                    events = data['events']
 
-        query = """INSERT INTO eventbrite_events
-                    (eventbrite_id, local_date, event_name,
-                    venue_name, venue_lat, venue_long, genre) VALUES
-                    (%s, %s, %s, %s, %s, %s, %s)"""
-        values = (event_id, event_date, event_name, venue_name,
-                  venue_lat, venue_long, subcategory_name)
+                    for event in events:
+                        event_id = event['id']
+                        event_name = event['name']['text']
+                        event_date = event['start']['local']
+                        venue_id = event['venue_id']
+                        subcategory_id = event['subcategory_id']
 
-        cursor.execute(query, values)
-        db.commit()
+                        venue_url = base_url + 'venues/' + venue_id
+                        venue_req = requests.get(url=venue_url, params={'token': token})
+                        venue_data = venue_req.json()
+
+                        venue_name = venue_data['name']
+                        venue_lat = venue_data['latitude']
+                        venue_long = venue_data['longitude']
+
+                        if subcategory_id:
+                            subcategory_url = base_url + 'subcategories/' + subcategory_id
+                            subcategory_req = requests.get(
+                                url=subcategory_url,
+                                params={'token': token}
+                            )
+                            subcategory_data = subcategory_req.json()
+                            subcategory_name = subcategory_data['name']
+                        else:
+                            subcategory_name = ''
+
+                        query = """INSERT INTO eventbrite_events
+                                    (eventbrite_id, local_date, event_name,
+                                    venue_name, venue_lat, venue_long, genre) VALUES
+                                    (%s, %s, %s, %s, %s, %s, %s)"""
+                        values = (event_id, event_date, event_name, venue_name,
+                                  venue_lat, venue_long, subcategory_name)
+
+                        cursor.execute(query, values)
+                        db.commit()
