@@ -16,15 +16,23 @@ db = mysql.connect(
 
 cursor = db.cursor()
 URL = "https://app.ticketmaster.com/discovery/v2/events.json"
+URL2 = "https://accounts.spotify.com/api/token"
+URL3 = "https://api.spotify.com/v1/search"
+
+client_id = config['spotify']['client_id']
+client_secret = config['spotify']['client_secret']
+grant_type = 'client_credentials'
+token_params = {'grant_type': grant_type}
 
 us_states = [
-             "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE",
-             "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS",
-             "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS",
-             "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY",
-             "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-             "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WI",
-             "WV", "WY"
+             # "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC"
+             "DE",
+             # "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS",
+             # "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS",
+             # "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY",
+             # "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+             # "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WI",
+             # "WV", "WY"
              ]
 
 classificationName = "music"
@@ -32,7 +40,7 @@ size = 200
 apikey = config['ticketmaster']['apikey']
 
 start_date = datetime.datetime.today()
-date_range = [start_date + datetime.timedelta(days=x) for x in range(0, 30)]
+date_range = [start_date + datetime.timedelta(days=x) for x in range(0, 10)]
 date_list = list(map(lambda x: [x.strftime("%Y-%m-%d"+"T00:00:00Z"),x.strftime(
     "%Y-%m-%d"+"T23:59:59Z")],date_range))
 
@@ -40,6 +48,8 @@ date_list = list(map(lambda x: [x.strftime("%Y-%m-%d"+"T00:00:00Z"),x.strftime(
 for us_state in us_states:
 
     for date in date_list:
+        print(date[0])
+        entry = 0
         time.sleep(.21)
 
         params = {'stateCode': us_state,
@@ -82,15 +92,31 @@ for us_state in us_states:
                 main_artist_genre = artists[0]['classifications'][0]['genre'][
                   'name'] if (artists and 'classifications' in artists[
                   0] and 'genre' in artists[0]['classifications'][0]) else ''
+                entry = entry + 1
+                print(entry,main_artist_name)
 
-                query = """INSERT INTO ticketmaster_events
-                            (ticketmaster_id, local_date, event_genre,
-                            event_subgenre, venue, venue_lat, venue_long,
-                            artist_id, artist_name, artist_genre) VALUES
-                            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-                values = (event_id, local_date, main_genre_name, sub_genre_name,
-                          main_venue_name, main_venue_lat, main_venue_lon,
-                          main_artist_id, main_artist_name, main_artist_genre)
+                if main_artist_name != '':
+                    token = requests.post(  URL2,
+                                            data=token_params,
+                                            auth=(client_id,client_secret)
+                                            ).json()['access_token']
+                    spotify_params = {  'q': main_artist_name,
+                                        'type': 'artist',
+                                        'access_token': token}
+                    data = requests.get(url=URL3,params=spotify_params).json()
+                    spotify_genres = data['artists']['items'][0]['genres'] if (
+                         len(data['artists']['items']) > 0 and 'genres' in
+                         data['artists']['items'][0]) else []
 
-                cursor.execute(query, values)
-                db.commit()
+#
+#                 query = """INSERT INTO ticketmaster_events
+#                             (ticketmaster_id, local_date, event_genre,
+#                             event_subgenre, venue, venue_lat, venue_long,
+#                             artist_id, artist_name, artist_genre) VALUES
+#                             (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+#                 values = (event_id, local_date, main_genre_name, sub_genre_name,
+#                           main_venue_name, main_venue_lat, main_venue_lon,
+#                           main_artist_id, main_artist_name, main_artist_genre)
+#
+#                 cursor.execute(query, values)
+#                 db.commit()
