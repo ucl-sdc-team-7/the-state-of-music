@@ -27,7 +27,7 @@
   const stats = {};
 
   stats.draw = function(genre_) {
-
+    //using fake data for now
     d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/state_pop.json", function(error, data_) {
       if (error) console.log(error);
 
