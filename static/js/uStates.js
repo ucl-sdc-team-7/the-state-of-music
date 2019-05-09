@@ -96,40 +96,40 @@
           ///////////////////CREATING SVG ELEMENT AND APPEND MAP TO SVG////////////////////
 
 
-          var toolTip = d3.select("#tooltip")
-            .attr("class", "toolTip")
-            .style("opacity", 0)
-
 
           //tooptip for top genre page
           function mouseOver_topgenre(d) {
-            toolTip.transition().duration(300)
-              .style("opacity", 0.8)
-              .html(
+            d3.select("#tooltip")
+              .attr("class", "toolTip")
+              .transition().duration(300)
+              .style("opacity", 0.8);
+            d3.select("#tooltip").html(
                 "<h4>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
                 "<table><tr><td> Top Genre:</td><td>" + tool_txt[d.properties.value] + "</td></tr>" +
                 "</table>" +
                 "<small>(click to zoom)</small>")
               .style("left", (d3.event.pageX - 345) + "px")
-              .style("top", (d3.event.pageY - 120) + "px")
+              .style("top", (d3.event.pageY - 120) + "px");
 
           }
 
           //tooltip for all genres
           function mouseOver_genre(d) {
-            toolTip.transition().duration(300)
-              .style("opacity", 0.8)
-              .html(
+            d3.select("#tooltip")
+              .attr("class", "toolTip")
+              .transition().duration(300)
+              .style("opacity", 0.8);
+            d3.select("#tooltip").html(
                 "<h4>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
                 "<table><tr><td>" + tool_txt[genre_] + "</td><td>" + d.properties.value * 100 + "%</td></tr>" +
                 "</table>" +
                 "<small>(click to zoom)</small>")
               .style("left", (d3.event.pageX - 345) + "px")
-              .style("top", (d3.event.pageY - 120) + "px")
+              .style("top", (d3.event.pageY - 120) + "px");
           }
 
           function mouseOut() {
-            toolTip.style("display", "none");
+            d3.select("#tooltip").transition().duration(500).style("opacity", 0);
           }
 
           var map = d3.select("#statesvg").append("svg")
