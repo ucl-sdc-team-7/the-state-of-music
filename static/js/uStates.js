@@ -43,7 +43,7 @@
 
 
   var uStates = {};
-  uStates.draw = function(genre_, toolTip) {
+  uStates.draw = function(genre_) {
     //Loading in genre data
     var request_url = "states/genre/" + genre_
     d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/state_pop.json", function(error, data_) {
@@ -95,26 +95,41 @@
 
           ///////////////////CREATING SVG ELEMENT AND APPEND MAP TO SVG////////////////////
 
+
+          var toolTip = d3.select("#tooltip")
+            .attr("class", "toolTip")
+            .style("opacity", 0)
+
+
           //tooptip for top genre page
           function mouseOver_topgenre(d) {
-            d3.select("#tooltip").transition().duration(200).style("opacity", 0.8);
-            d3.select("#tooltip").html(toolTip(d.properties.name, d.properties.abbr, d.properties.value, tool_txt[d.properties.value]))
-              //tooltip position hard-coded. Needs update.
+            toolTip.transition().duration(300)
+              .style("opacity", 0.8)
+              .html(
+                "<h4>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
+                "<table><tr><td> Top Genre:</td><td>" + tool_txt[d.properties.value] + "</td></tr>" +
+                "</table>" +
+                "<small>(click to zoom)</small>")
               .style("left", (d3.event.pageX - 345) + "px")
-              .style("top", (d3.event.pageY - 120) + "px");
+              .style("top", (d3.event.pageY - 120) + "px")
+
           }
 
           //tooltip for all genres
           function mouseOver_genre(d) {
-            d3.select("#tooltip").transition().duration(200).style("opacity", 0.8);
-            d3.select("#tooltip").html(toolTip(d.properties.name, d.properties.abbr, d.properties.value, tool_txt[genre_]))
-              //tooltip position hard-coded. Needs update.
+            toolTip.transition().duration(300)
+              .style("opacity", 0.8)
+              .html(
+                "<h4>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
+                "<table><tr><td>" + tool_txt[genre_] + "</td><td>" + d.properties.value * 100 + "%</td></tr>" +
+                "</table>" +
+                "<small>(click to zoom)</small>")
               .style("left", (d3.event.pageX - 345) + "px")
-              .style("top", (d3.event.pageY - 120) + "px");
+              .style("top", (d3.event.pageY - 120) + "px")
           }
 
           function mouseOut() {
-            d3.select("#tooltip").transition().duration(500).style("opacity", 0);
+            toolTip.style("display", "none");
           }
 
           var map = d3.select("#statesvg").append("svg")

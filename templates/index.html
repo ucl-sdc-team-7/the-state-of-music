@@ -129,23 +129,8 @@
 <script src="{{url_for('static',filename = 'js/uStates.js')}}"></script><!-- creates uStates. -->
 <script src="{{url_for('static',filename = 'js/statistics.js')}}"></script><!-- creates statistics in side bar. -->
 <script>
-	//tooltip function for top genres
-	function tooltip_topgenre(name, abbr, value, genre) {
-		/* function to create html content string in tooltip div. */
-		return "<h4>" + name + ", " + abbr + "</h4>" +
-			"<table><tr><td> Top Genre:</td><td>" + genre + "</td></tr>" +
-			"</table>" +
-			"<small>(click to zoom)</small>";
-	}
-	//tooltip function for all genres
-	function tooltip_genre(name, abbr, value, genre) {
-		/* function to create html content string in tooltip div. */
-		return "<h4>" + name + ", " + abbr + "</h4>" +
-			"<table><tr><td>" + genre + "</td><td>" + value * 100 + "%</td></tr>" +
-			"</table>" +
-			"<small>(click to zoom)</small>";
-	}
-	uStates.draw("topgenre", tooltip_topgenre)
+
+	uStates.draw("topgenre")
 	stats.draw("topgenre")
 	//Update data section (Called from the onclick)
 	function updateData() {
@@ -153,7 +138,7 @@
 			.on('click', function() {
 				var genre_id = d3.select(this).attr('id')
 				d3.selectAll("svg > *").remove();
-				uStates.draw(genre_id, tooltip_genre);
+				uStates.draw(genre_id);
 				stats.draw(genre_id)
 			});
 	}
@@ -161,7 +146,7 @@
 		d3.selectAll('#logo')
 			.on('click', function() {
 				d3.selectAll("svg > *").remove();
-				uStates.draw("topgenre", tooltip_topgenre);
+				uStates.draw("topgenre");
 				stats.draw("topgenre")
 			});
 	}
