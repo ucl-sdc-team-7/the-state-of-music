@@ -13,17 +13,6 @@
   const x = d3.scaleLinear().range([0, bar_width]);
   const y = d3.scaleBand().range([bar_height, 0]);
 
-  const colors = {
-    pop: "#002f81",
-    rock_metal: "#2a7187",
-    indie: "#0381b4",
-    hiphop: "#4a2777",
-    rnb: "#b41162",
-    classical_jazz: "#bf9076",
-    electronic_dance: "#56371b",
-    country_folk: "#545a66",
-  }
-
   const stats = {};
 
   stats.draw = function(genre_) {
