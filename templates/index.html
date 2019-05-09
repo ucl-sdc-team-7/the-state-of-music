@@ -137,7 +137,6 @@
 			"</table>" +
 			"<small>(click to zoom)</small>";
 	}
-
 	//tooltip function for all genres
 	function tooltip_genre(name, abbr, value, genre) {
 		/* function to create html content string in tooltip div. */
@@ -146,23 +145,18 @@
 			"</table>" +
 			"<small>(click to zoom)</small>";
 	}
-
 	uStates.draw("topgenre", tooltip_topgenre)
 	stats.draw("topgenre")
-
 	//Update data section (Called from the onclick)
 	function updateData() {
-
 		d3.selectAll(".genre-icon")
 			.on('click', function() {
 				var genre_id = d3.select(this).attr('id')
 				d3.selectAll("svg > *").remove();
 				uStates.draw(genre_id, tooltip_genre);
 				stats.draw(genre_id)
-
 			});
 	}
-
 	function updatelogo() {
 		d3.selectAll('#logo')
 			.on('click', function() {

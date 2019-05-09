@@ -1,17 +1,17 @@
 html, body, {
-    height: 100%;
-    width: 100%;
-    margin: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
 }
 
-#logo{
+#logo {
   text-align: left;
   margin: 10px 10px;
 }
 
-#displayInfo{
+#displayInfo {
   font-family: 'Roboto', sans-serif;
-  margin: 20px 10px 10px 10px;
+  margin: 20px 10px 0px 10px;
   padding: 10px;
   font-size: 15px;
   color: white;
@@ -19,45 +19,56 @@ html, body, {
   opacity: 0.7;
 }
 
-#displayStats{
-    margin: 10px 10px 10px 10px;
-    font-family: 'Roboto', sans-serif;
-    padding: 10px;
-    font-size: 15px;
-    color: #555a66;
-    background-color: rgb(255,255,255,0.7);
+#displayStats {
+  font-family: 'Roboto', sans-serif;
+  display: inline-block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  vertical-align: top;
+  padding: 20px;
+  color: #555a66;
 }
 
-#mainPanel{
-  padding:0px;
-  margin:0px;
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #555a66;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
 }
 
-#logo{
+#mainPanel {
+  padding: 0px;
+  margin: 0px;
+}
+
+#logo {
   width: 80%
 }
 
-#navbar{
-  text-align: center;
-  padding: 10px;
+#navbar {
+  text-align: left;
+  margin: 10px;
 }
 
-.icon{
-  text-align: center;
+.genre-icon {
+  text-align: left;
   opacity: 0.7;
-  width: 80%;
+  width: 100%;
 }
 
-.icon:hover{
-  opacity: 0.9999; /*chrome doesn't seem to like hovering to opacity: 1*/
+.genre-icon:hover {
+  opacity: 0.9999;
+  /*chrome doesn't seem to like hovering to opacity: 1*/
 }
 
 *:focus {
-  opacity:0.99999;
+  opacity: 0.99999;
   outline: none;
 }
 
-#mapCanvas{
+#mapCanvas {
   display: block;
   position: relative;
   height: 100%;
@@ -67,66 +78,55 @@ html, body, {
   align-items: center;
 }
 
-.state{
-	fill: none;
-	stroke: white;
-	stroke-width: 2;
+.state {
+  fill: none;
+  stroke: white;
+  stroke-width: 2;
   fill-opacity: 0.7;
 }
 
-.state:hover{
-	fill-opacity: 0.9999; /*chrome doesn't seem to like hovering to opacity: 1*/
-	}
-
-
-#legend {
-  display: inline-block;
-  position: relative;
-  height: 100%;
-  width: 100%;
-  vertical-align: top;
-  margin-top: 10px;
-  align-items: center;
+.state:hover {
+  fill-opacity: 0.9999;
+  /*chrome doesn't seem to like hovering to opacity: 1*/
 }
 
 #tooltip {
   position: absolute;
-  text-align: left;
+  text-align: center;
   padding: 20px;
   margin: 10px;
   font: 12px sans-serif;
   border-radius: 2px;
   pointer-events: none;
-
-  background:rgba(0,0,0,0.9);
-  border:1px solid grey;
-  border-radius:5px;
-  font-size:12px;
-  width:auto;
-  padding:4px;
-  color:white;
-  opacity:0;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 4px;
+  color: white;
+  opacity: 0;
 }
 
-#tooltip h4{
-  margin:0;
-  font-size:14px;
+#tooltip h4 {
+  margin: 0;
+  font-size: 14px;
 }
 
-
-#tooltip table{
-	table-layout:fixed;
+#tooltip table {
+  text-align: center;
+  width: 100%;
+  white-space: nowrap;
 }
 
-#tooltip tr td{
-	padding:0;
-	margin:0;
+#tooltip tr td {
+  padding: 10px;
+  margin: 0;
+  opacity: 0.6;
 }
 
-#tooltip tr td:nth-child(1){
-	width:50px;
+#tooltip tr td:nth-child(1) {
+  width: 50px;
 }
 
-#tooltip tr td:nth-child(2){
-	text-align:center;
+#tooltip tr td:nth-child(2) {
+  text-align: center;
 }
