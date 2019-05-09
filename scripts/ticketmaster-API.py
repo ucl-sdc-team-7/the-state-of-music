@@ -108,15 +108,15 @@ for us_state in us_states:
                          len(data['artists']['items']) > 0 and 'genres' in
                          data['artists']['items'][0]) else []
 
-#
-#                 query = """INSERT INTO ticketmaster_events
-#                             (ticketmaster_id, local_date, event_genre,
-#                             event_subgenre, venue, venue_lat, venue_long,
-#                             artist_id, artist_name, artist_genre) VALUES
-#                             (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-#                 values = (event_id, local_date, main_genre_name, sub_genre_name,
-#                           main_venue_name, main_venue_lat, main_venue_lon,
-#                           main_artist_id, main_artist_name, main_artist_genre)
-#
-#                 cursor.execute(query, values)
-#                 db.commit()
+
+                query = """INSERT INTO ticketmaster_events
+                            (ticketmaster_id, local_date, event_genre,
+                            event_subgenre, venue, venue_lat, venue_long,
+                            artist_id, artist_name, artist_genre) VALUES
+                            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                values = (event_id, local_date, main_genre_name, sub_genre_name,
+                          main_venue_name, main_venue_lat, main_venue_lon,
+                          main_artist_id, main_artist_name, main_artist_genre)
+
+                cursor.execute(query, values)
+                db.commit()
