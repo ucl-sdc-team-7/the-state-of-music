@@ -15,7 +15,6 @@ db = mysql.connect(
 )
 
 cursor = db.cursor()
-
 URL = "https://app.ticketmaster.com/discovery/v2/events.json"
 
 us_states = [
