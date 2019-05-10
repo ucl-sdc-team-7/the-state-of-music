@@ -44,10 +44,6 @@
       const bar = chart.append("g")
       .attr("transform", "translate(" + bar_margin.left + "," + bar_margin.top + ")")
 
-      //drawing bars in chart
-      bar.selectAll('.bar').data(data)
-      .enter().append('rect')
-      .attr("class", "bar")
 
 
       if (genre == "topgenre") {
@@ -58,8 +54,10 @@
         //assigning y-axis
         bar.append('g').attr("class", "y axis").call(d3.axisLeft(y))
 
-        //drawing full bar chart
-        chart.selectAll(".bar")
+        //drawing bars in chart
+        bar.selectAll('.bar').data(data)
+        .enter().append('rect')
+        .attr("class", "bar")
         .attr('y', function(d) { return y(d.abbr); }) //assigning hieght of bars
         .attr("width", function(d) { return x(d.value); }) //assigning width of bars
         .attr("height", y.bandwidth())

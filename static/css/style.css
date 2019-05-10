@@ -38,6 +38,11 @@ html, body, {
   shape-rendering: crispEdges;
 }
 
+.bar-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+}
+
 #mainPanel {
   padding: 0px;
   margin: 0px;
