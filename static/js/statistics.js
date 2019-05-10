@@ -63,7 +63,7 @@
         .attr('y', function(d) { return y(d.abbr); }) //assigning hieght of bars
         .attr("width", function(d) { return x(d.value); }) //assigning width of bars
         .attr("height", y.bandwidth())
-        .attr("fill", function(d) {return colors[genre_]})
+        .attr("fill", function(d) {return colorsandgenres.genre_colors[genre_]})
       }
 
     });

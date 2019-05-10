@@ -1,23 +1,23 @@
 (function() {
   //sets dimentions
-  var margin = {
+  const map_margin = {
       top: 0,
       left: 0,
       right: 0,
       bottom: 0
     },
-    height = 450 - margin.top - margin.bottom,
-    width = 960 - margin.left - margin.right;
+    map_height = 450 - map_margin.top - map_margin.bottom,
+    map_width = 960 - map_margin.left - map_margin.right;
   //defining map projection
-  var projection = d3.geoAlbersUsa()
-    .translate([width / 2, height / 2])
+  const projection = d3.geoAlbersUsa()
+    .translate([map_width / 2, map_height / 2])
     .scale(1000)
 
   //tells map how to draw the paths from the projection
-  var path = d3.geoPath()
+  const map_path = d3.geoPath()
     .projection(projection);
 
-  var uStates = {};
+  const uStates = {};
   uStates.draw = function(genre_) {
     //Loading in genre data
     var request_url = "states/genre/" + genre_
@@ -27,8 +27,8 @@
       /////////////////////////////////SETTING COLOUR RANGES/////////////////////////////////
 
       //setting colour range for main page
-      var color_cat = d3.scaleOrdinal().domain(genres)
-        .range(['#002f81', '#2a7187', '#0381b4', '#4a2777', '#b41162', '#bf9076', '#56371b', '#545a66'])
+      var color_cat = d3.scaleOrdinal().domain(colorsandgenres.genres)
+        .range(colorsandgenres.colors)
 
       //setting colour range for genres
       var data = data_.features
@@ -40,7 +40,7 @@
 
       var min = d3.min(val_arr);
       var max = d3.max(val_arr);
-      var color_genre = d3.scaleLinear().domain([min, max]).range(["white", colors[genre_]])
+      var color_genre = d3.scaleLinear().domain([min, max]).range(["white", colorsandgenres.genre_colors[genre_]])
 
       ///////////////////////////////JOINING GENRE DATA TO JSON//////////////////////////////
 
@@ -80,7 +80,7 @@
               .style("opacity", 0.8);
             d3.select("#tooltip").html(
                 "<h4>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
-                "<table><tr><td> Top Genre:</td><td>" + tool_txt[d.properties.value] + "</td></tr>" +
+                "<table><tr><td> Top Genre:</td><td>" + colorsandgenres.tool_txt[d.properties.value] + "</td></tr>" +
                 "</table>" +
                 "<small>(click to zoom)</small>")
               .style("left", (d3.event.pageX - 345) + "px")
@@ -96,7 +96,7 @@
               .style("opacity", 0.8);
             d3.select("#tooltip").html(
                 "<h4>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
-                "<table><tr><td>" + tool_txt[genre_] + "</td><td>" + d.properties.value * 100 + "%</td></tr>" +
+                "<table><tr><td>" + colorsandgenres.tool_txt[genre_] + "</td><td>" + d.properties.value * 100 + "%</td></tr>" +
                 "</table>" +
                 "<small>(click to zoom)</small>")
               .style("left", (d3.event.pageX - 345) + "px")
@@ -113,7 +113,7 @@
             .data(states)
             .enter()
             .append("path")
-            .attr("d", path)
+            .attr("d", map_path)
             .style("stroke", "#fff")
             .style("stroke-width", "1")
             .style("opacity", 0.7);
