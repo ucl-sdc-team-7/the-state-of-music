@@ -13,20 +13,9 @@
   const x = d3.scaleLinear().range([0, bar_width]);
   const y = d3.scaleBand().range([bar_height, 0]);
 
-  const colors = {
-    pop: "#002f81",
-    rock_metal: "#2a7187",
-    indie: "#0381b4",
-    hiphop: "#4a2777",
-    rnb: "#b41162",
-    classical_jazz: "#bf9076",
-    electronic_dance: "#56371b",
-    country_folk: "#545a66",
-  }
-
   const stats = {};
 
-  stats.draw = function(genre_) {
+  stats.draw = function(genre) {
     //using fake data for now
     d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/state_pop.json", function(error, data_) {
       if (error) console.log(error);
@@ -61,7 +50,7 @@
       .attr("class", "bar")
 
 
-      if (genre_ == "topgenre") {
+      if (genre == "topgenre") {
 
         console.log("temp - gotta finish this bit")
 
@@ -74,7 +63,7 @@
         .attr('y', function(d) { return y(d.abbr); }) //assigning hieght of bars
         .attr("width", function(d) { return x(d.value); }) //assigning width of bars
         .attr("height", y.bandwidth())
-        .attr("fill", function(d) {return colors[genre_]})
+        .attr("fill", function(d) {return GENRES[genre].color})
       }
 
     });

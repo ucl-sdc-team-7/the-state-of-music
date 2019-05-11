@@ -30,8 +30,8 @@ html, body, {
   color: #555a66;
 }
 
-.axis path,
-.axis line {
+.axis {
+  font-family: 'Roboto', sans-serif;
   fill: none;
   stroke: #555a66;
   stroke-width: 1px;
