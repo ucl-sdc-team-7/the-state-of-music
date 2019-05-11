@@ -18,20 +18,20 @@
     .projection(projection);
 
   const uStates = {};
-  uStates.draw = function(genre_) {
+  uStates.draw = function(genre) {
     //Loading in genre data
-    var request_url = "states/genre/" + genre_
-    d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/state_pop.json", function(error, data_) {
+    var request_url = "states/genre/" + genre
+    d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/state_pop.json", function(error, data) {
       if (error) console.log(error);
 
       /////////////////////////////////SETTING COLOUR RANGES/////////////////////////////////
 
       //setting colour range for main page
-      var color_cat = d3.scaleOrdinal().domain(colorsandgenres.genres)
-        .range(colorsandgenres.colors)
+      // var color_cat = d3.scaleOrdinal().domain(colorsandgenres.genres)
+      //   .range(colorsandgenres.colors)
 
       //setting colour range for genres
-      var data = data_.features
+      var data = data.features
       var val_arr = [];
       for (var j = 0; j < data.length; j++) {
         var value = +data[j].value;
@@ -40,13 +40,16 @@
 
       var min = d3.min(val_arr);
       var max = d3.max(val_arr);
-      var color_genre = d3.scaleLinear().domain([min, max]).range(["white", colorsandgenres.genre_colors[genre_]])
+      
+      if ( genre != "topgenre") {
+        var color_genre = d3.scaleLinear().domain([min, max]).range(["white", GENRES[genre].color]);  
+      }
 
       ///////////////////////////////JOINING GENRE DATA TO JSON//////////////////////////////
 
       //loading in us json data
       d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/uStates.json",
-        function(json_) {
+        function(json) {
           // Looping through each state data value in the .csv file
           for (var i = 0; i < data.length; i++) {
             // Grabing State Name
@@ -56,7 +59,7 @@
             var value = data[i].value;
 
             // Finding the corresponding state inside the JSON
-            var states = json_.features
+            var states = json.features
             for (var j = 0; j < states.length; j++) {
               var jsonState = states[j].properties.abbr;
               if (dataState == jsonState) {
@@ -80,7 +83,7 @@
               .style("opacity", 0.8);
             d3.select("#tooltip").html(
                 "<h4>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
-                "<table><tr><td> Top Genre:</td><td>" + colorsandgenres.tool_txt[d.properties.value] + "</td></tr>" +
+                "<table><tr><td> Top Genre:</td><td>" + GENRES[d.properties.value] + "</td></tr>" +
                 "</table>" +
                 "<small>(click to zoom)</small>")
               .style("left", (d3.event.pageX - 345) + "px")
@@ -96,7 +99,7 @@
               .style("opacity", 0.8);
             d3.select("#tooltip").html(
                 "<h4>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
-                "<table><tr><td>" + colorsandgenres.tool_txt[genre_] + "</td><td>" + d.properties.value * 100 + "%</td></tr>" +
+                "<table><tr><td>" + GENRES[genre].label + "</td><td>" + d.properties.value * 100 + "%</td></tr>" +
                 "</table>" +
                 "<small>(click to zoom)</small>")
               .style("left", (d3.event.pageX - 345) + "px")
@@ -120,10 +123,10 @@
 
 
           // applying colour scheme based on html input for 'genre_'
-          if (genre_ == "topgenre") {
+          if (genre == "topgenre") {
             map.on("mouseover", mouseOver_topgenre).on("mouseout", mouseOut)
               .style("fill", function(d) {
-                return color_cat(d.properties.value)
+                return "222222";
               });
           } else {
             map.on("mouseover", mouseOver_genre).on("mouseout", mouseOut)

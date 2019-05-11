@@ -15,7 +15,7 @@
 
   const stats = {};
 
-  stats.draw = function(genre_) {
+  stats.draw = function(genre) {
     //using fake data for now
     d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/state_pop.json", function(error, data_) {
       if (error) console.log(error);
@@ -50,7 +50,7 @@
       .attr("class", "bar")
 
 
-      if (genre_ == "topgenre") {
+      if (genre == "topgenre") {
 
         console.log("temp - gotta finish this bit")
 
@@ -63,7 +63,7 @@
         .attr('y', function(d) { return y(d.abbr); }) //assigning hieght of bars
         .attr("width", function(d) { return x(d.value); }) //assigning width of bars
         .attr("height", y.bandwidth())
-        .attr("fill", function(d) {return colorsandgenres.genre_colors[genre_]})
+        .attr("fill", function(d) {return GENRES[genre].color})
       }
 
     });
