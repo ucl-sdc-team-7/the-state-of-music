@@ -62,6 +62,18 @@
         .attr("width", function(d) { return x(d.value); }) //assigning width of bars
         .attr("height", y.bandwidth())
         .attr("fill", function(d) {return GENRES[genre].color})
+
+        //adding values to bars
+        bar.selectAll(".text")
+        .data(data).enter()
+        .append("text")
+        .attr("class", "bar-text")
+        .attr("dy", ".35em")
+        .attr("x", function(d){ return x(d.value) - 20 })
+        .attr("y", function(d){ return y(d.abbr) + y.bandwidth()/2 })
+        .attr("text-anchor","middle")
+        .text(function(d) { return d.value })
+        .style("fill", "white")
       }
 
     });
