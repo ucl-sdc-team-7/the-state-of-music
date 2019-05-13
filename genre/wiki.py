@@ -7,5 +7,4 @@ page = requests.get(url)
 soup = BeautifulSoup(page.content, 'html.parser')
 
 for link in soup.find_all('a'):
-        #print(sub_heading.text)
     print(link.get_text('title'))
