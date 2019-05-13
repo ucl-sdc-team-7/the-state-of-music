@@ -71,14 +71,16 @@ def addEntry(dict,key,vars):
     dict[key] = vars
     return dict;
 
+def calcShare(genre):
+    share = (event_genre_dict[genre] / total)
+    return share;
+
 #####################################
 ##########  API CALLS  ##############
 #####################################
 for us_state in us_states:
-    print(us_state)
 
     for date in date_list:
-        entry = 0
         time.sleep(.21)
 
         params = {'stateCode': us_state,
@@ -148,15 +150,13 @@ for us_state in us_states:
 
                 event_genre_dict = {'other':0,
                                     'pop':0,
-                                    'rock':0,
+                                    'rock and metal':0,
                                     'electronic':0,
                                     'hip hop':0,
                                     'r&b':0,
                                     'indie':0,
                                     'country and folk':0,
-                                    'metal':0,
-                                    'classical':0,
-                                    'jazz':0
+                                    'classical and jazz':0,
                                     }
 
                 if 'spotify' in genres or 'tm_artist' in genres:
@@ -183,17 +183,15 @@ for us_state in us_states:
                     total = total + event_genre_dict[key]
 
                 if total > 0:
-                    pop = event_genre_dict['pop'] / total
-                    rock_and_metal = ((event_genre_dict['rock'] +
-                                        event_genre_dict['metal']) / total)
-                    indie = event_genre_dict['indie'] / total
-                    hip_hop = event_genre_dict['hip hop'] / total
-                    rnb = event_genre_dict['r&b'] / total
-                    classical_and_jazz = ((event_genre_dict['classical'] +
-                                            event_genre_dict['jazz']) / total)
-                    electronic_and_dance = event_genre_dict['electronic'] / total
-                    country_and_folk = event_genre_dict['country and folk'] / total
-                    other = event_genre_dict['other'] / total
+                    pop = calcShare('pop')
+                    rock_and_metal = calcShare('rock and metal')
+                    indie = calcShare('indie')
+                    hip_hop = calcShare('hip hop')
+                    rnb = calcShare('r&b')
+                    classical_and_jazz = calcShare('classical and jazz')
+                    electronic_and_dance = calcShare('electronic')
+                    country_and_folk = calcShare('country and folk')
+                    other = calcShare('other')
                 else:
                     (pop,rock_and_metal,indie,hip_hop,rnb,classical_and_jazz,
                     electronic_and_dance,country_and_folk,other) = (0,0,0,0,0,0,
