@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = "https://en.wikipedia.org/wiki/List_of_popular_music_genres"
+url = "https://en.wikipedia.org/wiki/List_of_music_styles"
 page = requests.get(url)
 
 soup = BeautifulSoup(page.content, 'html.parser')
