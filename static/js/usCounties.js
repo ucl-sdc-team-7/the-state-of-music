@@ -6,8 +6,9 @@
 
     //leaflet goes here
     // initialize the map - zoom and bounding box to change on click
+    var bbox = [42.755966,-107.302490];
 
-    const map = L.map('countymap').setView([40.7831, -73.9712], 12);
+    const countyMap = L.map('countymap').setView(bbox, 7);
 
 
 
@@ -20,10 +21,28 @@
     });
 
     //add base map to div
-    basemap.addTo(map);
+    basemap.addTo(countyMap);
 
-    map.invalidateSize(true);
+    //var counties = fetchJSON("../static/data/usCounties_geo.js")
+    //.then(function(counties) { return counties});
 
+    //counties.addTo(map);
+/*
+    choropleth = L.choropleth(usCounties, {
+
+      valueProperty: "value", // which property in the features to use
+      scale: ["white", GENRES[genre].color], // chroma.js scale - include as many as you like
+      steps: 10, // number of breaks or steps in range
+      mode: "q", // q for quantile, e for equidistant, k for k-means
+      style: {
+      color: "#fff", // border color
+      weight: 1,
+      fillOpacity: 0.9
+    },
+
+  }).addTo(map);
+
+  */
 
   }
 
