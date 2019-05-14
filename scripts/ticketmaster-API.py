@@ -61,20 +61,6 @@ for l in reader:
         if v != '':
             genre_dict[k].append(v)
 
-
-#####################################
-##########  FUNCTIONS  ##############
-#####################################
-
-def addEntry(dict,key,vars):
-    dict = dict
-    dict[key] = vars
-    return dict;
-
-def calcShare(genre):
-    share = (event_genre_dict[genre] / total)
-    return share;
-
 #####################################
 ##########  API CALLS  ##############
 #####################################
@@ -124,94 +110,14 @@ for us_state in us_states:
                   'name'] if (artists and 'classifications' in artists[
                   0] and 'genre' in artists[0]['classifications'][0]) else ''
 
-                if main_artist_name is not '':
-                    token = requests.post(  URL2,
-                                            data=token_params,
-                                            auth=(client_id,client_secret)
-                                            ).json()['access_token']
-                    spotify_params = {  'q': main_artist_name,
-                                        'type': 'artist',
-                                        'access_token': token}
-                    data = requests.get(url=URL3,params=spotify_params).json()
-                    spotify_genres = data['artists']['items'][0]['genres'] if (
-                         len(data['artists']['items']) > 0 and 'genres' in
-                         data['artists']['items'][0]) else []
-
-                genres = {}
-
-                if main_genre_name != '':
-                    genres = addEntry(genres,'tm_main',[main_genre_name.lower()])
-                if sub_genre_name != '':
-                    genres = addEntry(genres,'tm_sub',[sub_genre_name.lower()])
-                if main_artist_name != '':
-                    genres = addEntry(genres,'tm_artist',[main_artist_genre.lower()])
-                if (main_artist_name != '' and spotify_genres != []):
-                    genres = addEntry(genres,'spotify',spotify_genres)
-
-                event_genre_dict = {'other':0,
-                                    'pop':0,
-                                    'rock and metal':0,
-                                    'electronic':0,
-                                    'hip hop':0,
-                                    'r&b':0,
-                                    'indie':0,
-                                    'country and folk':0,
-                                    'classical and jazz':0,
-                                    }
-
-                if 'spotify' in genres or 'tm_artist' in genres:
-                    for dict in genres:
-                        if dict in ['spotify','tm_artist']:
-                            for genre in genres[dict]:
-                                for key in event_genre_dict:
-                                    if genre.lower() in genre_dict[key]:
-                                        event_genre_dict[key] = event_genre_dict[key] + 1.0
-                        else:
-                            for genre in genres[dict]:
-                                for key in event_genre_dict:
-                                    if genre.lower() in genre_dict[key]:
-                                        event_genre_dict[key] = event_genre_dict[key] + 0.5
-                else:
-                    for dict in genres:
-                        for genre in genres[dict]:
-                            for key in event_genre_dict:
-                                if genre.lower() in genre_dict[key]:
-                                    event_genre_dict[key] = event_genre_dict[key] + 1.0
-
-                total = 0
-                for key in event_genre_dict:
-                    total = total + event_genre_dict[key]
-
-                if total > 0:
-                    pop = calcShare('pop')
-                    rock_and_metal = calcShare('rock and metal')
-                    indie = calcShare('indie')
-                    hip_hop = calcShare('hip hop')
-                    rnb = calcShare('r&b')
-                    classical_and_jazz = calcShare('classical and jazz')
-                    electronic_and_dance = calcShare('electronic')
-                    country_and_folk = calcShare('country and folk')
-                    other = calcShare('other')
-                else:
-                    (pop,rock_and_metal,indie,hip_hop,rnb,classical_and_jazz,
-                    electronic_and_dance,country_and_folk,other) = (0,0,0,0,0,0,
-                    0,0,0)
-
                 query = """INSERT INTO ticketmaster_events
                             (ticketmaster_id, local_date, event_genre,
                             event_subgenre, venue, venue_lat, venue_long,
-                            artist_id, artist_name, artist_genre, pop,
-                            rock_and_metal, indie, hip_hop, r_n_b,
-                            classical_and_jazz, electronic_and_dance,
-                            country_and_folk, other) VALUES
-                             (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                             %s, %s, %s, %s, %s, %s)"""
+                            artist_id, artist_name, artist_genre) VALUES
+                             (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
                 values = (event_id, local_date, main_genre_name, sub_genre_name,
                           main_venue_name, main_venue_lat, main_venue_lon,
-                          main_artist_id, main_artist_name, main_artist_genre,
-                          pop, rock_and_metal, indie, hip_hop, rnb,
-                          classical_and_jazz, electronic_and_dance,
-                          country_and_folk,other)
+                          main_artist_id, main_artist_name, main_artist_genre)
 
                 cursor.execute(query, values)
                 db.commit()
