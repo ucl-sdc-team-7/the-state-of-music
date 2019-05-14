@@ -15,6 +15,7 @@
 
 	<link rel="stylesheet" href="{{url_for('static',filename = 'css/style.css')}}">
 	<link rel="stylesheet" href="{{url_for('static',filename = 'libs/leaflet/dist/leaflet.css')}}">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
 <body>
@@ -133,8 +134,8 @@
 <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
 <script src="{{url_for('static',filename = 'libs/leaflet-choropleth/dist/choropleth.js')}}"></script>
 <script src="{{url_for('static',filename = 'js/constants.js')}}"></script>
-<script src="{{url_for('static',filename = 'js/uStates.js')}}"></script><!-- creates US States. -->
 <script src="{{url_for('static',filename = 'js/usCounties.js')}}"></script><!-- creates US counties. -->
+<script src="{{url_for('static',filename = 'js/uStates.js')}}"></script><!-- creates US States. -->
 <script src="{{url_for('static',filename = 'js/statistics.js')}}"></script><!-- creates statistics in side bar. -->
 <script src="{{url_for('static',filename = 'js/app.js')}}"></script><!-- draws everything -->
 
