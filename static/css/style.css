@@ -48,6 +48,10 @@ html, body, {
   margin: 0px;
 }
 
+.map-path:hover {
+  opacity: 0.2;
+}
+
 #logo {
   width: 80%
 }
