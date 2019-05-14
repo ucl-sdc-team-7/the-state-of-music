@@ -3,13 +3,7 @@ import time
 import mysql.connector as mysql
 import configparser
 import datetime
-import csv
-from collections import defaultdict
 
-####################################
-###########  STAGING  ##############
-####################################
-### read-in data need for sql connection
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
@@ -22,19 +16,8 @@ db = mysql.connect(
 
 cursor = db.cursor()
 
-### save API URLs as vars
-URL = "https://app.ticketmaster.com/discovery/v2/events.json"
-URL2 = "https://accounts.spotify.com/api/token"
-URL3 = "https://api.spotify.com/v1/search"
+ticketmaster_url = "https://app.ticketmaster.com/discovery/v2/events.json"
 
-### stage params and inputs for Spotify token API
-client_id = config['spotify']['client_id']
-client_secret = config['spotify']['client_secret']
-grant_type = 'client_credentials'
-token_params = {'grant_type': grant_type}
-
-
-##### stage params for TM event search API
 us_states = [
               "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC",
               "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA",
@@ -52,20 +35,8 @@ date_range = [start_date + datetime.timedelta(days=x) for x in range(0, 30)]
 date_list = list(map(lambda x: [x.strftime("%Y-%m-%d"+"T00:00:00Z"),x.strftime(
     "%Y-%m-%d"+"T23:59:59Z")],date_range))
 
-##### stage genre dictionary for genre assignment
-genre_dict=defaultdict(list)
-csvfile=open('genre-list.csv')
-reader= csv.DictReader(csvfile)
-for l in reader:
-    for k,v in l.items():
-        if v != '':
-            genre_dict[k].append(v)
 
-#####################################
-##########  API CALLS  ##############
-#####################################
 for us_state in us_states:
-
     for date in date_list:
         time.sleep(.21)
 
@@ -76,7 +47,7 @@ for us_state in us_states:
                   'endDateTime': date[1],
                   'size': size
                   }
-        r = requests.get(url=URL, params=params)
+        r = requests.get(url=ticketmaster_url, params=params)
         data = r.json()
 
         total_events = data['page']['totalElements']
@@ -114,7 +85,7 @@ for us_state in us_states:
                             (ticketmaster_id, local_date, event_genre,
                             event_subgenre, venue, venue_lat, venue_long,
                             artist_id, artist_name, artist_genre) VALUES
-                             (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
                 values = (event_id, local_date, main_genre_name, sub_genre_name,
                           main_venue_name, main_venue_lat, main_venue_lon,
                           main_artist_id, main_artist_name, main_artist_genre)
