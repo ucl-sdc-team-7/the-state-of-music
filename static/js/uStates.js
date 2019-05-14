@@ -40,9 +40,9 @@
 
       var min = d3.min(val_arr);
       var max = d3.max(val_arr);
-      
+
       if ( genre != "topgenre") {
-        var color_genre = d3.scaleLinear().domain([min, max]).range(["white", GENRES[genre].color]);  
+        var color_genre = d3.scaleLinear().domain([min, max]).range(["white", GENRES[genre].color]);
       }
 
       ///////////////////////////////JOINING GENRE DATA TO JSON//////////////////////////////
@@ -110,12 +110,13 @@
             d3.select("#tooltip").transition().duration(500).style("opacity", 0);
           }
 
-          var map = d3.select("#statesvg").append("svg")
+          var map = d3.select("#statesvg")
             //Binding the data to the SVG and create one path per json feature
             .selectAll("path")
             .data(states)
             .enter()
             .append("path")
+            .attr("class", "map-path")
             .attr("d", map_path)
             .style("stroke", "#fff")
             .style("stroke-width", "1")
@@ -134,7 +135,7 @@
                 return color_genre(d.properties.value)
               });
           }
-
+          
         });
     });
 
