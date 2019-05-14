@@ -1,9 +1,6 @@
 import requests
-import time
 import mysql.connector as mysql
 import configparser
-import datetime
-import csv
 from collections import defaultdict
 import json
 
@@ -62,7 +59,7 @@ cursor.execute(query)
 count = 0
 
 for row in cursor:
-    # if count < 5:
+     if count < 5:
         main_genre_name = row[0]
         sub_genre_name = row[1]
         main_artist_name = row[2]
@@ -182,21 +179,21 @@ for row in cursor:
 
             print(count)
 
-            query = """INSERT INTO ticketmaster_events
-                        (ticketmaster_id, local_date, event_genre,
-                        event_subgenre, venue, venue_lat, venue_long,
-                        artist_id, artist_name, artist_genre, pop,
-                        rock, hip_hop, r_n_b,
-                        classical_and_jazz, electronic,
-                        country_and_folk) VALUES
-                         (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                         %s, %s, %s, %s, %s, %s) WHERE (ticketmaster_id == %s)"""
-            values = (event_id, local_date, main_genre_name, sub_genre_name,
-                      main_venue_name, main_venue_lat, main_venue_lon,
-                      main_artist_id, main_artist_name, main_artist_genre,
-                      pop, rock, hip_hop, rnb,
-                      classical_and_jazz, electronic,
-                      country_and_folk, ticketmaster_id)
-
-            cursor.execute(query, values)
-            db.commit()
+            # query = """INSERT INTO ticketmaster_events
+            #             (ticketmaster_id, local_date, event_genre,
+            #             event_subgenre, venue, venue_lat, venue_long,
+            #             artist_id, artist_name, artist_genre, pop,
+            #             rock, hip_hop, r_n_b,
+            #             classical_and_jazz, electronic,
+            #             country_and_folk) VALUES
+            #              (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+            #              %s, %s, %s, %s, %s, %s) WHERE (ticketmaster_id == %s)"""
+            # values = (event_id, local_date, main_genre_name, sub_genre_name,
+            #           main_venue_name, main_venue_lat, main_venue_lon,
+            #           main_artist_id, main_artist_name, main_artist_genre,
+            #           pop, rock, hip_hop, rnb,
+            #           classical_and_jazz, electronic,
+            #           country_and_folk, ticketmaster_id)
+            #
+            # cursor.execute(query, values)
+            # db.commit()
