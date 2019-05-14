@@ -18,6 +18,26 @@
 </head>
 
 <body>
+<!-- Modal -->
+<div class="modal fade" id="modelAbout" tabindex="-1" role="dialog" aria-labelledby="modelAboutTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">About Us</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body"><!-- Cleo text -->
+        <p> The website is a coursework presented by Cleo Au, William Low, Pili Mayora, Richa Sud and Matthew Sutton for UCL CASA.</p>
+		<p>	It utilises music performance information (such as: name, event location and genre) extracted from <a href="https://developer.ticketmaster.com/products-and-docs/apis/getting-started/">ticketmaster's</a> and <a href="https://www.eventbrite.com/platform/api">eventbrite's</a> API for the next 30 days. The genre for each artist were then match with the one listed in <a href="https://developer.spotify.com/documentation/web-api/">Spotify’s API</a> to ensure a more accurate representation of the event. Events are then grouped by genre according to a dictionary created from web-scraping <a ref="https://en.wikipedia.org/wiki/List_of_music_styles">the List of Music Styles in Wikipedia</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 	<div id='container'>
 
@@ -108,7 +128,7 @@
 
 							<div class="col-md-3">
 								<div class='about-icon' id='about'>
-									<input type="image" src="{{url_for('static',filename = 'images/about.png')}}" onclick="updateData()" width="100%">
+									<input type="image" src="{{url_for('static',filename = 'images/about.png')}}" onclick="$('#modelAbout').modal()" width="100%">
 								</div>
 							</div>
 
