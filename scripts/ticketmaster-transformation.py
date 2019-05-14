@@ -190,7 +190,7 @@ for row in cursor:
                         classical_and_jazz, electronic,
                         country_and_folk) VALUES
                          (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                         %s, %s, %s, %s, %s, %s) WHERE ticketmaster_id == %s"""
+                         %s, %s, %s, %s, %s, %s) WHERE (ticketmaster_id == %s)"""
             values = (event_id, local_date, main_genre_name, sub_genre_name,
                       main_venue_name, main_venue_lat, main_venue_lon,
                       main_artist_id, main_artist_name, main_artist_genre,
