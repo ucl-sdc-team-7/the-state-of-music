@@ -3,7 +3,7 @@ import mysql.connector as mysql
 import configparser
 import json
 
-### read-in data need for sql connection
+### read-in data needed for sql connection
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
@@ -18,8 +18,8 @@ cursor = db.cursor(buffered=True)
 cursor2 = db.cursor(buffered=True)
 
 ### save API URLs as vars
-token_url = "https://accounts.spotify.com/api/token"
-genres_url = "https://api.spotify.com/v1/search"
+spotify_token_url = "https://accounts.spotify.com/api/token"
+spotify_genres_url = "https://api.spotify.com/v1/search"
 
 ### stage params and inputs for Spotify token API
 client_id = config['spotify']['client_id']
@@ -56,14 +56,14 @@ for row in cursor:
         ticketmaster_id = row[4]
 
         if main_artist_name is not '':
-            token = requests.post(  token_url,
+            token = requests.post(  spotify_token_url,
                                     data=token_params,
                                     auth=(client_id,client_secret)
                                     ).json()['access_token']
             spotify_params = {  'q': main_artist_name,
                                 'type': 'artist',
                                 'access_token': token}
-            data = requests.get(url=genres_url,params=spotify_params).json()
+            data = requests.get(url=spotify_genres_url,params=spotify_params).json()
             spotify_genres = data['artists']['items'][0]['genres'] if (
                  len(data['artists']['items']) > 0 and 'genres' in
                  data['artists']['items'][0]) else []
@@ -97,44 +97,35 @@ for row in cursor:
                     for genre in genres[dict]:
                         for key in event_genre_dict:
                             if genre.lower() in genre_dict[key]:
-                                # print(genre,("---->"),key)
                                 event_genre_dict[key] = event_genre_dict[key] + 1.0
                             elif genre.lower() == key.lower():
-                                # print(genre,("---->"),key)
                                 event_genre_dict[key] = event_genre_dict[key] + 1.0
                             elif 'r&b' in genre.lower():
                                 new_genre = genre.lower().replace('r&b','r&b and soul')
                                 if new_genre == key.lower():
-                                    # print(new_genre,("---->"),key)
                                     event_genre_dict[key] = event_genre_dict[key] + 1.0
                 else:
                     for genre in genres[dict]:
                         for key in event_genre_dict:
                             if genre.lower() in genre_dict[key]:
-                                # print(genre,("---->"),key)
                                 event_genre_dict[key] = event_genre_dict[key] + 0.5
                             elif genre.lower() == key.lower():
-                                # print(genre,("---->"),key)
                                 event_genre_dict[key] = event_genre_dict[key] + 0.5
                             elif 'r&b' in genre.lower():
                                 new_genre = genre.lower().replace('r&b','r&b and soul')
                                 if new_genre == key.lower():
-                                    # print(new_genre,("---->"),key)
                                     event_genre_dict[key] = event_genre_dict[key] + 0.5
         else:
             for dict in genres:
                 for genre in genres[dict]:
                     for key in event_genre_dict:
                         if genre.lower() in genre_dict[key]:
-                            # print(genre,("---->"),key)
                             event_genre_dict[key] = event_genre_dict[key] + 1.0
                         elif genre.lower() in genre_dict[key]:
-                            # print(genre,("---->"),key)
                             event_genre_dict[key] = event_genre_dict[key] + 1.0
                         elif 'r&b' in genre.lower():
                             new_genre = genre.lower().replace('r&b','r&b and soul')
                             if new_genre == key.lower():
-                                # print(new_genre,("---->"),key)
                                 event_genre_dict[key] = event_genre_dict[key] + 1.0
 
         total = 0
