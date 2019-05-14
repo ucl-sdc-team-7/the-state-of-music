@@ -23,6 +23,8 @@
     //add base map to div
     basemap.addTo(countyMap);
 
+    L.geoJson(counties_geo).addTo(countyMap);
+
     //var counties = fetchJSON("../static/data/usCounties_geo.js")
     //.then(function(counties) { return counties});
 
