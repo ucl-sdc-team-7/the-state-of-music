@@ -15,7 +15,6 @@
 
 	<link rel="stylesheet" href="{{url_for('static',filename = 'css/style.css')}}">
 	<link rel="stylesheet" href="{{url_for('static',filename = 'libs/leaflet/dist/leaflet.css')}}">
-	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
 <body>
@@ -66,14 +65,8 @@
 							</div>
 
 							<div class="col-md-3">
-								<div class='genre-icon' id='rock_metal'>
-									<input type="image" src="{{url_for('static',filename = 'images/rock_metal.png')}}" onclick="updateData()" width="100%">
-								</div>
-							</div>
-
-							<div class="col-md-3">
-								<div class='genre-icon' id='indie'>
-									<input type="image" src="{{url_for('static',filename = 'images/indie.png')}}" value="" onclick="updateData()" width="100%">
+								<div class='genre-icon' id='rock'>
+									<input type="image" src="{{url_for('static',filename = 'images/rock.png')}}" onclick="updateData()" width="100%">
 								</div>
 							</div>
 
@@ -82,16 +75,18 @@
 									<input type="image" src="{{url_for('static',filename = 'images/hiphop.png')}}" onclick="updateData()" width="100%">
 								</div>
 							</div>
-						</div>
-					</div>
 
-					<div class="col-md-6">
-						<div class="row">
 							<div class="col-md-3">
 								<div class='genre-icon' id='rnb'>
 									<input type="image" src="{{url_for('static',filename = 'images/rnb.png')}}" onclick="updateData()" width="100%">
 								</div>
 							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+					  <div class="row">
+
 
 							<div class="col-md-3">
 								<div class='genre-icon' id='classical_jazz'>
@@ -100,8 +95,8 @@
 							</div>
 
 							<div class="col-md-3">
-								<div class='genre-icon' id='electronic_dance'>
-									<input type="image" src="{{url_for('static',filename = 'images/electronic_dance.png')}}" onclick="updateData()" width="100%">
+								<div class='genre-icon' id='electronic'>
+									<input type="image" src="{{url_for('static',filename = 'images/electronic.png')}}" onclick="updateData()" width="100%">
 								</div>
 							</div>
 
@@ -110,8 +105,21 @@
 									<input type="image" src="{{url_for('static',filename = 'images/country_folk.png')}}" onclick="updateData()" width="100%">
 								</div>
 							</div>
+
+							<div class="col-md-3">
+								<div class='about-icon' id='about'>
+									<input type="image" src="{{url_for('static',filename = 'images/about.png')}}" onclick="updateData()" width="100%">
+								</div>
+							</div>
+
 						</div>
 					</div>
+
+
+
+
+
+
 
 				</div>
 
@@ -119,11 +127,9 @@
 					<div id="mapCanvas">
 						<!-- div and svg to hold the map. -->
 						<svg id="statesvg" viewBox="0 0 960 630" preserveAspectRatio="xMidYMid meet"></svg>
-					</div>
-					<div id="tooltip"></div><!-- div to hold tooltip. -->
-				</div>
+						<div id="tooltip"></div><!-- div to hold tooltip. -->
 
-			</div>
+					</div>
 </body>
 
 
@@ -134,6 +140,8 @@
 <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
 <script src="{{url_for('static',filename = 'libs/leaflet-choropleth/dist/choropleth.js')}}"></script>
 <script src="{{url_for('static',filename = 'js/constants.js')}}"></script>
+<script src="{{url_for('static',filename = 'data/usCounties_geo.js')}}"></script>
+<script src="{{url_for('static',filename = 'data/countyData.js')}}"></script><!-- temporary data file -->
 <script src="{{url_for('static',filename = 'js/usCounties.js')}}"></script><!-- creates US counties. -->
 <script src="{{url_for('static',filename = 'js/uStates.js')}}"></script><!-- creates US States. -->
 <script src="{{url_for('static',filename = 'js/statistics.js')}}"></script><!-- creates statistics in side bar. -->
