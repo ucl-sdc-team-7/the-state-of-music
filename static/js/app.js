@@ -26,3 +26,13 @@ d3.selectAll('.map-path')
     var state_bbox = get_state_bbox(state_abbr);
     //usCounties.draw(state_bbox,genre) //function that draws leaflet to come
   });
+
+  
+//set map zoom to state (includes margin)
+//stateBoxes variable is loaded from state_boundaries_w_margin.js
+function zoomToState(state_abbr) {
+countyMap.fitBounds([
+    [stateBoxes[state_abbr].xmin,stateBoxes[state_abbr].xmin],
+    [stateBoxes[state_abbr].xmax,stateBoxes[state_abbr].ymax]
+]);
+}
