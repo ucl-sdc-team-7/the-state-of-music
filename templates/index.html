@@ -5,22 +5,25 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--loading jQuery -->
-	<script src="{{url_for('static',filename = 'js/jquery.min.js')}}"></script>
+	<script src="{{url_for('static',filename = 'libs/jquery.min.js')}}"></script>
 	<!--loading bootstrap -->
-	<link rel="stylesheet" href="{{url_for('static',filename = 'css/bootstrap.min.css')}}">
-	<script src="{{url_for('static',filename = 'js/bootstrap.min.js')}}"></script>
-	<script src="{{url_for('static',filename = 'js/popper.min.js')}}"></script>
+	<link rel="stylesheet" href="{{url_for('static',filename = 'libs/bootstrap.min.css')}}">
+	<script src="{{url_for('static',filename = 'libs/bootstrap.min.js')}}"></script>
+	<script src="{{url_for('static',filename = 'libs/popper.min.js')}}"></script>
 	<!--loading roboto font -->
 	<link rel='stylesheet' id='font-css' href='http://fonts.googleapis.com/css?family=Roboto:400,300,100' type='text/css' media='all' />
 
 	<link rel="stylesheet" href="{{url_for('static',filename = 'css/style.css')}}">
+	<link rel="stylesheet" href="{{url_for('static',filename = 'libs/leaflet/dist/leaflet.css')}}">
 </head>
 
 <body>
+
 	<div id='container'>
 
-		<!--<div id = "cityMap"></div> div to hold map at city level -->
+		<div id="countymap"></div>
 
+		<!--<div id = "cityMap"></div> div to hold map at city level -->
 		<div class="row">
 			<div class="col-md-3" id="sidePanel">
 				<!-- loading logos here -->
@@ -123,9 +126,12 @@
 </body>
 
 
-<script src="{{url_for('static',filename = 'js/d3.min.js')}}"></script><!-- D3 graphing library -->
-<script src="{{url_for('static',filename = 'js/d3-scale-chromatic.v1.min.js')}}"></script>
-<script src="{{url_for('static',filename = 'js/topojson.v1.min.js')}}"></script><!-- topojson library -->
+<script src="{{url_for('static',filename = 'libs/d3.min.js')}}"></script><!-- D3 graphing library -->
+<script src="{{url_for('static',filename = 'libs/d3-scale-chromatic.v1.min.js')}}"></script>
+<script src="{{url_for('static',filename = 'libs/topojson.v1.min.js')}}"></script><!-- topojson library -->
+<script src="{{url_for('static',filename = 'libs/leaflet/dist/leaflet.js')}}"></script>
+<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
+<script src="{{url_for('static',filename = 'libs/leaflet-choropleth/dist/choropleth.js')}}"></script>
 <script src="{{url_for('static',filename = 'js/constants.js')}}"></script>
 <script src="{{url_for('static',filename = 'js/uStates.js')}}"></script><!-- creates US States. -->
 <script src="{{url_for('static',filename = 'js/usCounties.js')}}"></script><!-- creates US counties. -->
