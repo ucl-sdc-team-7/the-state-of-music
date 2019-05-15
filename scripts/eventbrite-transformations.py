@@ -54,11 +54,6 @@ for row in cursor:
     electronic = event_genre_dict['electronic music']
     country_and_folk = event_genre_dict['country'] + event_genre_dict['folk']
 
-    print(eb_id)
-    print("genre:", eb_genre)
-    for genre in event_genre_dict:
-        print(genre, event_genre_dict[genre])
-
     query = """UPDATE eventbrite_events SET
             pop = %s, rock = %s, hip_hop = %s, rnb = %s,
             classical_and_jazz = %s, electronic = %s,
