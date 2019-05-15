@@ -97,44 +97,35 @@ for row in cursor:
                     for genre in genres[dict]:
                         for key in event_genre_dict:
                             if genre.lower() in genre_dict[key]:
-                                # print(genre,("---->"),key)
                                 event_genre_dict[key] = event_genre_dict[key] + 1.0
                             elif genre.lower() == key.lower():
-                                # print(genre,("---->"),key)
                                 event_genre_dict[key] = event_genre_dict[key] + 1.0
                             elif 'r&b' in genre.lower():
                                 new_genre = genre.lower().replace('r&b','r&b and soul')
                                 if new_genre == key.lower():
-                                    # print(new_genre,("---->"),key)
                                     event_genre_dict[key] = event_genre_dict[key] + 1.0
                 else:
                     for genre in genres[dict]:
                         for key in event_genre_dict:
                             if genre.lower() in genre_dict[key]:
-                                # print(genre,("---->"),key)
                                 event_genre_dict[key] = event_genre_dict[key] + 0.5
                             elif genre.lower() == key.lower():
-                                # print(genre,("---->"),key)
                                 event_genre_dict[key] = event_genre_dict[key] + 0.5
                             elif 'r&b' in genre.lower():
                                 new_genre = genre.lower().replace('r&b','r&b and soul')
                                 if new_genre == key.lower():
-                                    # print(new_genre,("---->"),key)
                                     event_genre_dict[key] = event_genre_dict[key] + 0.5
         else:
             for dict in genres:
                 for genre in genres[dict]:
                     for key in event_genre_dict:
                         if genre.lower() in genre_dict[key]:
-                            # print(genre,("---->"),key)
                             event_genre_dict[key] = event_genre_dict[key] + 1.0
                         elif genre.lower() in genre_dict[key]:
-                            # print(genre,("---->"),key)
                             event_genre_dict[key] = event_genre_dict[key] + 1.0
                         elif 'r&b' in genre.lower():
                             new_genre = genre.lower().replace('r&b','r&b and soul')
                             if new_genre == key.lower():
-                                # print(new_genre,("---->"),key)
                                 event_genre_dict[key] = event_genre_dict[key] + 1.0
 
         total = 0
@@ -154,7 +145,7 @@ for row in cursor:
             electronic,country_and_folk) = (0,0,0,0,0,0,
             0)
 
-        query = """UPDATE ticketmaster_events_temp SET
+        query = """UPDATE ticketmaster_events SET
                 pop = %s, rock = %s, hip_hop = %s, rnb = %s,
                 classical_and_jazz = %s, electronic = %s,
                 country_and_folk = %s
