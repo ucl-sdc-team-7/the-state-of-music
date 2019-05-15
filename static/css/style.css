@@ -156,12 +156,14 @@ html, body, {
   text-align: center;
 }
 
-/* Next two entries are for the background color of the info text box */
+/* Next two entries are for the colouring of the info text box*/
 
 :root {
-  --genre-color: #888b94;
+  --displayInfo-color: #888b94;
+  --displayInfo-text-color: #FFFFFF;
 	}
 	
 #displayInfo {
-	background-color: var(--genre-color);
+	background-color: var(--displayInfo-color);
+	color: var(--displayInfo-text-color);
 }

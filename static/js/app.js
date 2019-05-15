@@ -3,8 +3,13 @@ stats.draw("topgenre")
 
 function updateInfoBox(label,color){
 		$("#titleGenre").html(label);
-		document.documentElement.style.setProperty('--genre-color', color);
+		//this slightly  ugly solution shifts the colouring of the info boxes
+		//it's repeated in the updatelogo function below
+		document.documentElement.style.setProperty('--displayInfo-color', "#efefef");
 		$("#titleCategory").html("Where live "+label+" music is most popular")
+		document.documentElement.style.setProperty('--displayInfo-text-color', "#555b66");
+		$("#displayStatsTitle").html("Where should "+label+" fans go this month?");
+		
 	}
 
 //Update data section (Called from the onclick)
@@ -25,8 +30,10 @@ function updatelogo() {
 			uStates.draw("topgenre");
 			stats.draw("topgenre")
 			$("#titleGenre").html("music");
-			document.documentElement.style.setProperty('--genre-color', "#888b94");
+			document.documentElement.style.setProperty('--displayInfo-color', "#888b94");
 			$("#titleCategory").html("The most popular types of live music")
+			document.documentElement.style.setProperty('--displayInfo-text-color', "#FFFFFF");
+			$("#displayStatsTitle").html("Which states feel the strongest about each genre?");
     });
 }
   
@@ -34,7 +41,7 @@ function updatelogo() {
 //stateBoxes variable is loaded from state_boundaries_w_margin.js
 function zoomToState(state_abbr) {
 countyMap.fitBounds([
-    [stateBoxes[state_abbr].xmin,stateBoxes[state_abbr].xmin],
+    [stateBoxes[state_abbr].xmin,stateBoxes[state_abbr].ymin],
     [stateBoxes[state_abbr].xmax,stateBoxes[state_abbr].ymax]
 ]);
 }
