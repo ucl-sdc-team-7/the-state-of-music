@@ -41,7 +41,7 @@ function updatelogo() {
 //stateBoxes variable is loaded from state_boundaries_w_margin.js
 function zoomToState(state_abbr) {
 countyMap.fitBounds([
-    [stateBoxes[state_abbr].xmin,stateBoxes[state_abbr].ymin],
-    [stateBoxes[state_abbr].xmax,stateBoxes[state_abbr].ymax]
+    [stateBoxes[state_abbr].ymin,stateBoxes[state_abbr].xmin],
+    [stateBoxes[state_abbr].ymax,stateBoxes[state_abbr].xmax]
 ]);
 }
