@@ -4,9 +4,17 @@ html, body, {
   margin: 0;
 }
 
+#countymap {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+}
+
 #logo {
   text-align: left;
   margin: 10px 10px;
+  z-index: 0;
 }
 
 #displayInfo {
@@ -16,18 +24,21 @@ html, body, {
   font-size: 15px;
   color: white;
   background-color: #555a66;
-  opacity: 0.7;
+  opacity: 1;
+  z-index: 0;
 }
 
 #displayStats {
   font-family: 'Roboto', sans-serif;
   display: inline-block;
+  background-color: "white";
   position: relative;
   height: 100%;
   width: 100%;
   vertical-align: top;
   padding: 20px;
   color: #555a66;
+  z-index: 0;
 }
 
 .axis {
@@ -49,31 +60,36 @@ html, body, {
 }
 
 .map-path:hover {
-  opacity: 0.2;
+  opacity: 1;
 }
 
 #logo {
-  width: 80%
+  width: 80%;
+}
+
+#logo:hover {
+  opacity: 0.8; 
 }
 
 #navbar {
   text-align: left;
   margin: 10px;
+  z-index: 0;
 }
 
 .genre-icon {
   text-align: left;
-  opacity: 0.7;
+  opacity: 1;
   width: 100%;
 }
 
 .genre-icon:hover {
-  opacity: 0.9999;
+  opacity: 0.7;
   /*chrome doesn't seem to like hovering to opacity: 1*/
 }
 
 *:focus {
-  opacity: 0.99999;
+  opacity: 1;
   outline: none;
 }
 

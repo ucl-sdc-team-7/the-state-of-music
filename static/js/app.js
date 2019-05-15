@@ -18,15 +18,6 @@ function updatelogo() {
       stats.draw("topgenre")
     });
 }
-
-//drawing counties onclick
-d3.selectAll('.map-path')
-  .on('click', function(d) {
-    var state_abbr = d.properties.abbr;
-    var state_bbox = get_state_bbox(state_abbr);
-    //usCounties.draw(state_bbox,genre) //function that draws leaflet to come
-  });
-
   
 //set map zoom to state (includes margin)
 //stateBoxes variable is loaded from state_boundaries_w_margin.js

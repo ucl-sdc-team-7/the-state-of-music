@@ -3,32 +3,28 @@ const GENRES = {
     "color": "#002f81",
     "label": "Pop"
   },
-  "rock_metal": {
+  "rock": {
     "color": "#2a7187",
-    "label": "Rock & Metal"
-  },
-  "indie": {
-    "color": "#0381b4",
-    "label": "Indie"
+    "label": "Rock"
   },
   "hiphop": {
-    "color": "#4a2777",
+    "color": "#0381b4",
     "label": "Hip Hop"
   },
   "rnb": {
-    "color": "#b41162",
+    "color": "#4a2777",
     "label": "R&B"
   },
   "classical_jazz": {
-    "color": "#bf9076",
+    "color": "#b41162",
     "label": "Classical & Jazz"
   },
-  "electronic_dance": {
-    "color": "#56371b",
+  "electronic": {
+    "color": "#bf9076",
     "label": "Electronic & Dance"
   },
   "country_folk": {
-    "color": "#545a66",
+    "color": "#56371b",
     "label": "Country & Folk"
-  }
+  },
 };

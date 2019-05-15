@@ -135,7 +135,17 @@
                 return color_genre(d.properties.value)
               });
           }
-          
+
+          //drawing counties onclick
+          d3.selectAll('.map-path')
+            .on('click', function(d) {
+              d3.selectAll("svg > *").remove();
+              var state_abbr = d.properties.abbr;
+              //var state_bbox = get_state_bbox(state_abbr);
+              usCounties.draw() //function that draws leaflet to come
+            });
+
+
         });
     });
 
