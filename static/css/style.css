@@ -8,7 +8,6 @@ html, body, {
   position: absolute;
   height: 100%;
   width: 100%;
-  z-index: -1;
 }
 
 #logo {
@@ -78,7 +77,15 @@ html, body, {
 #navbar {
   text-align: left;
   margin: 10px;
-  z-index: 0;
+}
+
+
+#mapCanvas {
+  position: relative;
+  width: 100%;
+  vertical-align: top;
+  margin: 10px;
+  align-items: center;
 }
 
 .genre-icon {
@@ -95,16 +102,6 @@ html, body, {
 *:focus {
   opacity: 1;
   outline: none;
-}
-
-#mapCanvas {
-  display: block;
-  position: relative;
-  height: 100%;
-  width: 100%;
-  vertical-align: top;
-  margin-top: 10px;
-  align-items: center;
 }
 
 #tooltip {

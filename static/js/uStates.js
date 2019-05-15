@@ -19,6 +19,7 @@
 
   const uStates = {};
   uStates.draw = function(genre) {
+
     //Loading in genre data
     var request_url = "states/genre/" + genre
     d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/state_pop.json", function(error, data) {
@@ -136,13 +137,11 @@
               });
           }
 
-          //set map zoom to state (includes margin)
-          //stateBoxes variable is loaded from state_boundaries_w_margin.js
           function get_state_bbox(state_abbr) {
-          return [
-              [stateBoxes[state_abbr].ymin,stateBoxes[state_abbr].xmin],
-              [stateBoxes[state_abbr].ymax,stateBoxes[state_abbr].xmax]
-          ];
+            return [
+              [stateBoxes[state_abbr].ymin, stateBoxes[state_abbr].xmin],
+              [stateBoxes[state_abbr].ymax, stateBoxes[state_abbr].xmax]
+            ];
           }
 
           //drawing counties onclick
@@ -152,8 +151,8 @@
               mouseOut();
               var state_abbr = d.properties.abbr;
               var state_bbox = get_state_bbox(state_abbr);
-              console.log(state_bbox)
-              usCounties.draw(state_bbox) //function that draws leaflet to come
+              usCounties.draw(state_bbox,"topgenre"); //function that draws leaflet
+              stats.draw("rnb") // temp function to draw face stats
             });
 
         });

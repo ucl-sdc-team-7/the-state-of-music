@@ -46,7 +46,8 @@
 
 	<div id='container'>
 
-		<div id="countymap"></div>
+
+		<!--<div id = "countymap"></div> div to hold map at city level -->
 
 		<!--<div id = "cityMap"></div> div to hold map at city level -->
 		<div class="row">
@@ -159,7 +160,8 @@
 <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
 <script src="{{url_for('static',filename = 'libs/leaflet-choropleth/dist/choropleth.js')}}"></script>
 <script src="{{url_for('static',filename = 'js/constants.js')}}"></script>
-<script src="{{url_for('static',filename = 'data/usCounties_geo.js')}}"></script>
+<script src="{{url_for('static',filename = 'data/states_geo.js')}}"></script>
+<script src="{{url_for('static',filename = 'data/counties_geo.js')}}"></script>
 <script src="{{url_for('static',filename = 'data/countyData.js')}}"></script><!-- temporary data file -->
 <script src="{{url_for('static',filename = 'js/state_boundaries_w_margin.js')}}"></script><!-- for leaflet zoom levels -->
 <script src="{{url_for('static',filename = 'js/usCounties.js')}}"></script><!-- creates US counties. -->
