@@ -39,18 +39,13 @@ usCounties.draw = function(bbox, genre) {
       fillOpacity: 1
     });
 
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-      layer.bringToFront();
-    }
-
-    var popup = L.popup()
-      .setLatLng(e.latlng)
-      .setContent('Popup') //needs real data
-      .openOn(countyMap);
+    layer.openPopup()
   }
 
   function resetHighlight(e) {
-    choropleth.resetStyle(e.target);
+    var layer = e.target;
+    choropleth.resetStyle(layer);
+    layer.closePopup()
   }
 
   function zoomToFeature(e) {
@@ -62,6 +57,14 @@ usCounties.draw = function(bbox, genre) {
   }
 
   function onEachFeature(feature, layer) {
+
+    var popupContent =   "<h4>" + feature.properties.NAME + " County</h4>" +
+      "<table><tr><td>R&B</td><td>" + feature.properties.value * 100 + "%</td></tr>" +
+      "</table>" +
+      "<small>(click to zoom)</small>"
+
+    layer.bindPopup(popupContent, {closeButton: false, offset: L.point(0, -20), 'className' : 'custom'}, );
+
     layer.on({
       mouseover: highlightFeature,
       mouseout: resetHighlight,
@@ -80,7 +83,7 @@ usCounties.draw = function(bbox, genre) {
 
 
   //drawing state map over counties doesn't allow for hovers and clicks
-  
+
   /*
   L.geoJson(states_geo, {
       style: {
