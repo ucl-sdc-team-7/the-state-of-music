@@ -155,3 +155,15 @@ html, body, {
 #tooltip tr td:nth-child(2) {
   text-align: center;
 }
+
+/* Next two entries are for the colouring of the info text box*/
+
+:root {
+  --displayInfo-color: #888b94;
+  --displayInfo-text-color: #FFFFFF;
+	}
+	
+#displayInfo {
+	background-color: var(--displayInfo-color);
+	color: var(--displayInfo-text-color);
+}
