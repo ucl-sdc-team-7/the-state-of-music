@@ -14,7 +14,7 @@
 	<link rel='stylesheet' id='font-css' href='http://fonts.googleapis.com/css?family=Roboto:400,300,100' type='text/css' media='all' />
 
 	<link rel="stylesheet" href="{{url_for('static',filename = 'css/style.css')}}">
-	<link rel="stylesheet" href="{{url_for('static',filename = 'libs/leaflet/dist/leaflet.css')}}">
+	<link rel="stylesheet" href="{{url_for('static',filename = 'libs/leaflet/dist/leaflet.css')}}">	
 </head>
 
 <body>
@@ -58,22 +58,17 @@
 				</div>
 
 				<div id="displayInfo">
-					<h3>About</h3>
-					<h4>the State of Music</h4>
-					<small>
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-						This is some stuff about music in the US.
-					</small>
+				<div id="infoText">
+				<h5>The state of <span id= "titleGenre">music</span> in <span id="titleLoc">the United States</span></h5><small><span id="titleCategory">The most popular types of live music</span> in the next 30 days</small>
 				</div>
+				<small>
+					<div id="InfoSummary">
+						</div>
+				</small>
+			</div>
 
 				<div id="displayStats">
-					<h5>Top 5 states:</h5>
+					<h6><span id="displayStatsTitle">Which states feel the strongest about each genre?</span></h6>
 					<svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet"></svg>
 				</div>
 

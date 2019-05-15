@@ -1,15 +1,15 @@
 const GENRES = {
   "pop": {
     "color": "#002f81",
-    "label": "Pop"
+    "label": "pop"
   },
   "rock": {
     "color": "#2a7187",
-    "label": "Rock"
+    "label": "rock"
   },
   "hiphop": {
     "color": "#0381b4",
-    "label": "Hip Hop"
+    "label": "hip hop"
   },
   "rnb": {
     "color": "#4a2777",
@@ -17,14 +17,14 @@ const GENRES = {
   },
   "classical_jazz": {
     "color": "#b41162",
-    "label": "Classical & Jazz"
+    "label": "classical & jazz"
   },
   "electronic": {
     "color": "#bf9076",
-    "label": "Electronic & Dance"
+    "label": "electronic & dance"
   },
   "country_folk": {
     "color": "#56371b",
-    "label": "Country & Folk"
+    "label": "country & folk"
   },
 };
