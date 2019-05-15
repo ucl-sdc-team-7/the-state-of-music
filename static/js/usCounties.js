@@ -1,16 +1,15 @@
-(function() {
+
 
   var usCounties = {};
 
+
+
   usCounties.draw = function(bbox, genre) {
 
-    //leaflet goes here
     // initialize the map - zoom and bounding box to change on click
-    var bbox = [42.755966,-107.302490];
+    //var bounds = [[-124.92351, 32.0603879],[-113.617292, 42.4832861]];
 
-    const countyMap = L.map('countymap').setView(bbox, 7);
-
-
+    var countyMap = L.map('countymap').fitBounds(bbox);
 
     const url = "http://{s}tile.stamen.com/toner-lite/{z}/{x}/{y}.png";
 
@@ -49,5 +48,3 @@
   }
 
   this.usCounties = usCounties
-
-})();

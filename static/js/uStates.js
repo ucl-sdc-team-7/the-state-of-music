@@ -1,4 +1,4 @@
-(function() {
+
   //sets dimentions
   const map_margin = {
       top: 0,
@@ -136,15 +136,25 @@
               });
           }
 
+          //set map zoom to state (includes margin)
+          //stateBoxes variable is loaded from state_boundaries_w_margin.js
+          function get_state_bbox(state_abbr) {
+          return [
+              [stateBoxes[state_abbr].ymin,stateBoxes[state_abbr].xmin],
+              [stateBoxes[state_abbr].ymax,stateBoxes[state_abbr].xmax]
+          ];
+          }
+
           //drawing counties onclick
           d3.selectAll('.map-path')
             .on('click', function(d) {
               d3.selectAll("svg > *").remove();
+              mouseOut();
               var state_abbr = d.properties.abbr;
-              //var state_bbox = get_state_bbox(state_abbr);
-              usCounties.draw() //function that draws leaflet to come
+              var state_bbox = get_state_bbox(state_abbr);
+              console.log(state_bbox)
+              usCounties.draw(state_bbox) //function that draws leaflet to come
             });
-
 
         });
     });
@@ -152,5 +162,3 @@
   };
 
   this.uStates = uStates;
-
-})();

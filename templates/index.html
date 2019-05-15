@@ -18,29 +18,31 @@
 </head>
 
 <body>
-<!-- Modal -->
-<div class="modal fade" id="modelAbout" tabindex="-1" role="dialog" aria-labelledby="modelAboutTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">About Us</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body"><!-- Cleo text -->
-        <p> The state of music is a coursework presented by Group 7 - International Super Friends (Cleo Au, William Low, Pili Mayora, Richa Sud and Matthew Sutton) for UCL CASA's module CASA0009 Spatial Data Capture, Storage and Analysis.</p>
-		<p>	The website utilises music performance information (name, event location and genre) extracted from <a href="https://developer.ticketmaster.com/products-and-docs/apis/getting-started/">ticketmaster's</a> and <a href="https://www.eventbrite.com/platform/api">eventbrite's</a> API for the next 30 days. </p>
-		<p> The genre of playing artists were then match with the one classified by <a href="https://developer.spotify.com/documentation/web-api/">Spotify’s API</a> to ensure higher accuracy of the events' genre. </p>
-		<p>	All events are then grouped by genre according to a dictionary created from web-scraping <a href="https://en.wikipedia.org/wiki/List_of_music_styles">the List of Music Styles in Wikipedia</a>.</p>
-		<p> Explaination of the normalisation method here... (from Matt) </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+	<!-- Modal -->
+	<div class="modal fade" id="modelAbout" tabindex="-1" role="dialog" aria-labelledby="modelAboutTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">About Us</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- Cleo text -->
+					<p> The state of music is a coursework presented by Group 7 - International Super Friends (Cleo Au, William Low, Pili Mayora, Richa Sud and Matthew Sutton) for UCL CASA's module CASA0009 Spatial Data Capture, Storage and Analysis.</p>
+					<p> The website utilises music performance information (name, event location and genre) extracted from <a href="https://developer.ticketmaster.com/products-and-docs/apis/getting-started/">ticketmaster's</a> and <a
+							href="https://www.eventbrite.com/platform/api">eventbrite's</a> API for the next 30 days. </p>
+					<p> The genre of playing artists were then match with the one classified by <a href="https://developer.spotify.com/documentation/web-api/">Spotify’s API</a> to ensure higher accuracy of the events' genre. </p>
+					<p> All events are then grouped by genre according to a dictionary created from web-scraping <a href="https://en.wikipedia.org/wiki/List_of_music_styles">the List of Music Styles in Wikipedia</a>.</p>
+					<p> Explaination of the normalisation method here... (from Matt) </p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<div id='container'>
 
@@ -108,7 +110,7 @@
 					</div>
 
 					<div class="col-md-6">
-					  <div class="row">
+						<div class="row">
 
 
 							<div class="col-md-3">
@@ -138,12 +140,6 @@
 						</div>
 					</div>
 
-
-
-
-
-
-
 				</div>
 
 				<div class="row">
@@ -165,10 +161,10 @@
 <script src="{{url_for('static',filename = 'js/constants.js')}}"></script>
 <script src="{{url_for('static',filename = 'data/usCounties_geo.js')}}"></script>
 <script src="{{url_for('static',filename = 'data/countyData.js')}}"></script><!-- temporary data file -->
+<script src="{{url_for('static',filename = 'js/state_boundaries_w_margin.js')}}"></script><!-- for leaflet zoom levels -->
 <script src="{{url_for('static',filename = 'js/usCounties.js')}}"></script><!-- creates US counties. -->
 <script src="{{url_for('static',filename = 'js/uStates.js')}}"></script><!-- creates US States. -->
 <script src="{{url_for('static',filename = 'js/statistics.js')}}"></script><!-- creates statistics in side bar. -->
-<script src="{{url_for('static',filename = 'js/state_boundaries_w_margin.js')}}"></script><!-- for leaflet zoom levels -->
 <script src="{{url_for('static',filename = 'js/app.js')}}"></script><!-- draws everything -->
 
 
