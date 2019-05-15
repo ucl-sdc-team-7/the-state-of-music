@@ -2,6 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 import json
 
+#####################################
+###########  SCRAPING  ##############
+#####################################
 genreDict = {}
 url = "https://en.m.wikipedia.org/wiki/List_of_music_styles"
 r = requests.get(url)
@@ -12,9 +15,9 @@ mainGenres = soup.find_all("span", {"class": "mw-headline"})
 
 #the [0:20] sub-setting is to avoid the categories Other, References, External links, Bibliography, and See also
 #for future uses of this code the number of valid categories needs to be confirmed, or other means of exclusion added
-for mainGenre in mainGenres[0:20]:  
+for mainGenre in mainGenres[0:20]:
     #the key and genreList will populate our dictionary
-    key=(mainGenre.text)
+    key=(mainGenre.text.lower())
     genreList=[]
     #the id of each mainGenres span is used to target the list of bullet points that follow them
     section = soup.find(id=mainGenre.get('id'))
@@ -31,8 +34,8 @@ for mainGenre in mainGenres[0:20]:
                 firstItem = allText.split('\n', 1)[0]
             #the relevent genre is added to the list for this main genre
             #the join and split here is getting rid of any double spaces
-                genreList.append(' '.join(firstItem.split()))
-            else: genreList.append(' '.join(allText.split()))
+                genreList.append(' '.join(firstItem.lower().split()))
+            else: genreList.append(' '.join(allText.lower().split()))
     except:
         pass
     #the dictionary is populated
