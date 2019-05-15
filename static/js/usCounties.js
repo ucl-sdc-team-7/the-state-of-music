@@ -34,11 +34,9 @@ usCounties.draw = function(bbox, genre) {
 
   function highlightFeature(e) {
     var layer = e.target;
-
     layer.setStyle({
       fillOpacity: 1
     });
-
     layer.openPopup()
   }
 
@@ -58,12 +56,15 @@ usCounties.draw = function(bbox, genre) {
 
   function onEachFeature(feature, layer) {
 
-    var popupContent =   "<h4>" + feature.properties.NAME + " County</h4>" +
+    var popupContent = "<h4>" + feature.properties.NAME + " County</h4>" +
       "<table><tr><td>R&B</td><td>" + feature.properties.value * 100 + "%</td></tr>" +
       "</table>" +
       "<small>(click to zoom)</small>"
 
-    layer.bindPopup(popupContent, {closeButton: false, offset: L.point(0, -20), 'className' : 'custom'}, );
+    layer.bindPopup(popupContent, {
+      closeButton: false,
+      'className': 'custom'
+    }, );
 
     layer.on({
       mouseover: highlightFeature,
