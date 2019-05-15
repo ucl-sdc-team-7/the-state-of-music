@@ -79,7 +79,6 @@ for row in cursor:
         if (main_artist_name != '' and spotify_genres != []):
             genres = addEntry(genres,'spotify',spotify_genres)
 
-
         event_genre_dict = {'country':0,
                             'electronic music':0,
                             'folk':0,
