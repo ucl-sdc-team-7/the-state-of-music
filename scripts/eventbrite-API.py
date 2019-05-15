@@ -70,6 +70,7 @@ for us_state_and_viewport in us_states_and_viewports[1:]:
             events_response = eventbrite.event_search(**params)
             events = events_response['events']
 
+
             for event in events:
                 event_id = event['id']
                 event_name = event['name']['text']
