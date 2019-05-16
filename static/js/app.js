@@ -17,8 +17,13 @@ function updateData() {
 	d3.selectAll(".genre-icon")
 		.on('click', function() {
 			var genre_id = d3.select(this).attr('id')
-			d3.selectAll("svg > *").remove();
-			uStates.draw(genre_id);
+			d3.selectAll("svg#statesvg > *").remove();
+			if (geo_level == "state") {
+				uStates.draw(genre_id);
+			} else if (geo_level == "county") {
+				usCounties.recalculateGenres(genre_id);
+			}
+				
 			stats.draw(genre_id);
 			updateInfoBox(GENRES[genre_id].label,GENRES[genre_id].color);
     });
@@ -27,7 +32,7 @@ function updateData() {
 function updatelogo() {
 	d3.selectAll('#logo')
 		.on('click', function() {
-			d3.selectAll("svg > *").remove();
+			d3.selectAll("svg#statesvg > *").remove();
 			uStates.draw("topgenre");
 			stats.draw("topgenre")
 			$("#titleGenre").html("music");
