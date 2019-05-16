@@ -1,4 +1,3 @@
-
 //sets dimentions
 const map_margin = {
     top: 0,
@@ -16,6 +15,11 @@ const projection = d3.geoAlbersUsa()
 //tells map how to draw the paths from the projection
 const map_path = d3.geoPath()
   .projection(projection);
+
+const map = d3.select("#statesvg")
+  //Binding the data to the SVG and create one path per json feature
+  .selectAll("path")
+  .attr("class", "map-path")
 
 const uStates = {};
 uStates.draw = function(genre) {
@@ -42,7 +46,7 @@ uStates.draw = function(genre) {
     var min = d3.min(val_arr);
     var max = d3.max(val_arr);
 
-    if ( genre != "topgenre") {
+    if (genre != "topgenre") {
       var color_genre = d3.scaleLinear().domain([min, max]).range(["white", GENRES[genre].color]);
     }
 
@@ -73,8 +77,6 @@ uStates.draw = function(genre) {
         };
 
         ///////////////////CREATING SVG ELEMENT AND APPEND MAP TO SVG////////////////////
-
-
 
         //tooptip for top genre page
         function mouseOver_topgenre(d) {
@@ -117,7 +119,6 @@ uStates.draw = function(genre) {
           .data(states)
           .enter()
           .append("path")
-          .attr("class", "map-path")
           .attr("d", map_path)
           .style("stroke", "#fff")
           .style("stroke-width", "1")
@@ -138,17 +139,16 @@ uStates.draw = function(genre) {
         }
 
         //drawing counties onclick
-        d3.selectAll('.map-path')
-        .on('click', function(d) {
-          d3.selectAll("svg > *").remove();
-          mouseOut();
-          var state_abbr = d.properties.abbr;
-          var state_bbox = get_state_bbox(state_abbr);
-          usCounties.draw(state_bbox,"topgenre"); //function that draws leaflet
-          geo_level = "county";
-          current_state = state_abbr;
-          stats.draw("rnb") // temp function to draw face stats
-        });
+        d3.selectAll('path')
+          .on('click', function(d) {
+            d3.selectAll("svg > *").remove();
+            mouseOut();
+            var state_abbr = d.properties.abbr;
+            var state_bbox = get_state_bbox(state_abbr);
+            usCounties.draw(state_bbox, current_genre); //function that draws leaflet
+            geo_level = "county";
+            current_state = state_abbr;
+          });
       });
   });
 };
