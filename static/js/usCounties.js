@@ -1,51 +1,115 @@
-(function() {
+var usCounties = {};
+// initialize county map
+var countyMap = L.map('mapCanvas')
 
-  var usCounties = {};
+const url = "http://{s}tile.stamen.com/toner-lite/{z}/{x}/{y}.png";
+const basemap = L.tileLayer(url, {
+  subdomains: ['', 'a.', 'b.', 'c.', 'd.'],
+  minZoom: 0,
+  format: 'png',
+  opacity: 1,
+  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+});
 
-  usCounties.draw = function(bbox, genre) {
+//add base map to div
+basemap.addTo(countyMap)
 
-    //leaflet goes here
-    // initialize the map - zoom and bounding box to change on click
-    var bbox = [42.755966,-107.302490];
+counties_geo.features.forEach(function(element) {
+  countyData.find(function(newElement) {
+    if (element.properties.NAME == newElement.county_name) {
+      element.properties.value = newElement.value;
+    };
+  })
+});
 
-    const countyMap = L.map('countymap').setView(bbox, 7);
+function style() {
+  return {
+    color: "#ddd", // border color
+    weight: 1,
+    fillOpacity: 0.7,
+  }
+}
 
+function highlightFeature(e) {
+  var layer = e.target;
+  layer.openPopup()
+}
 
+function zoomToFeature(e) {
+  countyMap.fitBounds(e.target.getBounds());
+}
 
-    const url = "http://{s}tile.stamen.com/toner-lite/{z}/{x}/{y}.png";
+function onEachFeature(feature, layer) {
+  layer.myTag = "myCounties"
 
-    const basemap = L.tileLayer(url, {
-      subdomains: ['', 'a.', 'b.', 'c.', 'd.'],
-      minZoom: 0,
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    });
+  var popupContent = "<h4>" + feature.properties.NAME + " County</h4>" +
+    "<table><tr><td>R&B</td><td>" + feature.properties.value * 100 + "%</td></tr>" +
+    "</table>" +
+    "<small>(click to zoom)</small>"
 
-    //add base map to div
-    basemap.addTo(countyMap);
+  layer.bindPopup(popupContent, {
+    closeButton: false,
+    'className': 'custom'
+  }, );
 
-    //var counties = fetchJSON("../static/data/usCounties_geo.js")
-    //.then(function(counties) { return counties});
-
-    //counties.addTo(map);
-/*
-    choropleth = L.choropleth(usCounties, {
-
-      valueProperty: "value", // which property in the features to use
-      scale: ["white", GENRES[genre].color], // chroma.js scale - include as many as you like
-      steps: 10, // number of breaks or steps in range
-      mode: "q", // q for quantile, e for equidistant, k for k-means
-      style: {
-      color: "#fff", // border color
-      weight: 1,
-      fillOpacity: 0.9
-    },
-
-  }).addTo(map);
-
-  */
-
+  function resetHighlight(e) {
+    var layer = e.target;
+    layer.closePopup()
   }
 
-  this.usCounties = usCounties
+  layer.on({
+    mouseover: highlightFeature,
+    mouseout: resetHighlight,
+    click: zoomToFeature,
+  });
+}
 
-})();
+function getChoropleth(genre) {
+  return L.choropleth(counties_geo, {
+    valueProperty: "value",
+    scale: ["white", GENRES[genre].color], //color to change with genre-icon click
+    steps: 10,
+    mode: "q", // q for quantile
+    style: style,
+    onEachFeature: onEachFeature
+  })
+}
+
+usCounties.recalculateGenres = function(genre) {
+  countyMap.eachLayer(function(layer) {
+    if (layer.myTag && layer.myTag === "myCounties") {
+      countyMap.removeLayer(layer)
+    }
+  });
+
+  var choropleth = getChoropleth(genre);
+
+  choropleth.addTo(countyMap);
+}
+
+usCounties.removeChoropleth = function(genre) {
+
+}
+
+usCounties.draw = function(bbox, genre) {
+
+  countyMap.fitBounds(bbox);
+  var choropleth = getChoropleth(genre);
+  choropleth.addTo(countyMap);
+
+  //drawing state map over counties doesn't allow for hovers and clicks
+
+  /*
+  L.geoJson(states_geo, {
+      style: {
+        color: 'white',
+        weight: 5,
+        fillOpacity: 0,
+      }
+    })
+    .addTo(countyMap);
+  */
+
+}
+
+this.usCounties = usCounties
