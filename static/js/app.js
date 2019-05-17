@@ -22,7 +22,6 @@ function updateData() {
       if (geo_level == "state") {
         uStates.draw(genre_id);
       } else if (geo_level == "county") {
-        usCounties.removeChoropleth();
         usCounties.recalculateGenres(genre_id);
       }
 

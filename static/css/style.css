@@ -5,10 +5,12 @@ html, body, {
 }
 
 #countymap {
-  position: absolute;
+  display: none;
+  position: relative;
   height: 100%;
   width: 100%;
 }
+
 
 #logo {
   text-align: left;
