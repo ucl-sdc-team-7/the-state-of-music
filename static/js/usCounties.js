@@ -75,7 +75,7 @@ function zoomToCity(e) {
 }
 
 // defining popups and county style on hover
-function onEachFeature(feature, layer) {
+function onEachFeature(feature, layer, genre) {
   layer.myTag = "myCounties" // tagging county polygons for removeLayers() function
 
   var popupContent = "<h4>" + feature.properties.NAME + " County</h4>" +
