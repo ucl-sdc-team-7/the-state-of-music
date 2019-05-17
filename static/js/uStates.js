@@ -119,6 +119,7 @@ uStates.draw = function(genre) {
           .data(states)
           .enter()
           .append("path")
+          .attr("class", "map-path")
           .attr("d", map_path)
           .style("stroke", "#fff")
           .style("stroke-width", "1")
@@ -139,8 +140,9 @@ uStates.draw = function(genre) {
         }
 
         //drawing counties onclick
-        d3.selectAll('path')
+        d3.selectAll('.map-path')
           .on('click', function(d) {
+            $("#countymap").toggle()
             d3.selectAll("svg > *").remove();
             mouseOut();
             var state_abbr = d.properties.abbr;
