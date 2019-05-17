@@ -30,12 +30,23 @@ start_date = date_range[0].strftime("%Y-%m-%d" + "T00:00:00Z")
 end_date = date_range[-1].strftime("%Y-%m-%d" + "T23:59:59Z")
 
 # EVENTBRITE auth config
-oauth_token = config['eventbrite']['token']
+token_1 = config['eventbrite']['token1']
+token_2 = config['eventbrite']['token2']
+token_3 = config['eventbrite']['token3']
+token_4 = config['eventbrite']['token4']
 
-eventbrite = Eventbrite(oauth_token)
+oauth_token_list = [token_1,token_2,token_3,token_4]
+oauth_token = oauth_token_list[0]
 
 categories = '103'  # music
 formats = '6'  # concerts and performances
+
+# EVENTBRITE token_swap func
+def token_swap(old_oauth_token):
+    old_index = oauth_token_list.index(old_oauth_token)
+    new_index = (old_index + 1) if (old_index + 1 < len(oauth_token_list)) else 0
+    return oauth_token_list[new_index]
+
 
 for us_state_and_viewport in us_states_and_viewports[1:]:
     params = {'categories': categories,
@@ -48,9 +59,17 @@ for us_state_and_viewport in us_states_and_viewports[1:]:
               'start_date.range_end': end_date
               }
 
-    events_response = eventbrite.event_search(**params)
+    events_response = Eventbrite(oauth_token).event_search(**params)
 
-    total_events = events_response['pagination']['object_count']
+    try:
+        total_events = events_response['pagination']['object_count']
+    except:
+        oauth_token = token_swap(oauth_token)
+        events_response = Eventbrite(oauth_token).event_search(**params)
+        total_events = events_response['pagination']['object_count']
+
+
+
     pages_list = [1] if events_response['pagination']['page_count'] == 1 else list(
         range(1, events_response['pagination']['page_count'] + 1))
 
@@ -67,9 +86,14 @@ for us_state_and_viewport in us_states_and_viewports[1:]:
                       'page': page
                       }
 
-            events_response = eventbrite.event_search(**params)
-            events = events_response['events']
+            events_response = Eventbrite(oauth_token).event_search(**params)
 
+            try:
+                events = events_response['events']
+            except:
+                oauth_token = token_swap(oauth_token)
+                events_response = Eventbrite(oauth_token).event_search(**params)
+                events = events_response['events']
 
             for event in events:
                 event_id = event['id']
@@ -81,9 +105,14 @@ for us_state_and_viewport in us_states_and_viewports[1:]:
                 subcategory_id = event['subcategory_id']
 
                 venue_url = '/venues/' + venue_id
-                venue_response = eventbrite.get(venue_url)
+                venue_response = Eventbrite(oauth_token).get(venue_url)
+                try:
+                    venue_name = venue_response['name']
+                except:
+                    oauth_token = token_swap(oauth_token)
+                    venue_response = Eventbrite(oauth_token).get(venue_url)
+                    venue_name = venue_response['name']
 
-                venue_name = venue_response['name']
                 if (venue_name and len(venue_name) > 50):
                     venue_name = venue_name[0:49]
                 venue_lat = venue_response['latitude']
@@ -91,8 +120,13 @@ for us_state_and_viewport in us_states_and_viewports[1:]:
 
                 if subcategory_id:
                     subcategory_url = '/subcategories/' + subcategory_id
-                    subcategory_response = eventbrite.get(subcategory_url)
-                    subcategory_name = subcategory_response['name']
+                    subcategory_response = Eventbrite(oauth_token).get(subcategory_url)
+                    try:
+                        subcategory_name = subcategory_response['name']
+                    except:
+                        oauth_token = token_swap(oauth_token)
+                        subcategory_response = Eventbrite(oauth_token).get(subcategory_url)
+                        subcategory_name = subcategory_response['name']
                 else:
                     subcategory_name = ''
 

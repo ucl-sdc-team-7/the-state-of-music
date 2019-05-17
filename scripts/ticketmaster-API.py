@@ -3,6 +3,9 @@ import time
 import mysql.connector as mysql
 import configparser
 import datetime
+import timeit
+
+start_time = timeit.default_timer()
 
 config = configparser.ConfigParser()
 config.read('../config.ini')
@@ -35,8 +38,10 @@ date_range = [start_date + datetime.timedelta(days=x) for x in range(0, 30)]
 date_list = list(map(lambda x: [x.strftime("%Y-%m-%d"+"T00:00:00Z"),x.strftime(
     "%Y-%m-%d"+"T23:59:59Z")],date_range))
 
+entry = 0
 
 for us_state in us_states:
+    print(us_state)
     for date in date_list:
         time.sleep(.21)
 
@@ -81,14 +86,19 @@ for us_state in us_states:
                   'name'] if (artists and 'classifications' in artists[
                   0] and 'genre' in artists[0]['classifications'][0]) else ''
 
-                query = """INSERT INTO ticketmaster_events
-                            (ticketmaster_id, local_date, event_genre,
-                            event_subgenre, venue, venue_lat, venue_long,
-                            artist_id, artist_name, artist_genre) VALUES
-                            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-                values = (event_id, local_date, main_genre_name, sub_genre_name,
-                          main_venue_name, main_venue_lat, main_venue_lon,
-                          main_artist_id, main_artist_name, main_artist_genre)
+                entry = entry + 1
 
-                cursor.execute(query, values)
-                db.commit()
+                if entry == 100:
+                    print(timeit.default_timer()-start_time)
+
+                # query = """INSERT INTO ticketmaster_events
+                #             (ticketmaster_id, local_date, event_genre,
+                #             event_subgenre, venue, venue_lat, venue_long,
+                #             artist_id, artist_name, artist_genre) VALUES
+                #             (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                # values = (event_id, local_date, main_genre_name, sub_genre_name,
+                #           main_venue_name, main_venue_lat, main_venue_lon,
+                #           main_artist_id, main_artist_name, main_artist_genre)
+                #
+                # cursor.execute(query, values)
+                # db.commit()
