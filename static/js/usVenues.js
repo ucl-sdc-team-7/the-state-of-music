@@ -1,4 +1,4 @@
-function marker_colors(d) {
+function marker_opacity(d) {
   return d > 0.9 ? 0.9 :
     d > 0.8 ? 0.8 :
     d > 0.7 ? 0.7 :
@@ -9,7 +9,8 @@ function marker_colors(d) {
     0.2;
 }
 
-function onEachFeature_city(feature, layer) {
+function onEachFeature_venue(feature, layer) {
+  layer.myTag = "myVenues"
   var popupCity = "<h4>" + feature.properties.address + "</h4>" +
     "<table><tr><td>R&B</td><td>" + feature.properties.value * 100 + "%</td></tr>" +
     "</table>" +
@@ -20,25 +21,40 @@ function onEachFeature_city(feature, layer) {
   }, );
 }
 
-
-var usVenues = {};
-
-usVenues.draw = function(genre) {
-
+function getMarkers(genre) {
   var venues = L.geoJson(venue_geo, {
     pointToLayer: function(feature, latlng) {
       var geojsonMarkerOptions = {
         radius: 10,
-        color: genre,
-        fillColor: genre,
-        weight: 2,
-        fillOpacity: marker_colors(feature.properties.value),
+        color: GENRES[genre].color,
+        fillColor: GENRES[genre].color,
+        weight: 1,
+        fillOpacity: marker_opacity(feature.properties.value),
       };
       return L.circleMarker(latlng, geojsonMarkerOptions);
     },
-    onEachFeature: onEachFeature_city
-  }).addTo(countyMap);
+    onEachFeature: onEachFeature_venue
+  })
+
+  return venues;
+}
+
+var usVenues = {};
+
+usVenues.draw = function(genre) {
+  // resetting geo_level
+  geo_level = "venue"
+
+  var venues = getMarkers(genre)
+  venues.addTo(countyMap)
 
 };
+
+usVenues.recalculateGenres = function(genre) {
+  removeLayers();
+
+  var venues = getMarkers(genre)
+  venues.addTo(countyMap)
+}
 
 this.usVenues = usVenues;
