@@ -16,24 +16,33 @@ cursor = db.cursor()
 with open('population_data.csv', 'r') as csvfile:
     raw_data = csv.reader(csvfile, delimiter=',')
     for row in raw_data:
-        if row[0] == '50':
+        if row[0] == '50': #if SUMLEV == 50 aka the row is a county, not a state
             state_code = row[3]
             county_code = row[4]
             state_name = row[5]
             county_name = row[6]
-            pop_2018 = row[17]
+            state_abbr = row[7]
+            pop_2018 = row[18]
 
-            if county_name[len(county_name)-6:] == 'County':
-                county_name = county_name[:-7]
-            elif county_name[len(county_name)-6:] =='Parish':
-                county_name = county_name[:-7]
+            words_in_county_name = county_name.split(" ")
+            if words_in_county_name[-3:] == ['City','and','Borough']:
+                county_name = " ".join(words_in_county_name[:-3])
+                words_in_county_name = county_name.split(" ")
+            if words_in_county_name[-2:] == ['Census','Area']:
+                county_name = " ".join(words_in_county_name[:-2])
+                words_in_county_name = county_name.split(" ")
+            if (words_in_county_name[-1] == 'County' or words_in_county_name[-1] == 'Parish'
+                  or words_in_county_name[-1] =='Municipality' or words_in_county_name[-1] == 'Borough'):
+                county_name = " ".join(words_in_county_name[:-1])
+                words_in_county_name = county_name.split(" ")
+
 
             query = """INSERT INTO populations
-                    (state_code, state_name, county_code,
+                    (state_code, state_name, state_abbr, county_code,
                     county_name, pop_2018) VALUES
-                    (%s, %s, %s, %s, %s)"""
-            values = (state_code, state_name, county_code, county_name,
-                      pop_2018)
+                    (%s, %s, %s, %s, %s, %s)"""
+            values = (state_code, state_name, state_abbr, county_code,
+                      county_name, pop_2018)
 
             cursor.execute(query, values)
             db.commit()
