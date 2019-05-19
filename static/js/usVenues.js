@@ -11,13 +11,13 @@ function marker_opacity(d) {
 
 function onEachFeature_venue(feature, layer) {
   layer.myTag = "myVenues"
-  var popupCity = "<h4>" + feature.properties.address + "</h4>" +
+  var popupVenue = "<h4>" + feature.properties.address + "</h4>" +
     "<table><tr><td>R&B</td><td>" + feature.properties.value * 100 + "%</td></tr>" +
     "</table>" +
     "<small>(click to zoom)</small>"
 
-  layer.bindPopup(popupCity, {
-    'className': 'custom'
+  layer.bindPopup(popupVenue, {
+    'className': 'venue-info'
   }, );
 }
 
