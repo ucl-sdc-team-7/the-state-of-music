@@ -19,7 +19,6 @@ function updateData() {
       var genre_id = d3.select(this).attr('id')
       current_genre = genre_id;
       d3.selectAll("svg#statesvg > *").remove();
-
       if (geo_level == "state") {
         uStates.draw(genre_id);
         stats.draw(genre_id);
@@ -42,9 +41,9 @@ function updatelogo() {
         uStates.draw("topgenre");
       } else {
         $("#countymap").toggle();
+        geo_level = "state"
         uStates.draw("topgenre");
       }
-
       stats.draw("topgenre");
       $("#titleGenre").html("music");
       document.documentElement.style.setProperty('--displayInfo-color', "#888b94");
