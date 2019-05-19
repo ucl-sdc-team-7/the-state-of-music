@@ -56,14 +56,14 @@
 				</div>
 
 				<div id="displayInfo">
-				<div id="infoText">
-				<h5>The state of <span id= "titleGenre">music</span> in <span id="titleLoc">the United States</span></h5><small><span id="titleCategory">The most popular types of live music</span> in the next 30 days</small>
-				</div>
-				<small>
-					<div id="InfoSummary">
+					<div id="infoText">
+						<h5>The state of <span id="titleGenre">music</span> in <span id="titleLoc">the United States</span></h5><small><span id="titleCategory">The most popular types of live music</span> in the next 30 days</small>
+					</div>
+					<small>
+						<div id="InfoSummary">
 						</div>
-				</small>
-			</div>
+					</small>
+				</div>
 
 				<div id="displayStats">
 					<h6><span id="displayStatsTitle">Which states feel the strongest about each genre?</span></h6>
@@ -138,7 +138,7 @@
 
 				<div class="row">
 					<div id="mapCanvas">
-						<div id = "countymap"></div>
+						<div id="countymap"></div>
 						<!-- div and svg to hold the map. -->
 						<svg id="statesvg" viewBox="0 0 960 630" preserveAspectRatio="xMidYMid meet"></svg>
 						<div id="tooltip"></div><!-- div to hold tooltip. -->
@@ -146,19 +146,30 @@
 					</div>
 </body>
 
-
-<script src="{{url_for('static',filename = 'libs/d3.min.js')}}"></script><!-- D3 graphing library -->
+<!-- D3 graphing libraries -->
+<script src="{{url_for('static',filename = 'libs/d3.min.js')}}"></script>
 <script src="{{url_for('static',filename = 'libs/d3-scale-chromatic.v1.min.js')}}"></script>
-<script src="{{url_for('static',filename = 'libs/topojson.v1.min.js')}}"></script><!-- topojson library -->
+<!-- topojson library -->
+<script src="{{url_for('static',filename = 'libs/topojson.v1.min.js')}}"></script>
+
+<!-- leaflet libraries -->
 <script src="{{url_for('static',filename = 'libs/leaflet/dist/leaflet.js')}}"></script>
 <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
 <script src="{{url_for('static',filename = 'libs/leaflet-choropleth/dist/choropleth.js')}}"></script>
+
+<!-- global variables and helper functions -->
 <script src="{{url_for('static',filename = 'js/globals.js')}}"></script>
 <script src="{{url_for('static',filename = 'js/helpers.js')}}"></script>
-<script src="{{url_for('static',filename = 'data/states_geo.js')}}"></script>
-<script src="{{url_for('static',filename = 'data/counties_geo.js')}}"></script>
+
+<!-- external data -->
 <script src="{{url_for('static',filename = 'data/countyData.js')}}"></script><!-- temporary data file -->
+<script src="{{url_for('static',filename = 'data/venue_points.js')}}"></script><!-- temporary data file -->
 <script src="{{url_for('static',filename = 'js/state_boundaries_w_margin.js')}}"></script><!-- for leaflet zoom levels -->
+<script src="{{url_for('static',filename = 'data/states_geo.js')}}"></script><!-- state linestrings -->
+<script src="{{url_for('static',filename = 'data/counties_geo.js')}}"></script><!-- county geoJSON -->
+
+<!-- main scripts for the state of music -->
+<script src="{{url_for('static',filename = 'js/usVenues.js')}}"></script><!-- marks venues. -->
 <script src="{{url_for('static',filename = 'js/usCounties.js')}}"></script><!-- creates US counties. -->
 <script src="{{url_for('static',filename = 'js/uStates.js')}}"></script><!-- creates US States. -->
 <script src="{{url_for('static',filename = 'js/statistics.js')}}"></script><!-- creates statistics in side bar. -->

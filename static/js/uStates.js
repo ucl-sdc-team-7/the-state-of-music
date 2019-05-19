@@ -148,7 +148,6 @@ uStates.draw = function(genre) {
             var state_abbr = d.properties.abbr;
             var state_bbox = get_state_bbox(state_abbr);
             usCounties.draw(state_bbox, current_genre); //function that draws leaflet
-            geo_level = "county";
             current_state = state_abbr;
           });
       });

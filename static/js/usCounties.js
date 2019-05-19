@@ -65,17 +65,23 @@ function removeLayers() {
     if (layer.myTag && layer.myTag === "myStates") {
       countyMap.removeLayer(layer)
     }
+    if (layer.myTag && layer.myTag === "myVenues") {
+      countyMap.removeLayer(layer)
+    }
   });
 }
 
 
-function zoomToCity(e) {
+function zoomToCity(e, genre) {
+  genre = current_genre
   countyMap.fitBounds(e.target.getBounds());
+
   removeLayers()
+  usVenues.draw(genre)
 }
 
 // defining popups and county style on hover
-function onEachFeature(feature, layer) {
+function onEachFeature(feature, layer, genre) {
   layer.myTag = "myCounties" // tagging county polygons for removeLayers() function
 
   var popupContent = "<h4>" + feature.properties.NAME + " County</h4>" +
@@ -96,23 +102,27 @@ function onEachFeature(feature, layer) {
 }
 
 function getChoropleth(genre) {
-  return L.choropleth(counties_geo, {
+  var choropleth = L.choropleth(counties_geo, {
     valueProperty: "value",
     scale: ["white", GENRES[genre].color],
     steps: 10,
     mode: "q", // q for quantile
     style: county_style,
     onEachFeature: onEachFeature
-  })
+  });
+  return choropleth;
 }
 
 var usCounties = {};
 
 usCounties.draw = function(bbox, genre) {
+  // resetting geo_level
+  geo_level = "county";
 
   countyMap.fitBounds(bbox);
   var choropleth = getChoropleth(genre);
   choropleth.addTo(countyMap);
+
   L.geoJson(states_geo, {
     style: state_style,
     onEachFeature: function(feature, layer) {
@@ -122,13 +132,13 @@ usCounties.draw = function(bbox, genre) {
 
 }
 
-
 usCounties.recalculateGenres = function(genre) {
 
   removeLayers();
 
   var choropleth = getChoropleth(genre);
   choropleth.addTo(countyMap);
+
   L.geoJson(states_geo, {
     style: state_style,
     onEachFeature: function(feature, layer) {
