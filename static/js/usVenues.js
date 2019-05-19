@@ -1,4 +1,16 @@
+// joining genre data to counties geoJSON
+var venue_values = [];
+venue_geo.features.forEach(function(venue) {
+
+  venue_values.push(venue.properties.value)
+
+});
+
+console.log(Math.min(venue_values))
+
 function marker_opacity(d) {
+
+
   return d > 0.9 ? 0.9 :
     d > 0.8 ? 0.8 :
     d > 0.7 ? 0.7 :
