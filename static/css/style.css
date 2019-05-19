@@ -11,7 +11,6 @@ html, body, {
   width: 98%;
 }
 
-
 #logo {
   text-align: left;
   margin: 10px 10px;
@@ -20,7 +19,7 @@ html, body, {
 
 #displayInfo {
   font-family: 'Roboto', sans-serif;
-  margin: 20px 10px 0px 10px;
+  margin: 5px 10px 5px 25px;
   padding: 10px;
   font-size: 15px;
   color: white;
@@ -36,7 +35,7 @@ html, body, {
   height: 100%;
   width: 100%;
   vertical-align: top;
-  margin: 20px 10px 0px 10px;
+  margin: 5px 10px 5px 10px;
   padding: 10px;
   color: #555a66;
   z-index: 0;
@@ -80,7 +79,6 @@ html, body, {
   text-align: left;
   margin: 10px;
 }
-
 
 #mapCanvas {
   position: relative;
@@ -165,13 +163,12 @@ html, body, {
 }
 
 /* Next two entries are for the colouring of the info text box*/
-
 :root {
   --displayInfo-color: #888b94;
   --displayInfo-text-color: #FFFFFF;
-	}
+}
 
 #displayInfo {
-	background-color: var(--displayInfo-color);
-	color: var(--displayInfo-text-color);
+  background-color: var(--displayInfo-color);
+  color: var(--displayInfo-text-color);
 }
