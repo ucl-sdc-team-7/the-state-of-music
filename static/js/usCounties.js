@@ -21,7 +21,24 @@ const basemap = L.tileLayer(url, {
 });
 
 //adding base map to div
-basemap.addTo(countyMap)
+basemap.addTo(countyMap);
+
+var info = L.control();
+
+info.onAdd = function(map) {
+  this._div = L.DomUtil.create('div','county-info');
+  this.update();
+  return this._div;
+}
+
+info.update = function (props) {
+  this._div.innerHTML = "<h4>" + (props ? props.NAME + " County</h4>" +
+    "<table><tr><td>R&B</td><td>" + props.value + "%</td></tr>" +
+    "</table>" +
+    "<small>(click to zoom)</small>":'<h4>Hover over a county</h4>')
+}
+
+info.addTo(countyMap)
 
 // defining style for state boundaries
 function state_style() {
@@ -45,7 +62,7 @@ function county_mouseover(e) {
   layer.setStyle({
     fillOpacity: 1
   });
-  layer.openPopup()
+  info.update(layer.feature.properties)
 }
 
 function county_mouseout(e) {
@@ -53,7 +70,7 @@ function county_mouseout(e) {
   layer.setStyle({
     fillOpacity: 0.7
   });
-  layer.closePopup()
+  info.update()
 }
 
 // function to remove counties and states when zoom to city
@@ -75,6 +92,7 @@ function removeLayers() {
 function zoomToCity(e, genre) {
   genre = current_genre
   countyMap.fitBounds(e.target.getBounds());
+  countyMap.removeControl(info)
 
   removeLayers()
   usVenues.draw(genre)
@@ -83,16 +101,6 @@ function zoomToCity(e, genre) {
 // defining popups and county style on hover
 function onEachFeature(feature, layer, genre) {
   layer.myTag = "myCounties" // tagging county polygons for removeLayers() function
-
-  var popupContent = "<h4>" + feature.properties.NAME + " County</h4>" +
-    "<table><tr><td>R&B</td><td>" + feature.properties.value * 100 + "%</td></tr>" +
-    "</table>" +
-    "<small>(click to zoom)</small>"
-
-  layer.bindPopup(popupContent, {
-    closeButton: false,
-    'className': 'custom'
-  }, );
 
   layer.on({
     mouseover: county_mouseover,
