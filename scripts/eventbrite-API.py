@@ -42,12 +42,13 @@ categories = '103'  # music
 formats = '6'  # concerts and performances
 
 # EVENTBRITE token_swap func
+
+
 def token_swap(old_oauth_token):
     old_index = tokens.index(old_oauth_token)
     new_index = (old_index + 1) if (old_index + 1 < len(tokens)) else 0
     oauth_token = tokens[new_index]
     eventbrite = Eventbrite(oauth_token)
-    print([oauth_token,eventbrite])
     return [oauth_token, eventbrite]
 
 for us_state_and_viewport in us_states_and_viewports[43:]:
@@ -63,7 +64,7 @@ for us_state_and_viewport in us_states_and_viewports[43:]:
               }
 
     events_response = eventbrite.event_search(**params)
-    
+
     try:
         total_events = events_response['pagination']['object_count']
     except KeyError:

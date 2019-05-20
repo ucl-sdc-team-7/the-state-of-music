@@ -13,9 +13,9 @@ db = mysql.connect(
 )
 
 cursor = db.cursor()
-with open('population_data.csv', 'r') as csvfile:
+with open('population_data.csv', 'r', encoding='latin-1') as csvfile:
     raw_data = csv.reader(csvfile, delimiter=',')
-    next(raw_data,None)
+    next(raw_data, None)
     for row in raw_data:
         sum_level = row[0]
         state_code = row[3]
@@ -26,14 +26,14 @@ with open('population_data.csv', 'r') as csvfile:
         pop_2018 = row[18]
 
         words_in_county_name = county_name.split(" ")
-        if words_in_county_name[-3:] == ['City','and','Borough']:
+        if words_in_county_name[-3:] == ['City', 'and', 'Borough']:
             county_name = " ".join(words_in_county_name[:-3])
             words_in_county_name = county_name.split(" ")
-        if words_in_county_name[-2:] == ['Census','Area']:
+        if words_in_county_name[-2:] == ['Census', 'Area']:
             county_name = " ".join(words_in_county_name[:-2])
             words_in_county_name = county_name.split(" ")
         if (words_in_county_name[-1] == 'County' or words_in_county_name[-1] == 'Parish'
-              or words_in_county_name[-1] =='Municipality' or words_in_county_name[-1] == 'Borough'):
+                or words_in_county_name[-1] == 'Municipality' or words_in_county_name[-1] == 'Borough'):
             county_name = " ".join(words_in_county_name[:-1])
             words_in_county_name = county_name.split(" ")
 

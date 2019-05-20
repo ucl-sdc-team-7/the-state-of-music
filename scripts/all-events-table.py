@@ -1,9 +1,7 @@
-import requests
 import mysql.connector as mysql
 import configparser
-import json
 
-### read-in data need for sql connection
+# read-in data need for sql connection
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
@@ -18,7 +16,8 @@ cursor2 = db.cursor(buffered=True)
 cursor3 = db.cursor(buffered=True)
 cursor4 = db.cursor(buffered=True)
 
-def load(extract_cursor,data_source,source_id,load_cursor):
+
+def load(extract_cursor, data_source, source_id, load_cursor):
     for row in extract_cursor:
         source = data_source
         source_id = row[0]
@@ -35,12 +34,12 @@ def load(extract_cursor,data_source,source_id,load_cursor):
         state = row[11]
         county = row[12]
         genres = ['pop',
-                'rock',
-                'hip_hop',
-                'rnb',
-                'classical_and_jazz',
-                'electronic',
-                'country_and_folk']
+                  'rock',
+                  'hip_hop',
+                  'rnb',
+                  'classical_and_jazz',
+                  'electronic',
+                  'country_and_folk']
 
         genre_dict = dict()
         for genre in genres:
@@ -63,8 +62,8 @@ def load(extract_cursor,data_source,source_id,load_cursor):
                     electronic, country_and_folk, dom_genre) VALUES
                     (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
             values = (source, source_id, venue_name, venue_lat, venue_long, state,
-                    county, pop, rock, hip_hop, rnb, classical_and_jazz, electronic,
-                    country_and_folk, dom_genre)
+                      county, pop, rock, hip_hop, rnb, classical_and_jazz, electronic,
+                      country_and_folk, dom_genre)
 
             load_cursor.execute(query, values)
             db.commit()
@@ -75,7 +74,7 @@ query = """SELECT ticketmaster_id, venue, venue_lat, venue_long, pop, rock,
 
 cursor.execute(query)
 
-load(cursor,'ticketmaster','ticketmaster_id',cursor2)
+load(cursor, 'ticketmaster', 'ticketmaster_id', cursor2)
 
 query = """SELECT eventbrite_id, venue_name, venue_lat, venue_long, pop, rock,
         hip_hop, rnb, classical_and_jazz, electronic, country_and_folk, state,
@@ -83,4 +82,4 @@ query = """SELECT eventbrite_id, venue_name, venue_lat, venue_long, pop, rock,
 
 cursor3.execute(query)
 
-load(cursor3,'eventbrite','eventbrite_id',cursor4)
+load(cursor3, 'eventbrite', 'eventbrite_id', cursor4)

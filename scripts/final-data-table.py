@@ -1,9 +1,7 @@
-import requests
 import mysql.connector as mysql
 import configparser
-import json
 
-### read-in data need for sql connection
+# read-in data need for sql connection
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
@@ -18,7 +16,8 @@ cursor2 = db.cursor(buffered=True)
 cursor3 = db.cursor(buffered=True)
 cursor4 = db.cursor(buffered=True)
 
-genres = ['pop','rock','hip_hop','rnb','classical_and_jazz','electronic','country_and_folk']
+genres = ['pop', 'rock', 'hip_hop', 'rnb',
+          'classical_and_jazz', 'electronic', 'country_and_folk']
 
 st_co_dict = dict()
 
@@ -39,16 +38,15 @@ for row in cursor:
     state_dict = {'state': state_abbr,
                   'county': county_name,
                   'genre_dict': {'pop': 0,
-                                'rock': 0,
-                                'hip_hop': 0,
-                                'rnb': 0,
-                                'classical_and_jazz': 0,
-                                'electronic': 0,
-                                'country_and_folk': 0}
-                }
+                                 'rock': 0,
+                                 'hip_hop': 0,
+                                 'rnb': 0,
+                                 'classical_and_jazz': 0,
+                                 'electronic': 0,
+                                 'country_and_folk': 0}
+                  }
 
     st_co_dict[st_co] = state_dict
-
 
     query = """INSERT INTO county_level_data
             (state_code, state_name, state_abbr, county_code, county_name,
@@ -77,15 +75,18 @@ for row in cursor3:
 
             st_co = str(state) + "|" + str(county)
 
-            if len(dom_genre.split("/")) == 1 and dom_genre in genres: #if a single genre is dominant
-                st_co_dict[st_co]['genre_dict'][str(dom_genre)] = (st_co_dict[st_co]['genre_dict'][str(dom_genre)] + 1)
+            if len(dom_genre.split("/")) == 1 and dom_genre in genres:  # if a single genre is dominant
+                st_co_dict[st_co]['genre_dict'][str(dom_genre)] = (
+                    st_co_dict[st_co]['genre_dict'][str(dom_genre)] + 1)
 
-            elif len(dom_genre.split("/")) > 1: #if multiple genres share dominance
-                weight = (1 / len(dom_genre.split("/"))) #assign weight for partial genres
+            elif len(dom_genre.split("/")) > 1:  # if multiple genres share dominance
+                # assign weight for partial genres
+                weight = (1 / len(dom_genre.split("/")))
                 for partial_dom_genre in dom_genre.split("/"):
                     if partial_dom_genre in genres:
-                        st_co_dict[st_co]['genre_dict'][str(partial_dom_genre)] = st_co_dict[st_co]['genre_dict'][str(partial_dom_genre)] + weight
-            print(state,row,dom_genre)
+                        st_co_dict[st_co]['genre_dict'][str(partial_dom_genre)] = st_co_dict[st_co][
+                            'genre_dict'][str(partial_dom_genre)] + weight
+            print(state, row, dom_genre)
             print(st_co_dict[st_co]['genre_dict'])
             print("----")
 for st_co in st_co_dict:
