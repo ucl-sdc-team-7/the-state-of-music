@@ -151,7 +151,6 @@ uStates.draw = function(genre) {
             usCounties.draw(state_bbox, current_genre); //function that draws leaflet
             stats.draw(current_genre)
             current_state = state_abbr;
-            console.log(geo_level)
           });
       });
   });
