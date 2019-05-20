@@ -1,9 +1,8 @@
-import requests
 import mysql.connector as mysql
 import configparser
 import json
 
-### read-in data need for sql connection
+# read-in data need for sql connection
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
@@ -16,11 +15,11 @@ db = mysql.connect(
 cursor = db.cursor(buffered=True)
 cursor2 = db.cursor(buffered=True)
 
-### stage genreDict.json for later user
-with open('genreDict.json','r',encoding="utf-8") as file:
+# stage genreDict.json for later user
+with open('genreDict.json', 'r', encoding="utf-8") as file:
     genre_dict = json.loads(file.read())
 
-### run transformations
+# run transformations
 query = """SELECT genre, eventbrite_id
         FROM eventbrite_events"""
 
@@ -30,7 +29,13 @@ for row in cursor:
     eb_genre = row[0].lower()
     eb_id = row[1]
 
-    genres = ['country', 'electronic music', 'folk', 'hip hop', 'jazz', 'pop', 'r&b and soul', 'rock', 'classical music']
+    genres = ['country',
+              'electronic music',
+              'folk', 'hip hop',
+              'jazz', 'pop',
+              'r&b and soul',
+              'rock',
+              'classical music']
     event_genre_dict = {}
     for genre in genres:
         event_genre_dict[genre] = 0
@@ -50,7 +55,8 @@ for row in cursor:
     rock = event_genre_dict['rock']
     hip_hop = event_genre_dict['hip hop']
     rnb = event_genre_dict['r&b and soul']
-    classical_and_jazz = event_genre_dict['classical music'] + event_genre_dict['jazz']
+    classical_and_jazz = event_genre_dict[
+        'classical music'] + event_genre_dict['jazz']
     electronic = event_genre_dict['electronic music']
     country_and_folk = event_genre_dict['country'] + event_genre_dict['folk']
 
