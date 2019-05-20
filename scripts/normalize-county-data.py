@@ -1,9 +1,7 @@
-import requests
 import mysql.connector as mysql
 import configparser
-import json
 
-### read-in data needed for sql connection
+# read-in data needed for sql connection
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
@@ -16,9 +14,11 @@ db = mysql.connect(
 cursor = db.cursor(buffered=True)
 cursor2 = db.cursor(buffered=True)
 
+
 def normalize(genre):
-    genre_norm = ((genre / pop_2018)*1000)
-    return genre_norm;
+    genre_norm = ((genre / pop_2018) * 1000)
+    return genre_norm
+
 
 query = """SELECT state_name, county_name, pop_2018, pop, rock, hip_hop,
         rnb, classical_and_jazz, electronic, country_and_folk, all_genres FROM
@@ -50,7 +50,7 @@ for row in cursor:
             hip_hop_norm = %s, rnb_norm = %s, classical_and_jazz_norm = %s,
             electronic_norm = %s, country_and_folk_norm = %s
             WHERE state_name = %s AND county_name = %s;"""
-    values = (pop_norm,rock_norm,hip_hop_norm,rnb_norm,classical_and_jazz_norm,
-              electronic_norm,country_and_folk_norm,state_name,county_name)
+    values = (pop_norm, rock_norm, hip_hop_norm, rnb_norm, classical_and_jazz_norm,
+              electronic_norm, country_and_folk_norm, state_name, county_name)
     cursor2.execute(query, values)
     db.commit()

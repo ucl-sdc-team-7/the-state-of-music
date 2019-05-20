@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `state_of_music`.`all_events` (
   `classical_and_jazz` DECIMAL(3,2) NULL,
   `electronic` DECIMAL(3,2) NULL,
   `country_and_folk` DECIMAL(3,2) NULL,
-  `dom_genre` VARCHAR(25) NULL,
+  `dom_genre` VARCHAR(50) NULL,
   PRIMARY KEY (`id`));
 
 CREATE TABLE IF NOT EXISTS `state_of_music`.`county_level_data` (

@@ -68,6 +68,7 @@ def load(extract_cursor, data_source, source_id, load_cursor):
             load_cursor.execute(query, values)
             db.commit()
 
+
 query = """SELECT ticketmaster_id, venue, venue_lat, venue_long, pop, rock,
         hip_hop, rnb, classical_and_jazz, electronic, country_and_folk, state,
         county FROM ticketmaster_events;"""

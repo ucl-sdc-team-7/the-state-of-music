@@ -1,9 +1,7 @@
-import requests
 import mysql.connector as mysql
 import configparser
-import json
 
-### read-in data need for sql connection
+# read-in data need for sql connection
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
@@ -27,7 +25,7 @@ for row in cursor:
     pop_2018 = row[3]
     sum_level = row[4]
 
-    if sum_level == "40": #if the row is a county, instead of a state [40]
+    if sum_level == "40":  # if the row is a county, instead of a state [40]
         query = """INSERT INTO state_level_data
                 (state_code, state_name, state_abbr, pop_2018)
                 VALUES (%s, %s, %s, %s);"""

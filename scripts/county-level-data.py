@@ -1,9 +1,7 @@
-import requests
 import mysql.connector as mysql
 import configparser
-import json
 
-### read-in data need for sql connection
+# read-in data need for sql connection
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
@@ -17,22 +15,24 @@ cursor = db.cursor(buffered=True)
 cursor2 = db.cursor(buffered=True)
 cursor3 = db.cursor(buffered=True)
 
-genres = ['pop','rock','hip_hop','rnb','classical_and_jazz','electronic','country_and_folk']
+genres = ['pop', 'rock', 'hip_hop', 'rnb',
+          'classical_and_jazz', 'electronic', 'country_and_folk']
 
 query = """SELECT state, county, dom_genre FROM all_events"""
 cursor.execute(query)
 
 for event in cursor:
     state = event[0]
-    county = event[1][:-1] if event[1][-1] == " " else event[1] # omit trailing space
+    # omit trailing space
+    county = event[1][:-1] if event[1][-1] == " " else event[1]
     dom_genre = event[2]
 
     query = """SELECT state_abbr, county_name, pop, rock, hip_hop, rnb,
             classical_and_jazz, electronic, country_and_folk, all_genres,
             dom_genre FROM county_level_data WHERE state_abbr = %s and
             county_name = %s"""
-    values = (state,county)
-    cursor2.execute(query,values)
+    values = (state, county)
+    cursor2.execute(query, values)
 
     for row in cursor2:
         state_abbr = row[0]
@@ -54,13 +54,15 @@ for event in cursor:
                       'electronic': electronic,
                       'country_and_folk': country_and_folk}
 
-        if len(dom_genre.split("/")) == 1 and dom_genre in genres: #if a single genre is dominant
+        if len(dom_genre.split("/")) == 1 and dom_genre in genres:  # if a single genre is dominant
             genre_dict[dom_genre] = genre_dict[dom_genre] + 1
-        elif len(dom_genre.split("/")) > 1: #if multiple genres share dominance
-            weight = (1 / len(dom_genre.split("/"))) #assign weight for partial genres
+        elif len(dom_genre.split("/")) > 1:  # if multiple genres share dominance
+            # assign weight for partial genres
+            weight = (1 / len(dom_genre.split("/")))
             for partial_dom_genre in dom_genre.split("/"):
                 if partial_dom_genre in genres:
-                    genre_dict[partial_dom_genre] = genre_dict[partial_dom_genre] + weight
+                    genre_dict[partial_dom_genre] = genre_dict[
+                        partial_dom_genre] + weight
 
         max = 0
         all_genres = 0
@@ -82,6 +84,6 @@ for event in cursor:
         values = (genre_dict['pop'], genre_dict['rock'], genre_dict['hip_hop'],
                   genre_dict['rnb'], genre_dict['classical_and_jazz'],
                   genre_dict['electronic'], genre_dict['country_and_folk'],
-                  all_genres, dom_genre_county, state_abbr,county_name)
+                  all_genres, dom_genre_county, state_abbr, county_name)
         cursor3.execute(query, values)
         db.commit()
