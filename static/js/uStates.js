@@ -90,8 +90,7 @@ uStates.draw = function(genre) {
               "</table>" +
               "<small>(click to zoom)</small>")
             .style("left", (d3.event.pageX - 345) + "px")
-            .style("top", (d3.event.pageY - 120) + "px");
-
+            .style("top", (d3.event.pageY - 100) + "px");
         }
 
         //tooltip for all genres
@@ -106,7 +105,7 @@ uStates.draw = function(genre) {
               "</table>" +
               "<small>(click to zoom)</small>")
             .style("left", (d3.event.pageX - 345) + "px")
-            .style("top", (d3.event.pageY - 120) + "px");
+            .style("top", (d3.event.pageY - 100) + "px");
         }
 
         function mouseOut() {

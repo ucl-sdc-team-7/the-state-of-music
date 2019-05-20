@@ -46,6 +46,7 @@ function county_mouseover(e) {
     fillOpacity: 1
   });
   layer.openPopup()
+  info.update(layer.feature.properties);
 }
 
 function county_mouseout(e) {
@@ -54,6 +55,7 @@ function county_mouseout(e) {
     fillOpacity: 0.7
   });
   layer.closePopup()
+	info.update();
 }
 
 // function to remove counties and states when zoom to city
@@ -78,15 +80,17 @@ function zoomToCity(e) {
 function onEachFeature(feature, layer) {
   layer.myTag = "myCounties" // tagging county polygons for removeLayers() function
 
-  var popupContent = "<h4>" + feature.properties.NAME + " County</h4>" +
-    "<table><tr><td>R&B</td><td>" + feature.properties.value * 100 + "%</td></tr>" +
-    "</table>" +
-    "<small>(click to zoom)</small>"
+  var popupContent = 
+  //"<h4>" + feature.properties.NAME + " County</h4>" +
+  //  "<table><tr><td>R&B</td><td>" + feature.properties.value * 100 + "%</td></tr>" +
+  //  "</table>" +
+  "<small>click to see venues in " + feature.properties.NAME +"</small>"; //could just remove popup altogether by commenting out this variable and the below bindPopup function
 
   layer.bindPopup(popupContent, {
     closeButton: false,
     'className': 'custom'
-  }, );
+  },
+  );
 
   layer.on({
     mouseover: county_mouseover,
@@ -139,3 +143,28 @@ usCounties.recalculateGenres = function(genre) {
 }
 
 this.usCounties = usCounties
+
+//from here we're adding a info box to the map to hold the data that was previously in a popup
+
+var info = L.control();
+
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+
+info.update = function (props) { // update content of info box
+    this._div.innerHTML = (props ?
+	//start of dynamic content
+	'<h4>' + props.NAME + ' County</h4>' + // county needs to be moved to the attribute value (as not all things are counties
+    //'R&B ' + props.value * 100 + '%' //leaving this here for reference when adding actual values
+	'x'+' '+'pop'+' shows in the next 30 days'+
+	'<br>Population '+'x'+
+	'<br>Rank '+'x'+' of '+'x'
+	//end of dynamic content, next line is default content
+	: 'Hover over a county');
+};
+
+info.addTo(countyMap);
+

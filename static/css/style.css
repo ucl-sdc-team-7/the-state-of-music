@@ -109,7 +109,6 @@ html, body, {
 #tooltip {
   position: absolute;
   text-align: center;
-  padding: 20px;
   margin: 10px;
   font: 12px sans-serif;
   border-radius: 2px;
@@ -122,12 +121,20 @@ html, body, {
   opacity: 0;
 }
 
-.custom .leaflet-popup-tip,
+
 .custom .leaflet-popup-content-wrapper {
 
     text-align: center;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
+    background: rgba(255, 255, 255, 0.8);
+    color: black;
+	margin: 0px;
+	padding: 0px;
+}
+
+.custom .leaflet-popup-tip
+{
+	margin: 0px;
+	padding: 0px;
 }
 
 #tooltip h4, .custom .leaflet-popup-content-wrapper h4 {
@@ -155,7 +162,7 @@ html, body, {
   text-align: center;
 }
 
-/* Next two entries are for the colouring of the info text box*/
+/* Next two entries are for the colouring of the left column text box*/
 
 :root {
   --displayInfo-color: #888b94;
@@ -165,4 +172,25 @@ html, body, {
 #displayInfo {
 	background-color: var(--displayInfo-color);
 	color: var(--displayInfo-text-color);
+}
+
+/* Next two entries are for the colouring of the on-map info box*/
+
+.info {
+    padding: 6px 8px;
+    background: rgba(0, 0, 0, 0.9);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+	text-align: right;
+    min-width: 200px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 5px;
+    font-size: 15px;
+    color: white;
+    opacity: 0.8;
+}
+
+.info h4 {
+    margin: 0 0 5px;
+    color: white;
 }
