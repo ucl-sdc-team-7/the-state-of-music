@@ -3,6 +3,9 @@ import time
 import mysql.connector as mysql
 import configparser
 import datetime
+import timeit
+
+start_time = timeit.default_timer()
 
 config = configparser.ConfigParser()
 config.read('../config.ini')
@@ -31,12 +34,14 @@ classificationName = "music"
 size = 200
 apikey = config['ticketmaster']['apikey']
 start_date = datetime.datetime.today()
-date_range = [start_date + datetime.timedelta(days=x) for x in range(0, 30)]
+date_range = [start_date + datetime.timedelta(days=x) for x in range(0, 5)]
 date_list = list(map(lambda x: [x.strftime("%Y-%m-%d"+"T00:00:00Z"),x.strftime(
     "%Y-%m-%d"+"T23:59:59Z")],date_range))
 
+entry = 0
 
 for us_state in us_states:
+    print(us_state)
     for date in date_list:
         time.sleep(.21)
 
@@ -80,6 +85,7 @@ for us_state in us_states:
                 main_artist_genre = artists[0]['classifications'][0]['genre'][
                   'name'] if (artists and 'classifications' in artists[
                   0] and 'genre' in artists[0]['classifications'][0]) else ''
+
 
                 query = """INSERT INTO ticketmaster_events
                             (ticketmaster_id, local_date, event_genre,

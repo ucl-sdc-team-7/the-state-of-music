@@ -30,7 +30,13 @@ for row in cursor:
     eb_genre = row[0].lower()
     eb_id = row[1]
 
-    genres = ['country', 'electronic music', 'folk', 'hip hop', 'jazz', 'pop', 'r&b and soul', 'rock', 'classical music']
+    genres = ['country',
+              'electronic music',
+              'folk', 'hip hop',
+              'jazz', 'pop',
+              'r&b and soul',
+              'rock',
+              'classical music']
     event_genre_dict = {}
     for genre in genres:
         event_genre_dict[genre] = 0
