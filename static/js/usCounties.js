@@ -76,15 +76,10 @@ function county_mouseout(e) {
 // function to remove counties and states when zoom to city
 function removeLayers() {
   return countyMap.eachLayer(function(layer) {
-    if (layer.myTag && layer.myTag === "myCounties") {
+    if (layer.myTag === "myCounties" || layer.myTag === "myStates" || layer.myTag === "myVenues") {
       countyMap.removeLayer(layer)
     }
-    if (layer.myTag && layer.myTag === "myStates") {
-      countyMap.removeLayer(layer)
-    }
-    if (layer.myTag && layer.myTag === "myVenues") {
-      countyMap.removeLayer(layer)
-    }
+
   });
 }
 
@@ -126,6 +121,7 @@ var usCounties = {};
 usCounties.draw = function(bbox, genre) {
   // resetting geo_level
   geo_level = "county";
+  removeLayers();
 
   countyMap.fitBounds(bbox);
   var choropleth = getChoropleth(genre);

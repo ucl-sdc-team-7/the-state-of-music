@@ -143,11 +143,13 @@ uStates.draw = function(genre) {
         d3.selectAll('.map-path')
           .on('click', function(d) {
             $("#countymap").toggle()
-            d3.selectAll("svg > *").remove();
+            d3.selectAll("svg#statesvg > *").remove();
+            d3.selectAll("svg#stats > *").remove();
             mouseOut();
             var state_abbr = d.properties.abbr;
             var state_bbox = get_state_bbox(state_abbr);
             usCounties.draw(state_bbox, current_genre); //function that draws leaflet
+            stats.draw(current_genre)
             current_state = state_abbr;
           });
       });

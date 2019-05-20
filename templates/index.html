@@ -55,19 +55,23 @@
 					<input type="image" src="{{url_for('static',filename = 'images/logo.png')}}" onclick="updatelogo()" width="100%">
 				</div>
 
-				<div id="displayInfo">
-					<div id="infoText">
-						<h5>The state of <span id="titleGenre">music</span> in <span id="titleLoc">the United States</span></h5><small><span id="titleCategory">The most popular types of live music</span> in the next 30 days</small>
-					</div>
-					<small>
-						<div id="InfoSummary">
+				<div class="row">
+					<div id="displayInfo">
+						<div id="infoText">
+							<h5>The state of <span id="titleGenre">music</span> in <span id="titleLoc">the United States</span></h5><small><span id="titleCategory">The most popular types of live music</span> in the next 30 days</small>
 						</div>
-					</small>
+						<small>
+							<div id="InfoSummary">
+							</div>
+						</small>
+					</div>
 				</div>
 
-				<div id="displayStats">
-					<h6><span id="displayStatsTitle">Which states feel the strongest about each genre?</span></h6>
-					<svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet"></svg>
+				<div clss="row">
+					<div id="displayStats">
+						<h6><span id="displayStatsTitle">Which states feel the strongest about each genre?</span></h6>
+						<svg id="stats" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet"></svg>
+					</div>
 				</div>
 
 			</div>
@@ -75,59 +79,74 @@
 				<!-- loading icons here -->
 				<div class="row" id="navbar">
 
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="row">
-							<div class="col-md-3">
+
+							<div class="col-md-4">
+								<div class='genre-icon' id='topgenre'>
+									<input type="image" src="{{url_for('static',filename = 'images/all.png')}}" onclick="updateData()" width="115%">
+								</div>
+							</div>
+
+							<div class="col-md-4">
 								<div class='genre-icon' id='pop'>
-									<input type="image" src="{{url_for('static',filename = 'images/pop.png')}}" onclick="updateData()" width="100%">
+									<input type="image" src="{{url_for('static',filename = 'images/pop.png')}}" onclick="updateData()" width="115%">
 								</div>
 							</div>
 
-							<div class="col-md-3">
+							<div class="col-md-4">
 								<div class='genre-icon' id='rock'>
-									<input type="image" src="{{url_for('static',filename = 'images/rock.png')}}" onclick="updateData()" width="100%">
+									<input type="image" src="{{url_for('static',filename = 'images/rock.png')}}" onclick="updateData()" width="115%">
 								</div>
 							</div>
 
-							<div class="col-md-3">
-								<div class='genre-icon' id='hiphop'>
-									<input type="image" src="{{url_for('static',filename = 'images/hiphop.png')}}" onclick="updateData()" width="100%">
-								</div>
-							</div>
-
-							<div class="col-md-3">
-								<div class='genre-icon' id='rnb'>
-									<input type="image" src="{{url_for('static',filename = 'images/rnb.png')}}" onclick="updateData()" width="100%">
-								</div>
-							</div>
 						</div>
 					</div>
 
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="row">
 
+							<div class="col-md-4">
+								<div class='genre-icon' id='hiphop'>
+									<input type="image" src="{{url_for('static',filename = 'images/hiphop.png')}}" onclick="updateData()" width="115%">
+								</div>
+							</div>
 
-							<div class="col-md-3">
+							<div class="col-md-4">
+								<div class='genre-icon' id='rnb'>
+									<input type="image" src="{{url_for('static',filename = 'images/rnb.png')}}" onclick="updateData()" width="115%">
+								</div>
+							</div>
+
+
+							<div class="col-md-4">
 								<div class='genre-icon' id='classical_jazz'>
-									<input type="image" src="{{url_for('static',filename = 'images/classical_jazz.png')}}" onclick="updateData()" width="100%">
+									<input type="image" src="{{url_for('static',filename = 'images/classical_jazz.png')}}" onclick="updateData()" width="115%">
 								</div>
 							</div>
 
-							<div class="col-md-3">
+
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="row">
+
+							<div class="col-md-4">
 								<div class='genre-icon' id='electronic'>
-									<input type="image" src="{{url_for('static',filename = 'images/electronic.png')}}" onclick="updateData()" width="100%">
+									<input type="image" src="{{url_for('static',filename = 'images/electronic.png')}}" onclick="updateData()" width="115%">
 								</div>
 							</div>
 
-							<div class="col-md-3">
+							<div class="col-md-4">
 								<div class='genre-icon' id='country_folk'>
-									<input type="image" src="{{url_for('static',filename = 'images/country_folk.png')}}" onclick="updateData()" width="100%">
+									<input type="image" src="{{url_for('static',filename = 'images/country_folk.png')}}" onclick="updateData()" width="115%">
 								</div>
 							</div>
 
-							<div class="col-md-3">
+							<div class="col-md-4">
 								<div class='about-icon' id='about'>
-									<input type="image" src="{{url_for('static',filename = 'images/about.png')}}" onclick="$('#modelAbout').modal()" width="100%">
+									<input type="image" src="{{url_for('static',filename = 'images/about.png')}}" onclick="$('#modelAbout').modal()" width="115%">
 								</div>
 							</div>
 
