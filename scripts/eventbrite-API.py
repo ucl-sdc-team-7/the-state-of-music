@@ -19,7 +19,7 @@ cursor = db.cursor()
 base_url = "https://www.eventbriteapi.com/v3/"
 
 us_states_and_viewports = list()
-with open('state_bounding_boxes.csv', 'r') as csvfile:
+with open('state_bounding_boxes.csv', 'r', encoding="utf-8") as csvfile:
     states_and_viewports = csv.reader(csvfile, delimiter=',')
     for row in states_and_viewports:
         us_states_and_viewports.append(row)
@@ -42,8 +42,6 @@ categories = '103'  # music
 formats = '6'  # concerts and performances
 
 # EVENTBRITE token_swap func
-
-
 def token_swap(old_oauth_token):
     old_index = tokens.index(old_oauth_token)
     new_index = (old_index + 1) if (old_index + 1 < len(tokens)) else 0
@@ -51,8 +49,7 @@ def token_swap(old_oauth_token):
     eventbrite = Eventbrite(oauth_token)
     return [oauth_token, eventbrite]
 
-for us_state_and_viewport in us_states_and_viewports[43:]:
-    print(us_state_and_viewport[0])
+for us_state_and_viewport in us_states_and_viewports:
     params = {'categories': categories,
               'formats': formats,
               'location.viewport.northeast.latitude': us_state_and_viewport[4],
