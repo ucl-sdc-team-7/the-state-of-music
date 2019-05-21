@@ -37,15 +37,18 @@ def show_genre():
     genre_column = genre if genre != 'top' else 'dom_genre'
 
     select_query = "SELECT " + level_code_column + ", " + \
-        level_abbr_column + ", " + genre_column + " FROM " + table
+        level_abbr_column + ", " + genre_column + " FROM " + table + \
+        " ORDER BY " + genre_column
 
     cur.execute(select_query)
     data = cur.fetchall()
 
-    for state in data:
-        if state['dom_genre'] is not None:
+    for index, state in enumerate(data):
+        if state.get('dom_genre'):
             state['dom_genre'] = state['dom_genre'].split("/")[0]
-    print(data)
+        else:
+            del state[genre_column]
+        state['ranking'] = index + 1
 
     return jsonify(data=data)
 

@@ -33,27 +33,21 @@ uStates.draw = function(genre) {
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
-
     /////////////////////////////////SETTING COLOUR RANGES/////////////////////////////////
 
-    //setting colour range for main page
-    // var color_cat = d3.scaleOrdinal().domain(colorsandgenres.genres)
-    //   .range(colorsandgenres.colors)
-
     //setting colour range for genres
-    // var data = data.features
-    // var val_arr = [];
-    // for (var j = 0; j < data.length; j++) {
-    //   var value = +data[j].value;
-    //   val_arr.push(value)
-    // }
+    var rankings = [];
+    for (var index in data) {
+      rankings.push(data[index]['ranking']);
+    }
 
-    // var min = d3.min(val_arr);
-    // var max = d3.max(val_arr);
+    console.log(rankings);
+    var min = d3.min(rankings);
+    var max = d3.max(rankings);
 
-    // if (genre != "top") {
-    //   var color_genre = d3.scaleLinear().domain([min, max]).range(["white", GENRES[genre].color]);
-    // }
+    if (genre != "top") {
+      var color_genre = d3.scaleLinear().domain([min, max]).range(["white", GENRES[genre].color]);
+    }
 
     ///////////////////////////////JOINING GENRE DATA TO JSON//////////////////////////////
 
@@ -66,8 +60,13 @@ uStates.draw = function(genre) {
           // Grabing State Name
           var dataState = data[i].state_abbr;
 
-          //Grabbing data value
-          var value = data[i].dom_genre;
+          var value = ''
+          if (genre == 'top') {
+            value = data[i].dom_genre;
+          } else {
+            value = data[i].ranking;
+          }
+          
 
           // Finding the corresponding state inside the JSON
           for (var j = 0; j < states.length; j++) {
@@ -80,7 +79,6 @@ uStates.draw = function(genre) {
             };
           };
         };
-
         ///////////////////CREATING SVG ELEMENT AND APPEND MAP TO SVG////////////////////
 
         //tooptip for top genre page
