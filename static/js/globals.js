@@ -7,7 +7,7 @@ const GENRES = {
     "color": "#2a7187",
     "label": "rock"
   },
-  "hiphop": {
+  "hip_hop": {
     "color": "#0381b4",
     "label": "hip hop"
   },
@@ -15,7 +15,7 @@ const GENRES = {
     "color": "#4a2777",
     "label": "R&B"
   },
-  "classical_jazz": {
+  "classical_and_jazz": {
     "color": "#b41162",
     "label": "classical & jazz"
   },
@@ -23,7 +23,7 @@ const GENRES = {
     "color": "#bf9076",
     "label": "electronic & dance"
   },
-  "country_folk": {
+  "country_and_folk": {
     "color": "#56371b",
     "label": "country & folk"
   },

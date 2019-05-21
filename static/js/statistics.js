@@ -46,8 +46,7 @@
 
 
 
-      if (genre == "topgenre") {
-
+      if (genre == "top") {
         console.log("temp - gotta finish this bit")
 
       } else {

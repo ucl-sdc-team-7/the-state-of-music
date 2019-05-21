@@ -25,9 +25,14 @@ const uStates = {};
 uStates.draw = function(genre) {
 
   //Loading in genre data
-  var request_url = "states/genre/" + genre
-  d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/state_pop.json", function(error, data) {
+  const params = jQuery.param({
+      genre: genre,
+      level: 'state'
+  });
+  var request_url = "genre?" + params;
+  d3.json(request_url, function(error, data) {
     if (error) console.log(error);
+    data = data['data']
 
     /////////////////////////////////SETTING COLOUR RANGES/////////////////////////////////
 
@@ -36,35 +41,35 @@ uStates.draw = function(genre) {
     //   .range(colorsandgenres.colors)
 
     //setting colour range for genres
-    var data = data.features
-    var val_arr = [];
-    for (var j = 0; j < data.length; j++) {
-      var value = +data[j].value;
-      val_arr.push(value)
-    }
+    // var data = data.features
+    // var val_arr = [];
+    // for (var j = 0; j < data.length; j++) {
+    //   var value = +data[j].value;
+    //   val_arr.push(value)
+    // }
 
-    var min = d3.min(val_arr);
-    var max = d3.max(val_arr);
+    // var min = d3.min(val_arr);
+    // var max = d3.max(val_arr);
 
-    if (genre != "topgenre") {
-      var color_genre = d3.scaleLinear().domain([min, max]).range(["white", GENRES[genre].color]);
-    }
+    // if (genre != "top") {
+    //   var color_genre = d3.scaleLinear().domain([min, max]).range(["white", GENRES[genre].color]);
+    // }
 
     ///////////////////////////////JOINING GENRE DATA TO JSON//////////////////////////////
 
     //loading in us json data
     d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/uStates.json",
       function(json) {
+        var states = json.features
         // Looping through each state data value in the .csv file
         for (var i = 0; i < data.length; i++) {
           // Grabing State Name
-          var dataState = data[i].abbr;
+          var dataState = data[i].state_abbr;
 
           //Grabbing data value
-          var value = data[i].value;
+          var value = data[i].dom_genre;
 
           // Finding the corresponding state inside the JSON
-          var states = json.features
           for (var j = 0; j < states.length; j++) {
             var jsonState = states[j].properties.abbr;
             if (dataState == jsonState) {
@@ -80,13 +85,17 @@ uStates.draw = function(genre) {
 
         //tooptip for top genre page
         function mouseOver_topgenre(d) {
+          var top_genre = ""
+          if (d.properties.value) {
+            top_genre = GENRES[d.properties.value]["label"];
+          }
           d3.select("#tooltip")
             .attr("class", "toolTip")
             .transition().duration(300)
             .style("opacity", 0.8);
           d3.select("#tooltip").html(
               "<h4>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
-              "<table><tr><td> Top Genre:</td><td>" + GENRES[d.properties.value] + "</td></tr>" +
+              "<table><tr><td> Top Genre:</td><td>" + top_genre + "</td></tr>" +
               "</table>" +
               "<small>(click to zoom)</small>")
             .style("left", (d3.event.pageX - 345) + "px")
@@ -127,16 +136,23 @@ uStates.draw = function(genre) {
 
 
         // applying colour scheme based on html input for 'genre_'
-        if (genre == "topgenre") {
+        if (genre == "top") {
           map.on("mouseover", mouseOver_topgenre).on("mouseout", mouseOut)
             .style("fill", function(d) {
-              return "222222";
+              if (d.properties.value) {
+                return GENRES[d.properties.value]["color"];  
+              } else {
+                return '#e2e2e2';
+              }
+              
             });
         } else {
-          map.on("mouseover", mouseOver_genre).on("mouseout", mouseOut)
-            .style("fill", function(d) {
-              return color_genre(d.properties.value)
-            });
+          if (genre != "top") {
+            map.on("mouseover", mouseOver_genre).on("mouseout", mouseOut)
+              .style("fill", function(d) {
+                return color_genre(d.properties.value)
+              });  
+          }
         }
 
         //drawing counties onclick
