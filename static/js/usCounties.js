@@ -1,12 +1,3 @@
-// joining genre data to counties geoJSON
-counties_geo.features.forEach(function(element) {
-  countyData.find(function(newElement) {
-    if (element.properties.NAME == newElement.county_name) {
-      element.properties.value = newElement.value;
-    };
-  })
-});
-
 // initializing county map
 var countyMap = L.map('countymap')
 
@@ -26,16 +17,16 @@ basemap.addTo(countyMap);
 var info = L.control();
 
 info.onAdd = function(map) {
-  this._div = L.DomUtil.create('div','county-info');
+  this._div = L.DomUtil.create('div', 'county-info');
   this.update();
   return this._div;
 }
 
-info.update = function (props) {
+info.update = function(props) {
   this._div.innerHTML = "<h4>" + (props ? props.NAME + " County</h4>" +
-    "<table><tr><td>R&B</td><td>" + props.value + "%</td></tr>" +
+    "<table><tr><td>R&B</td><td>" + props.value + "</td></tr>" +
     "</table>" +
-    "<small>(click to zoom)</small>":'<h4>Hover over a county</h4>')
+    "<small>(click to zoom)</small>" : '<h4>Hover over a county</h4>')
 }
 
 // defining style for state boundaries
@@ -102,8 +93,41 @@ function onEachFeature(feature, layer, genre) {
   });
 }
 
+function getData(genre) {
+  //Loading in genre data
+  const params = jQuery.param({
+    genre: genre,
+    level: 'county'
+  });
+
+  var request_url = "genre?" + params;
+
+  console.log(genre);
+
+  d3.json(request_url, function(error, data) {
+    if (error) console.log(error);
+    data = data['data']
+
+    console.log(data)
+
+    // joining genre data to counties geoJSON
+    counties_geo.features.forEach(function(element) {
+      data.find(function(newElement) {
+        if (element.properties.NAME == newElement.county_name) {
+          if (genre == "top") {
+            element.properties.value = newElement.dom_genre;
+          } else {
+            element.properties.value = newElement.ranking;
+          }};
+      })
+    });
+  });
+  
+  return counties_geo;
+}
+
 function getChoropleth(genre) {
-  var choropleth = L.choropleth(counties_geo, {
+  var choropleth = L.choropleth(getData(genre), {
     valueProperty: "value",
     scale: ["white", GENRES[genre].color],
     steps: 10,

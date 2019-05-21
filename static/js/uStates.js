@@ -29,6 +29,7 @@ uStates.draw = function(genre) {
       genre: genre,
       level: 'state'
   });
+
   var request_url = "genre?" + params;
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
@@ -57,8 +58,8 @@ uStates.draw = function(genre) {
         var states = json.features
         // Looping through each state data value in the .csv file
         for (var i = 0; i < data.length; i++) {
-          // Grabing State Name
-          var dataState = data[i].state_abbr;
+          // Grabing State ID
+          var dataState = data[i].state_code;
 
           var value = ''
           if (genre == 'top') {
@@ -70,7 +71,7 @@ uStates.draw = function(genre) {
 
           // Finding the corresponding state inside the JSON
           for (var j = 0; j < states.length; j++) {
-            var jsonState = states[j].properties.abbr;
+            var jsonState = states[j].id;
             if (dataState == jsonState) {
               // Copying all genre scores into the JSON
               states[j].properties.value = value;

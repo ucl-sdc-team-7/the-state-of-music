@@ -33,12 +33,12 @@ def show_genre():
 
     table = level + '_level_data'
     level_code_column = level + '_code'
-    level_abbr_column = level + '_abbr'
-    genre_column = genre if genre != 'top' else 'dom_genre'
+    level_name_column = level + '_name'
+    genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
 
     select_query = "SELECT " + level_code_column + ", " + \
-        level_abbr_column + ", " + genre_column + " FROM " + table + \
-        " ORDER BY " + genre_column
+        level_name_column + ", " + genre_column + " FROM " + table + \
+        " ORDER BY " + genre_column + ";"
 
     cur.execute(select_query)
     data = cur.fetchall()
@@ -51,6 +51,7 @@ def show_genre():
         state['ranking'] = index + 1
 
     return jsonify(data=data)
+
 
 
 if __name__ == '__main__':
