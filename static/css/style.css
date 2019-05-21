@@ -17,10 +17,6 @@ html, body, {
   width: 80%;
 }
 
-#logo:hover {
-  opacity: 0.7;
-}
-
 .genre-icon {
   text-align: left;
   opacity: 0.3;
