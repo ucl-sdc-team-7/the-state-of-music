@@ -1,5 +1,5 @@
-uStates.draw("topgenre")
-stats.draw("topgenre")
+uStates.draw("top")
+stats.draw("top")
 
 function updateInfoBox(label, color) {
   $("#titleGenre").html(label);
