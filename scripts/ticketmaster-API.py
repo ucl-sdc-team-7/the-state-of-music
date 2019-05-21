@@ -3,6 +3,9 @@ import time
 import mysql.connector as mysql
 import configparser
 import datetime
+import timeit
+
+start_time = timeit.default_timer()
 
 config = configparser.ConfigParser()
 config.read('../config.ini')
@@ -19,24 +22,26 @@ cursor = db.cursor()
 ticketmaster_url = "https://app.ticketmaster.com/discovery/v2/events.json"
 
 us_states = [
-              "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC",
-              "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA",
-              "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN",
-              "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM",
-              "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI",
-              "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA",
-              "WI", "WV", "WY"
-             ]
+    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC",
+    "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA",
+    "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN",
+    "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM",
+    "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI",
+    "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA",
+    "WI", "WV", "WY"
+]
 classificationName = "music"
 size = 200
 apikey = config['ticketmaster']['apikey']
 start_date = datetime.datetime.today()
-date_range = [start_date + datetime.timedelta(days=x) for x in range(0, 30)]
-date_list = list(map(lambda x: [x.strftime("%Y-%m-%d"+"T00:00:00Z"),x.strftime(
-    "%Y-%m-%d"+"T23:59:59Z")],date_range))
+date_range = [start_date + datetime.timedelta(days=x) for x in range(0, 5)]
+date_list = list(map(lambda x: [x.strftime("%Y-%m-%d" + "T00:00:00Z"), x.strftime(
+    "%Y-%m-%d" + "T23:59:59Z")], date_range))
 
+entry = 0
 
 for us_state in us_states:
+    print(us_state)
     for date in date_list:
         time.sleep(.21)
 
@@ -52,7 +57,7 @@ for us_state in us_states:
 
         total_events = data['page']['totalElements']
 
-        if total_events > 0 :
+        if total_events > 0:
             events = data['_embedded']['events']
 
             for index, event in enumerate(events):
@@ -76,10 +81,10 @@ for us_state in us_states:
                 artists = event['_embedded'].get('attractions')
                 main_artist_id = artists[0]['id'] if artists else ''
                 main_artist_name = artists[0]['name'] if (artists and 'name' in
-                    artists[0]) else ''
+                                                          artists[0]) else ''
                 main_artist_genre = artists[0]['classifications'][0]['genre'][
-                  'name'] if (artists and 'classifications' in artists[
-                  0] and 'genre' in artists[0]['classifications'][0]) else ''
+                    'name'] if (artists and 'classifications' in artists[
+                        0] and 'genre' in artists[0]['classifications'][0]) else ''
 
                 query = """INSERT INTO ticketmaster_events
                             (ticketmaster_id, local_date, event_genre,
