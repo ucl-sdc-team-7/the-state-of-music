@@ -121,7 +121,7 @@ function getData(genre) {
       })
     });
   });
-  
+
   return counties_geo;
 }
 
@@ -137,6 +137,23 @@ function getChoropleth(genre) {
   return choropleth;
 }
 
+function domgenre_colors(d,genre) {
+  return d == GENRES[genre] ? GENRES[genre].color:
+  "#e2e2e2"
+}
+
+function getCategorical(genre) {
+  var choropleth = L.geoJson(getData(genre),{
+    style : {
+      color: "#fff",
+      weight: 1,
+      fillColor: domgenre_colors(feature.properties.value, genre),
+      fillOpacity: 0.7,
+    }
+  });
+  return choropleth;
+}
+
 var usCounties = {};
 
 usCounties.draw = function(bbox, genre) {
@@ -145,8 +162,13 @@ usCounties.draw = function(bbox, genre) {
   removeLayers();
 
   countyMap.fitBounds(bbox);
-  var choropleth = getChoropleth(genre);
-  choropleth.addTo(countyMap);
+  if(genre != "top"){
+    var choropleth = getChoropleth(genre);
+    choropleth.addTo(countyMap);
+  } else {
+    var choropleth = getCategorical(gere);
+    choropleth.addTo(countyMap);
+  }
 
   L.geoJson(states_geo, {
     style: state_style,
