@@ -38,9 +38,9 @@ function state_style() {
 }
 
 // defining style for county polygons
-function county_style() {
+function county_style(genre) {
   return {
-    color: "#fff",
+    color: GENRES[genre].color,
     weight: 1,
     fillOpacity: 0.7,
   }
@@ -75,6 +75,7 @@ function removeLayers() {
 
 function zoomToCity(e, genre) {
   genre = current_genre
+
   countyMap.fitBounds(e.target.getBounds());
   countyMap.removeControl(info)
 
@@ -132,7 +133,7 @@ function getChoropleth(genre) {
     scale: ["white", GENRES[genre].color],
     steps: 10,
     mode: "q", // q for quantile
-    style: county_style,
+    style: county_style(genre),
     onEachFeature: onEachFeature
   });
   return choropleth;
@@ -144,7 +145,7 @@ function domgenre_colors(d,genre) {
 }
 
 function getCategorical(genre) {
-  var choropleth = L.geoJson(getData(genre),{
+  var categorical = L.geoJson(getData(genre),{
     style : {
       color: "#fff",
       weight: 1,
@@ -152,7 +153,7 @@ function getCategorical(genre) {
       fillOpacity: 0.7,
     }
   });
-  return choropleth;
+  return categorical;
 }
 
 var usCounties = {};
@@ -161,14 +162,14 @@ usCounties.draw = function(bbox, genre) {
   // resetting geo_level
   geo_level = "county";
   removeLayers();
-
   countyMap.fitBounds(bbox);
+
   if(genre != "top"){
     var choropleth = getChoropleth(genre);
     choropleth.addTo(countyMap);
   } else {
-    var choropleth = getCategorical(gere);
-    choropleth.addTo(countyMap);
+    var categorical = getCategorical(gere);
+    categorical.addTo(countyMap);
   }
 
   L.geoJson(states_geo, {
@@ -186,8 +187,10 @@ usCounties.recalculateGenres = function(genre) {
 
   removeLayers();
 
+  if(genre != "top"){
   var choropleth = getChoropleth(genre);
   choropleth.addTo(countyMap);
+  }
 
   L.geoJson(states_geo, {
     style: state_style,
