@@ -33,6 +33,7 @@ uStates.draw = function(genre) {
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
+
     /////////////////////////////////SETTING COLOUR RANGES/////////////////////////////////
 
     //setting colour range for genres
@@ -65,7 +66,7 @@ uStates.draw = function(genre) {
           } else {
             value = data[i].ranking;
           }
-          
+
 
           // Finding the corresponding state inside the JSON
           for (var j = 0; j < states.length; j++) {
@@ -82,6 +83,7 @@ uStates.draw = function(genre) {
 
         //tooptip for top genre page
         function mouseOver_topgenre(d) {
+          d3.select(this).style("opacity", 1)
           var top_genre = ""
           if (d.properties.value) {
             top_genre = GENRES[d.properties.value]["label"];
@@ -110,6 +112,7 @@ uStates.draw = function(genre) {
 
         //tooltip for all genres
         function mouseOver_genre(d) {
+          d3.select(this).style("opacity", 1)
           d3.select("#tooltip")
             .attr("class", "toolTip")
             .transition().duration(300)
@@ -124,6 +127,7 @@ uStates.draw = function(genre) {
         }
 
         function mouseOut() {
+          d3.selectAll(".map-path").style('opacity',0.7)
           d3.select("#tooltip").transition().duration(500).style("opacity", 0);
         }
 
@@ -145,18 +149,18 @@ uStates.draw = function(genre) {
           map.on("mouseover", mouseOver_topgenre).on("mouseout", mouseOut)
             .style("fill", function(d) {
               if (d.properties.value) {
-                return GENRES[d.properties.value]["color"];  
+                return GENRES[d.properties.value]["color"];
               } else {
                 return '#e2e2e2';
               }
-              
+
             });
         } else {
           if (genre != "top") {
             map.on("mouseover", mouseOver_genre).on("mouseout", mouseOut)
               .style("fill", function(d) {
                 return color_genre(d.properties.value)
-              });  
+              });
           }
         }
 
