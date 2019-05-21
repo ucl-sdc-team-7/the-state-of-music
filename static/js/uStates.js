@@ -33,6 +33,7 @@ uStates.draw = function(genre) {
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
+
     /////////////////////////////////SETTING COLOUR RANGES/////////////////////////////////
 
     //setting colour range for genres
@@ -82,7 +83,7 @@ uStates.draw = function(genre) {
 
         //tooptip for top genre page
         function mouseOver_topgenre(d) {
-          d3.select(this).style('opacity', 1);
+          d3.select(this).style("opacity", 1)
           var top_genre = ""
           if (d.properties.value) {
             top_genre = GENRES[d.properties.value]["label"];
@@ -103,7 +104,7 @@ uStates.draw = function(genre) {
 
         //tooltip for all genres
         function mouseOver_genre(d) {
-          d3.select(this).style('opacity', 1);
+          d3.select(this).style("opacity", 1)
           d3.select("#tooltip")
             .attr("class", "toolTip")
             .transition().duration(300)
@@ -118,7 +119,7 @@ uStates.draw = function(genre) {
         }
 
         function mouseOut() {
-          d3.select(this).style('opacity', 0.7)
+          d3.selectAll(".map-path").style('opacity',0.7)
           d3.select("#tooltip").transition().duration(500).style("opacity", 0);
         }
 
