@@ -1,3 +1,4 @@
+$("#top").addClass("selected")
 uStates.draw("top")
 stats.draw("top")
 
@@ -18,8 +19,21 @@ function updateData() {
     .on('click', function() {
       var genre_id = d3.select(this).attr('id')
       current_genre = genre_id;
+
+      // Make all icons (except this) transparent
+      if($('.genre-icon').not(this).hasClass("selected")) {
+        $(".genre-icon").removeClass("selected")
+      }
+      // Make this opaque
+      if (!$(this).hasClass("selected")){
+        $(this).addClass("selected")
+      }
+
+      // removing state map and statistics
       d3.selectAll("svg#statesvg > *").remove();
       d3.selectAll("svg#stats > *").remove();
+
+      // adding new maps depending on geo_level
       if (geo_level == "state") {
         uStates.draw(genre_id);
         stats.draw(genre_id);
@@ -35,12 +49,18 @@ function updateData() {
     });
 }
 
+
+
 function updatelogo() {
   d3.selectAll('#logo')
     .on('click', function() {
+      $(".genre-icon").removeClass("selected")
+      $("#topgenre").addClass("selected")
+      // removing state map and statistics
       d3.selectAll("svg#statesvg > *").remove();
       d3.selectAll("svg#stats > *").remove();
 
+      // adding new maps depending on geo_level
       if (geo_level == "state") {
         uStates.draw("topgenre");
       } else {
@@ -48,7 +68,10 @@ function updatelogo() {
         geo_level = "state"
         uStates.draw("topgenre");
       }
+
+      // adding top genre stats
       stats.draw("topgenre");
+
       $("#titleGenre").html("music");
       document.documentElement.style.setProperty('--displayInfo-color', "#888b94");
       $("#titleCategory").html("The most popular types of live music")

@@ -14,7 +14,34 @@ html, body, {
 #logo {
   text-align: left;
   margin: 10px 10px;
-  z-index: 0;
+  width: 80%;
+}
+
+.genre-icon {
+  text-align: left;
+  opacity: 0.3;
+  width: 100%;
+}
+
+.genre-icon:hover {
+  opacity: 1;
+  /*chrome doesn't seem to like hovering to opacity: 1*/
+}
+
+.genre-icon.selected {
+  opacity: 1;
+}
+
+*:focus {
+  outline: none;
+}
+
+#about {
+  opacity: 0.7;
+}
+
+#about:hover {
+  opacity: 1;
 }
 
 #displayInfo {
@@ -25,7 +52,6 @@ html, body, {
   color: white;
   background-color: #555a66;
   opacity: 1;
-  z-index: 0;
 }
 
 #displayStats {
@@ -59,22 +85,6 @@ html, body, {
   margin: 0px;
 }
 
-.map-path:hover {
-  opacity: 1;
-}
-
-#logo {
-  width: 80%;
-}
-
-#logo:hover {
-  opacity: 0.8;
-}
-
-#logo:hover {
-  opacity: 0.7;
-}
-
 #navbar {
   text-align: left;
   margin: 10px;
@@ -86,22 +96,6 @@ html, body, {
   vertical-align: top;
   margin: 10px 20px 20px 20px;
   align-items: center;
-}
-
-.genre-icon {
-  text-align: left;
-  opacity: 1;
-  width: 100%;
-}
-
-.genre-icon:hover {
-  opacity: 0.7;
-  /*chrome doesn't seem to like hovering to opacity: 1*/
-}
-
-*:focus {
-  opacity: 1;
-  outline: none;
 }
 
 #tooltip {

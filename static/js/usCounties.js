@@ -38,8 +38,6 @@ info.update = function (props) {
     "<small>(click to zoom)</small>":'<h4>Hover over a county</h4>')
 }
 
-info.addTo(countyMap)
-
 // defining style for state boundaries
 function state_style() {
   return {
@@ -134,6 +132,8 @@ usCounties.draw = function(bbox, genre) {
     }
   }).addTo(countyMap);
 
+  info.addTo(countyMap)
+
 }
 
 usCounties.recalculateGenres = function(genre) {
@@ -149,6 +149,8 @@ usCounties.recalculateGenres = function(genre) {
       layer.myTag = "myStates"
     }
   }).addTo(countyMap);
+
+  info.addTo(countyMap)
 
 }
 
