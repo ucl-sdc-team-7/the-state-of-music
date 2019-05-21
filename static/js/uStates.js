@@ -41,7 +41,6 @@ uStates.draw = function(genre) {
       rankings.push(data[index]['ranking']);
     }
 
-    console.log(rankings);
     var min = d3.min(rankings);
     var max = d3.max(rankings);
 
