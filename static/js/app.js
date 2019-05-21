@@ -55,6 +55,8 @@ function updateData() {
 function updatelogo() {
   d3.selectAll('#logo')
     .on('click', function() {
+      $(".genre-icon").removeClass("selected")
+      $("#topgenre").addClass("selected")
       // removing state map and statistics
       d3.selectAll("svg#statesvg > *").remove();
       d3.selectAll("svg#stats > *").remove();
