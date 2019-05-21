@@ -129,7 +129,8 @@ html, body, {
 .county-info h4,
 .venue-info .leaflet-popup-content-wrapper h4 {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 #tooltip table,
@@ -140,10 +141,13 @@ html, body, {
   white-space: nowrap;
 }
 
+th {
+  text-align: left;
+}
+
 #tooltip tr td,
 .county-info tr td,
 .venue-info .leaflet-popup-content-wrapper tr td {
-  padding: 10px;
   margin: 0;
   opacity: 0.6;
 }
@@ -165,4 +169,48 @@ html, body, {
 #displayInfo {
   background-color: var(--displayInfo-color);
   color: var(--displayInfo-text-color);
+}
+
+.center {
+	text-align: center;
+}
+
+.left {
+	text-align: left;
+}
+
+.legend-color {
+  float: left;
+  width: 10px;
+  height: 10px;
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.pop {
+	background: #002f81;
+}
+
+.rock {
+	background: #2a7187;
+}
+
+.hip-hop {
+	background: #0381b4;
+}
+
+.rnb {
+	background: #4a2777;
+}
+
+.classical_jazz {
+	background: #b41162;
+}
+
+.electronic {
+	background: #bf9076;
+}
+
+.country_folk {
+	background: #56371b;
 }
