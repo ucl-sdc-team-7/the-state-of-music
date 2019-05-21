@@ -34,7 +34,7 @@ def show_genre():
     table = level + '_level_data'
     level_code_column = level + '_code'
     level_abbr_column = level + '_abbr'
-    genre_column = genre if genre != 'top' else 'dom_genre'
+    genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
 
     select_query = "SELECT " + level_code_column + ", " + \
         level_abbr_column + ", " + genre_column + " FROM " + table + \
