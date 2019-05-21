@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `state_of_music`.`county_level_data` (
   `classical_and_jazz` DECIMAL(5,2) DEFAULT 0,
   `electronic` DECIMAL(5,2) DEFAULT 0,
   `country_and_folk` DECIMAL(5,2) DEFAULT 0,
-  `all_genres` FLOAT(10) DEFAULT 0, 
+  `all_genres` DECIMAL(5,2) DEFAULT 0, 
   `dom_genre` VARCHAR(50) NULL,
   `pop_norm` FLOAT(10) NULL,
   `rock_norm` FLOAT(10) NULL,
