@@ -70,7 +70,7 @@ function updatelogo() {
       }
 
       // adding top genre stats
-      stats.draw("topgenre");
+      stats.draw("top");
 
       $("#titleGenre").html("music");
       document.documentElement.style.setProperty('--displayInfo-color', "#888b94");
