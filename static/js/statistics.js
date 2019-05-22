@@ -46,10 +46,7 @@
 
 
 
-      if (genre == "top") {
-        console.log("temp - gotta finish this bit")
-
-      } else {
+      if (genre != "top") {
         //assigning y-axis
         bar.append('g').attr("class", "y axis").call(d3.axisLeft(y))
 

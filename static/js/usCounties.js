@@ -14,6 +14,7 @@ const basemap = L.tileLayer(url, {
 //adding base map to div
 basemap.addTo(countyMap);
 
+//creating info box
 var info = L.control();
 
 info.onAdd = function(map) {
@@ -23,11 +24,11 @@ info.onAdd = function(map) {
 }
 
 info.update = function(props) {
-  this._div.innerHTML = "<h4>" + (props ? props.NAME + " County</h4>" +
-    "<table><tr><td>R&B</td><td>" + props.value + "</td></tr>" +
-    "</table>" +
-    "<small>(click to zoom)</small>" : '<h4>Hover over a county</h4>')
-}
+      this._div.innerHTML = "<h4>" + (props ? props.NAME + " County</h4>" +
+        "<table><tr><td>R&B</td><td>" + props.value + "</td></tr>" +
+        "</table>" +
+        "<small>(click to zoom)</small>" : '<h4>Hover over a county</h4>')
+    }
 
 // defining style for state boundaries
 function state_style() {
@@ -37,14 +38,16 @@ function state_style() {
   }
 }
 
-// defining style for county polygons
-function county_style(genre) {
-  return {
-    color: GENRES[genre].color,
-    weight: 1,
-    fillOpacity: 0.7,
-  }
+// creating state boundaries
+function getStateLines() {
+  return L.geoJson(states_geo, {
+    style: state_style,
+    onEachFeature: function(feature, layer) {
+      layer.myTag = "myStates"
+    }
+  });
 }
+
 
 function county_mouseover(e) {
   var layer = e.target;
@@ -102,13 +105,9 @@ function getData(genre) {
 
   var request_url = "genre?" + params;
 
-  console.log(genre);
-
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
-
-    console.log(data)
 
     // joining genre data to counties geoJSON
     counties_geo.features.forEach(function(element) {
@@ -118,12 +117,22 @@ function getData(genre) {
             element.properties.value = newElement.dom_genre;
           } else {
             element.properties.value = newElement.ranking;
-          }};
+          }
+        };
       })
     });
   });
 
   return counties_geo;
+}
+
+// defining style for county choropleth
+function county_style(genre) {
+  return {
+    color: GENRES[genre].color,
+    weight: 1,
+    fillOpacity: 0.7,
+  }
 }
 
 function getChoropleth(genre) {
@@ -138,19 +147,19 @@ function getChoropleth(genre) {
   return choropleth;
 }
 
-function domgenre_colors(d,genre) {
-  return d == GENRES[genre] ? GENRES[genre].color:
-  "#e2e2e2"
+function cat_style(feature) {
+  return {
+    fillColor: domgenre_colors(feature.properties.value), // refer helpers.js
+    weight: 1,
+    color: "#fff",
+    fillOpacity: 0.7
+  }
 }
 
 function getCategorical(genre) {
-  var categorical = L.geoJson(getData(genre),{
-    style : {
-      color: "#fff",
-      weight: 1,
-      fillColor: domgenre_colors(feature.properties.value, genre),
-      fillOpacity: 0.7,
-    }
+  var categorical = L.geoJson(getData(genre), {
+    style: cat_style,
+    onEachFeature: onEachFeature
   });
   return categorical;
 }
@@ -163,20 +172,18 @@ usCounties.draw = function(bbox, genre) {
   removeLayers();
   countyMap.fitBounds(bbox);
 
-  if(genre != "top"){
+  console.log("draw: " + genre)
+
+  if (genre != "top") {
     var choropleth = getChoropleth(genre);
     choropleth.addTo(countyMap);
   } else {
-    var categorical = getCategorical(gere);
+    var categorical = getCategorical(genre);
     categorical.addTo(countyMap);
   }
 
-  L.geoJson(states_geo, {
-    style: state_style,
-    onEachFeature: function(feature, layer) {
-      layer.myTag = "myStates" // tagging state polylines for removeLayers() function
-    }
-  }).addTo(countyMap);
+  var stateLines = getStateLines();
+  stateLines.addTo(countyMap);
 
   info.addTo(countyMap)
 
@@ -186,17 +193,18 @@ usCounties.recalculateGenres = function(genre) {
 
   removeLayers();
 
-  if(genre != "top"){
-  var choropleth = getChoropleth(genre);
-  choropleth.addTo(countyMap);
+  console.log("recalculate: " + genre)
+
+  if (genre != "top") {
+    var choropleth = getChoropleth(genre);
+    choropleth.addTo(countyMap);
+  } else {
+    var categorical = getCategorical(genre);
+    categorical.addTo(countyMap);
   }
 
-  L.geoJson(states_geo, {
-    style: state_style,
-    onEachFeature: function(feature, layer) {
-      layer.myTag = "myStates"
-    }
-  }).addTo(countyMap);
+  var stateLines = getStateLines();
+  stateLines.addTo(countyMap);
 
   info.addTo(countyMap)
 
