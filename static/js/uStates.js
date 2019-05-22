@@ -20,7 +20,7 @@ const map = d3.select("#statesvg")
   //Binding the data to the SVG and create one path per json feature
   .selectAll("path")
   .attr("class", "map-path")
-
+  
 const uStates = {};
 uStates.draw = function(genre) {
 
@@ -94,8 +94,16 @@ uStates.draw = function(genre) {
             .transition().duration(300)
             .style("opacity", 0.8);
           d3.select("#tooltip").html(
-              "<h4>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
+              "<h4>" + d.properties.name + " ("+d.properties.abbr+")" + "</h4>" +
               "<table><tr><td> Top Genre:</td><td>" + top_genre + "</td></tr>" +
+			  "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
+			  "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>x</td></tr>"+
+			  "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>x</td></tr>"+
+			  "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>x</td></tr>"+
+			  "<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>x</td></tr>"+
+			  "<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>x</td></tr>"+
+			  "<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>x</td></tr>"+
+			  "<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>x</td></tr>"+
               "</table>" +
               "<small>(click to zoom)</small>")
             .style("left", (d3.event.pageX - 345) + "px")
@@ -111,9 +119,9 @@ uStates.draw = function(genre) {
             .transition().duration(300)
             .style("opacity", 0.8);
           d3.select("#tooltip").html(
-              "<h4>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
-              "<table><tr><td>" + GENRES[genre].label + "</td><td>" + d.properties.value * 100 + "%</td></tr>" +
-              "</table>" +
+              "<h4 class='state-head'>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
+              "<table><tr><th>Rank:</th><td>" + (52-d.properties.value) + " out of 51</td></tr>"+
+			  "<th>Number of upcoming "+ GENRES[genre].label +" shows</th><td>x</td></table>" +
               "<small>(click to zoom)</small>")
             .style("left", (d3.event.pageX - 345) + "px")
             .style("top", (d3.event.pageY - 120) + "px");
