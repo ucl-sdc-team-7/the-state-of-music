@@ -2,7 +2,7 @@ $("#top").addClass("selected")
 uStates.draw("top")
 stats.draw("top")
 
-function updateInfoBox(label, color) {
+function updateInfoBox(label) {
   $("#titleGenre").html(label);
   //this slightly  ugly solution shifts the colouring of the info boxes
   //it's repeated in the updatelogo function below
@@ -45,7 +45,11 @@ function updateData() {
         stats.draw(genre_id);
       }
 
-      updateInfoBox(GENRES[genre_id].label, GENRES[genre_id].color);
+      if (genre_id != "top") {
+        updateInfoBox(GENRES[genre_id].label);
+      } else {
+        updateInfoBox("music");
+      }
     });
 }
 
@@ -55,22 +59,24 @@ function updatelogo() {
   d3.selectAll('#logo')
     .on('click', function() {
       $(".genre-icon").removeClass("selected")
-      $("#topgenre").addClass("selected")
+      $("#top").addClass("selected")
       // removing state map and statistics
       d3.selectAll("svg#statesvg > *").remove();
       d3.selectAll("svg#stats > *").remove();
 
+      current_genre = "top"
+
       // adding new maps depending on geo_level
       if (geo_level == "state") {
-        uStates.draw("topgenre");
+        uStates.draw("top");
       } else {
         $("#countymap").toggle();
         geo_level = "state"
-        uStates.draw("topgenre");
+        uStates.draw("top");
       }
 
       // adding top genre stats
-      stats.draw("topgenre");
+      stats.draw("top");
 
       $("#titleGenre").html("music");
       document.documentElement.style.setProperty('--displayInfo-color', "#888b94");
