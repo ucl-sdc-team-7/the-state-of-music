@@ -1,83 +1,99 @@
-(function() {
+//setting dimentions
+const bar_margin = {
+    top: 20,
+    right: 20,
+    bottom: 20,
+    left: 60
+  },
+  bar_width = 300 - bar_margin.left - bar_margin.right,
+  bar_height = 300 - bar_margin.top - bar_margin.bottom;
 
-  //setting dimentions
-  const bar_margin = {
-      top: 20,
-      right: 20,
-      bottom: 20,
-      left: 40
-    },
-    bar_width = 300 - bar_margin.left - bar_margin.right,
-    bar_height = 300 - bar_margin.top - bar_margin.bottom;
+const x = d3.scaleLinear().range([0, bar_width]);
+const y = d3.scaleBand().range([bar_height, 0]);
 
-  const x = d3.scaleLinear().range([0, bar_width]);
-  const y = d3.scaleBand().range([bar_height, 0]);
+const stats = {};
 
-  const stats = {};
+stats.draw = function(genre) {
 
-  stats.draw = function(genre) {
-    //using fake data for now
-    d3.json("https://raw.githubusercontent.com/richa-sud/the-state-of-music-json/master/state_pop.json", function(error, data_) {
-      if (error) console.log(error);
+  console.log(geo_level)
 
-      var data = data_.features
+  const params = jQuery.param({
+    genre: genre,
+    level: geo_level
+  });
+  var request_url = "genre?" + params;
+  d3.json(request_url, function(error, data) {
+    if (error) console.log(error);
+    data = data['data']
 
-      //sort bars based on value
-      data = data.sort(function(a, b) {
-        return a.value - b.value
-      })
+    //sort bars based on value
+    data = data.sort(function(a, b) {
+      return b.ranking - a.ranking
+    })
 
-      //finding top five states
-      data = data.slice(-5, data.length)
+    max_rank = data[0]
 
-      // setting domains for bars
-      x.domain([0, d3.max(data, function(d){ return d.value })]);
-      y.domain(data.map(function(d){ return d.abbr })).padding(0.3);
+    //finding top five states
+    data = data.slice(-5, max_rank.ranking)
 
-      //creating y-axis
-      const yAxis = d3.axisLeft(y);
+    // setting domains for bars
+    x.domain([0, d3.max(data, function(d) {
+      return d.ranking
+    })]);
+    y.domain(data.map(function(d) {
+      return d.state_name
+    })).padding(0.3);
 
-      //creating svg object
-      const chart = d3.select("#displayStats").select("svg")
+    //creating y-axis
+    const yAxis = d3.axisLeft(y);
 
-      //assigning margins
-      const bar = chart.append("g")
+    //creating svg object
+    const chart = d3.select("#displayStats").select("svg")
+
+    //assigning margins
+    const bar = chart.append("g")
       .attr("transform", "translate(" + bar_margin.left + "," + bar_margin.top + ")")
 
+    if (genre != "top") {
 
+      //assigning y-axis
+      bar.append('g').attr("class", "y axis").call(d3.axisLeft(y))
 
-      if (genre == "top") {
-        console.log("temp - gotta finish this bit")
-
-      } else {
-        //assigning y-axis
-        bar.append('g').attr("class", "y axis").call(d3.axisLeft(y))
-
-        //drawing bars in chart
-        bar.selectAll('.bar').data(data)
+      //drawing bars in chart
+      bar.selectAll('.bar').data(data)
         .enter().append('rect')
         .attr("class", "bar")
-        .attr('y', function(d) { return y(d.abbr); }) //assigning hieght of bars
-        .attr("width", function(d) { return x(d.value); }) //assigning width of bars
+        .attr('y', function(d) {
+          return y(d.state_name);
+        }) //assigning hieght of bars
+        .attr("width", function(d) {
+          return x(d.ranking);
+        }) //assigning width of bars
         .attr("height", y.bandwidth())
-        .attr("fill", function(d) {return GENRES[genre].color})
+        .attr("fill", function(d) {
+          return GENRES[genre].color
+        })
 
-        //adding values to bars
-        bar.selectAll(".text")
+      //adding values to bars
+      bar.selectAll(".text")
         .data(data).enter()
         .append("text")
         .attr("class", "bar-text")
         .attr("dy", ".35em")
-        .attr("x", function(d){ return x(d.value) - 20 })
-        .attr("y", function(d){ return y(d.abbr) + y.bandwidth()/2 })
-        .attr("text-anchor","middle")
-        .text(function(d) { return d.value })
+        .attr("x", function(d) {
+          return x(d.ranking) - 20
+        })
+        .attr("y", function(d) {
+          return y(d.state_name) + y.bandwidth() / 2
+        })
+        .attr("text-anchor", "middle")
+        .text(function(d) {
+          return d.ranking
+        })
         .style("fill", "white")
-      }
+    }
 
-    });
-  };
+  });
+};
 
-  this.stats = stats;
-
-})();
+this.stats = stats;
