@@ -28,13 +28,11 @@ stats.draw = function(genre) {
 
     //sort bars based on value
     data = data.sort(function(a, b) {
-      return b.ranking - a.ranking
+      return a.ranking - b.ranking
     })
 
-    max_rank = data[0]
-
     //finding top five states
-    data = data.slice(-5, max_rank.ranking)
+    data = data.slice(0, 5).reverse();
 
     //creating svg object
     const chart = d3.select("#displayStats").select("svg")
