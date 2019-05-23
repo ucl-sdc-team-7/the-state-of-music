@@ -49,7 +49,7 @@ for row in cursor:
                         0] == "administrative_area_level_2"
                 ):
                     county = address_component['short_name']
-                    county = county.replace("St", "St.")
+                    county = county.replace("St ", "St. ")
                     county = county.replace("County", "")
                     county = county.replace("Parish", "")
 
