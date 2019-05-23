@@ -87,7 +87,6 @@ function zoomToCity(e, genre) {
   countyMap.fitBounds(e.target.getBounds());
   countyMap.removeControl(info)
 
-  removeLayers()
   usVenues.draw(genre)
 }
 
