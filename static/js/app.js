@@ -55,22 +55,22 @@ function updatelogo() {
   d3.selectAll('#logo')
     .on('click', function() {
       $(".genre-icon").removeClass("selected")
-      $("#topgenre").addClass("selected")
+      $("#top").addClass("selected")
       // removing state map and statistics
       d3.selectAll("svg#statesvg > *").remove();
       d3.selectAll("svg#stats > *").remove();
 
       // adding new maps depending on geo_level
       if (geo_level == "state") {
-        uStates.draw("topgenre");
+        uStates.draw("top");
       } else {
         $("#countymap").toggle();
         geo_level = "state"
-        uStates.draw("topgenre");
+        uStates.draw("top");
       }
 
       // adding top genre stats
-      stats.draw("topgenre");
+      stats.draw("top");
 
       $("#titleGenre").html("music");
       document.documentElement.style.setProperty('--displayInfo-color', "#888b94");

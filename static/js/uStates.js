@@ -20,7 +20,7 @@ const map = d3.select("#statesvg")
   //Binding the data to the SVG and create one path per json feature
   .selectAll("path")
   .attr("class", "map-path")
-  
+
 const uStates = {};
 uStates.draw = function(genre) {
 
@@ -46,7 +46,7 @@ uStates.draw = function(genre) {
     var max = d3.max(rankings);
 
     if (genre != "top") {
-      var color_genre = d3.scaleLinear().domain([min, max]).range(["white", GENRES[genre].color]);
+      var color_genre = d3.scaleLinear().domain([min, max]).range([GENRES[genre].color, "white"]);
     }
 
     ///////////////////////////////JOINING GENRE DATA TO JSON//////////////////////////////
@@ -119,7 +119,7 @@ uStates.draw = function(genre) {
             .style("opacity", 0.8);
           d3.select("#tooltip").html(
               "<h4 class='state-head'>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
-              "<table><tr><th>Rank:</th><td>" + (52-d.properties.value) + " out of 51</td></tr>"+
+              "<table><tr><th>Rank:</th><td>" + (d.properties.value) + " out of 51</td></tr>"+
 			  "<th>Number of upcoming "+ GENRES[genre].label +" shows</th><td>x</td></table>" +
               "<small>(click to zoom)</small>")
             .style("left", (d3.event.pageX - 345) + "px")
