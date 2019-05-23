@@ -20,7 +20,7 @@ const map = d3.select("#statesvg")
   //Binding the data to the SVG and create one path per json feature
   .selectAll("path")
   .attr("class", "map-path")
-  
+
 const uStates = {};
 uStates.draw = function(genre) {
 

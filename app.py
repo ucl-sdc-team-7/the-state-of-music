@@ -2,6 +2,7 @@ from flask import Flask
 from flask_mysqldb import MySQL
 from flask import render_template, request, jsonify
 import configparser
+import simplejson as json
 import os
 app = Flask(__name__)
 
@@ -33,12 +34,24 @@ def show_genre():
 
     table = level + '_level_data'
     level_code_column = level + '_code'
-    level_abbr_column = level + '_abbr'
-    genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
+    level_name_column = level + '_name'
+    level_abbr_column = 'state_abbr'
 
-    select_query = "SELECT " + level_code_column + ", " + \
-        level_abbr_column + ", " + genre_column + " FROM " + table + \
-        " ORDER BY " + genre_column
+
+    if level != "venue":
+
+        genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
+
+        select_query = "SELECT " + level_code_column + ", " + \
+            level_name_column + ", " + level_abbr_column + ", " + genre_column + " FROM " + table + \
+            " ORDER BY " + genre_column + ';'
+    else:
+
+        genre_column = genre if genre != 'top' else 'dom_genre'
+
+        select_query = "SELECT venue, "  + \
+            "venue_lat, venue_long, " + level_abbr_column + ", " + genre_column + " FROM " + table + \
+            " ORDER BY " + genre_column + ';'
 
     cur.execute(select_query)
     data = cur.fetchall()
@@ -47,8 +60,10 @@ def show_genre():
         if state.get('dom_genre'):
             state['dom_genre'] = state['dom_genre'].split("/")[0]
         else:
+            state['value'] = state[genre_column]
             del state[genre_column]
         state['ranking'] = index + 1
+
 
     return jsonify(data=data)
 
