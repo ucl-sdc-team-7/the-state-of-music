@@ -37,7 +37,6 @@ def show_genre():
     level_name_column = level + '_name'
     level_abbr_column = 'state_abbr'
 
-
     if level != "venue":
 
         genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
