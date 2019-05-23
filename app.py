@@ -35,19 +35,23 @@ def show_genre():
     table = level + '_level_data'
     level_code_column = level + '_code'
     level_name_column = level + '_name'
+    level_abbr_column = 'state_abbr'
+
 
     if level != "venue":
+
         genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
 
         select_query = "SELECT " + level_code_column + ", " + \
-            "state_abbr, " + level_name_column + ", " + genre_column + " FROM " + table + \
-            " ORDER BY " + genre_column + ' DESC;'
+            level_name_column + ", " + level_abbr_column + ", " + genre_column + " FROM " + table + \
+            " ORDER BY " + genre_column + ';'
     else:
+
         genre_column = genre if genre != 'top' else 'dom_genre'
 
-        select_query = "SELECT venue, venue_lat, venue_long, state_abbr, "  + \
-            genre_column + " FROM " + table + " ORDER BY " + genre_column + ' DESC;'
-
+        select_query = "SELECT venue, "  + \
+            "venue_lat, venue_long, " + level_abbr_column + ", " + genre_column + " FROM " + table + \
+            " ORDER BY " + genre_column + ';'
 
     cur.execute(select_query)
     data = cur.fetchall()
