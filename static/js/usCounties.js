@@ -88,7 +88,9 @@ function zoomToCity(e, genre) {
   countyMap.removeControl(info)
 
   removeLayers()
+  d3.selectAll("svg#stats > *").remove();
   usVenues.draw(genre)
+  stats.draw(genre)
 }
 
 // defining popups and county style on hover
