@@ -122,7 +122,7 @@ function getData(genre) {
       })
     });
   });
-
+  console.log(counties_geo)
   return counties_geo;
 }
 
