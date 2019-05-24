@@ -49,7 +49,7 @@ def token_swap(old_oauth_token):
     eventbrite = Eventbrite(oauth_token)
     return [oauth_token, eventbrite]
 
-for us_state_and_viewport in us_states_and_viewports:
+for us_state_and_viewport in us_states_and_viewports[1:]:
     params = {'categories': categories,
               'formats': formats,
               'location.viewport.northeast.latitude': us_state_and_viewport[4],
@@ -137,12 +137,12 @@ for us_state_and_viewport in us_states_and_viewports:
                 else:
                     subcategory_name = ''
 
-                query = """INSERT INTO eventbrite_events
-                        (eventbrite_id, local_date, event_name,
-                        venue_name, venue_lat, venue_long, genre) VALUES
-                        (%s, %s, %s, %s, %s, %s, %s)"""
-                values = (event_id, event_date, event_name, venue_name,
-                          venue_lat, venue_long, subcategory_name)
-
-                cursor.execute(query, values)
-                db.commit()
+                # query = """INSERT INTO eventbrite_events
+                #         (eventbrite_id, local_date, event_name,
+                #         venue_name, venue_lat, venue_long, genre) VALUES
+                #         (%s, %s, %s, %s, %s, %s, %s)"""
+                # values = (event_id, event_date, event_name, venue_name,
+                #           venue_lat, venue_long, subcategory_name)
+                #
+                # cursor.execute(query, values)
+                # db.commit()
