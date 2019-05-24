@@ -49,7 +49,7 @@ def token_swap(old_oauth_token):
     eventbrite = Eventbrite(oauth_token)
     return [oauth_token, eventbrite]
 
-for us_state_and_viewport in us_states_and_viewports:
+for us_state_and_viewport in us_states_and_viewports[1:]:
     params = {'categories': categories,
               'formats': formats,
               'location.viewport.northeast.latitude': us_state_and_viewport[4],
