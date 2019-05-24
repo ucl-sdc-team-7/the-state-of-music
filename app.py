@@ -53,6 +53,7 @@ def show_genre():
             "venue_lat, venue_long, " + level_abbr_column + ", " + genre_column + " FROM " + table + \
             " ORDER BY " + genre_column + ';'
 
+
     cur.execute(select_query)
     data = cur.fetchall()
 
