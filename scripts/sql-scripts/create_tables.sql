@@ -95,6 +95,14 @@ CREATE TABLE IF NOT EXISTS `state_of_music`.`county_level_data` (
   `classical_and_jazz_norm` FLOAT(10) NULL,
   `electronic_norm` FLOAT(10) NULL,
   `country_and_folk_norm` FLOAT(10) NULL,
+  `pop_num` INT(4) DEFAULT 0,
+  `rock_num` INT(4) DEFAULT 0,
+  `hip_hop_num` INT(4) DEFAULT 0,
+  `rnb_num` INT(4) DEFAULT 0,
+  `classical_and_jazz_num` INT(4) DEFAULT 0,
+  `electronic_num` INT(4) DEFAULT 0,
+  `country_and_folk_num` INT(4) DEFAULT 0,
+  `total_num` INT(4) DEFAULT 0,
   PRIMARY KEY (`id`));
   
 CREATE TABLE IF NOT EXISTS `state_of_music`.`state_level_data` (
@@ -119,6 +127,14 @@ CREATE TABLE IF NOT EXISTS `state_of_music`.`state_level_data` (
   `classical_and_jazz_norm` FLOAT(10) NULL,
   `electronic_norm` FLOAT(10) NULL,
   `country_and_folk_norm` FLOAT(10) NULL,
+  `pop_num` INT(4) DEFAULT 0,
+  `rock_num` INT(4) DEFAULT 0,
+  `hip_hop_num` INT(4) DEFAULT 0,
+  `rnb_num` INT(4) DEFAULT 0,
+  `classical_and_jazz_num` INT(4) DEFAULT 0,
+  `electronic_num` INT(4) DEFAULT 0,
+  `country_and_folk_num` INT(4) DEFAULT 0,
+  `total_num` INT(4) DEFAULT 0,
   PRIMARY KEY (`id`));
   
 CREATE TABLE IF NOT EXISTS `state_of_music`.`venue_level_data` (
@@ -136,5 +152,5 @@ CREATE TABLE IF NOT EXISTS `state_of_music`.`venue_level_data` (
   `electronic` DECIMAL(5,2) DEFAULT 0,
   `country_and_folk` DECIMAL(5,2) DEFAULT 0,
   `all_genres` DECIMAL(5,2) DEFAULT 0, 
-  `dom_genre` VARCHAR(50) NULL,
+  `dom_genre` VARCHAR(100) NULL,
   PRIMARY KEY (`id`));
