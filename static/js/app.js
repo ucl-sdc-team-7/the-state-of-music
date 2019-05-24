@@ -41,7 +41,7 @@ function updateData() {
         usCounties.recalculateGenres(genre_id);
         stats.draw(genre_id);
       } else if (geo_level == "venue") {
-        usVenues.recalculateGenres(genre_id)
+        usVenues.draw(genre_id)
         stats.draw(genre_id);
       }
 
