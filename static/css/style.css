@@ -171,6 +171,8 @@ th {
   color: var(--displayInfo-text-color);
 }
 
+/* Next set used for popups*/
+
 .center {
 	text-align: center;
 }
@@ -213,4 +215,10 @@ th {
 
 .country_folk {
 	background: #56371b;
+}
+
+/* Next entry is a fix for a bootstrap deafult css setting that is causing the page to exceed the viewpane*/
+
+.row {
+	margin-right: 0;
 }
