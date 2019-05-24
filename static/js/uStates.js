@@ -160,7 +160,11 @@ uStates.draw = function(genre) {
           if (genre != "top") {
             map.on("mouseover", mouseOver_genre).on("mouseout", mouseOut)
               .style("fill", function(d) {
-                return color_genre(d.properties.value)
+                if (d.properties.value){
+                  return color_genre(d.properties.value)
+                } else {
+                  return "#e2e2e2";
+                }
               });
           }
         }

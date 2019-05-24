@@ -39,14 +39,15 @@ def show_genre():
     if level != "venue":
         genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
 
-        select_query = "SELECT " + level_code_column + ", " + \
-            "state_abbr, " + level_name_column + ", " + genre_column + " FROM " + table + \
-            " ORDER BY " + genre_column + ' DESC;'
+        select_query = "SELECT " + level_code_column + ", state_abbr, " + \
+            level_name_column + ", " + genre_column + " FROM " + table + \
+            " WHERE " + genre_column + "<> '0' ORDER BY " + genre_column + ' DESC;'
     else:
         genre_column = genre if genre != 'top' else 'dom_genre'
 
         select_query = "SELECT venue, venue_lat, venue_long, state_abbr, "  + \
-            genre_column + " FROM " + table + " ORDER BY " + genre_column + ' DESC;'
+            genre_column + " FROM " + table + " WHERE " + genre_column + "<> '0'" + \
+            " ORDER BY " + genre_column + ' DESC;'
 
 
     cur.execute(select_query)
