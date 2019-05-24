@@ -152,7 +152,7 @@ uStates.draw = function(genre) {
               if (d.properties.value) {
                 return GENRES[d.properties.value]["color"];
               } else {
-                return '#e2e2e2';
+                return "#555a66";
               }
 
             });
@@ -163,7 +163,7 @@ uStates.draw = function(genre) {
                 if (d.properties.value){
                   return color_genre(d.properties.value)
                 } else {
-                  return "#e2e2e2";
+                  return "#555a66";
                 }
               });
           }

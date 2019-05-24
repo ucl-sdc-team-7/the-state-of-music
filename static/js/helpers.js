@@ -16,7 +16,7 @@ function getrequestURL(genre) {
 }
 
 function domgenre_colors(d) {
-  return typeof d == 'undefined' ? '#e2e2e2':
+  return typeof d == 'undefined' ? "#aaadb2":
           GENRES[d]["color"];
 }
 

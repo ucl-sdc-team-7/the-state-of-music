@@ -132,7 +132,7 @@ function county_style(genre) {
 function getChoropleth(genre) {
   var choropleth = L.choropleth(getData(genre), {
     valueProperty: "value",
-    fillColor: "#e2e2e2",
+    fillColor: "#aaadb2",
     scale: [GENRES[genre].color, "white"],
     steps: 10,
     mode: "q", // q for quantile
