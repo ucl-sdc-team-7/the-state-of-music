@@ -25,26 +25,49 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">About Us</h5>
+					<h5 class="modal-title">About</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
+				
 				<div class="modal-body">
-					<!-- Cleo text -->
-					<p> The state of music is a coursework presented by Group 7 - International Super Friends (Cleo Au, William Low, Pili Mayora, Richa Sud and Matthew Sutton) for UCL CASA's module CASA0009 Spatial Data Capture, Storage and Analysis.</p>
-					<p> The website utilises music performance information (name, event location and genre) extracted from <a href="https://developer.ticketmaster.com/products-and-docs/apis/getting-started/">ticketmaster's</a> and <a
+                
+				<!-- Nav tabs -->
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a class="nav-link active" data-toggle="tab" href="#home">How does this work?</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#menu1">Using our API</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#menu2">Meet the team</a>
+		</li>
+	</ul>
+
+<!-- Tab panes -->
+	<div class="tab-content">
+		<div class="tab-pane container active" id="home">
+			<p> The state of music is a coursework presented by Group 7 - International Super Friends (Cleo Au, William Low, Pili Mayora, Richa Sud and Matthew Sutton) for UCL CASA's module CASA0009 Spatial Data Capture, Storage and Analysis.</p>
+			<p> The website utilises music performance information (name, event location and genre) extracted from <a href="https://developer.ticketmaster.com/products-and-docs/apis/getting-started/">ticketmaster's</a> and <a
 							href="https://www.eventbrite.com/platform/api">eventbrite's</a> API for the next 30 days. </p>
-					<p> The genre of playing artists were then match with the one classified by <a href="https://developer.spotify.com/documentation/web-api/">Spotify’s API</a> to ensure higher accuracy of the events' genre. </p>
-					<p> All events are then grouped by genre according to a dictionary created from web-scraping <a href="https://en.wikipedia.org/wiki/List_of_music_styles">the List of Music Styles in Wikipedia</a>.</p>
-					<p> Explaination of the normalisation method here... (from Matt) </p>
+			<p> The genre of playing artists were then match with the one classified by <a href="https://developer.spotify.com/documentation/web-api/">Spotify’s API</a> to ensure higher accuracy of the events' genre. </p>
+			<p> All events are then grouped by genre according to a dictionary created from web-scraping <a href="https://en.wikipedia.org/wiki/List_of_music_styles">the List of Music Styles in Wikipedia</a>.</p>
+			<p> Explaination of the normalisation method here... (from Matt) </p>
+		</div>
+	<div class="tab-pane container fade" id="menu1">Our APIs can be accessed through the magic of the internet</div>
+	
+	<div class="tab-pane container fade" id="menu2">Our team is great</div>
+			</div>
+			</div>
+				
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
-	</div>
 
 	<div id='container'>
 
@@ -166,6 +189,7 @@
 
 					</div>
 </body>
+
 
 <!-- D3 graphing libraries -->
 <script src="{{url_for('static',filename = 'libs/d3.min.js')}}"></script>
