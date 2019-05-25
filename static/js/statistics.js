@@ -3,7 +3,7 @@ const bar_margin = {
     top: 20,
     right: 20,
     bottom: 20,
-    left: 150
+    left: 100
   },
   bar_width = 300 - bar_margin.left - bar_margin.right,
   bar_height = 300 - bar_margin.top - bar_margin.bottom;
@@ -15,7 +15,8 @@ const stats = {};
 
 stats.draw = function(genre) {
 
-  var request_url = getrequestURL(genre)
+  const params = jQuery.param({ genre: genre });
+  var request_url = ((geo_level == "county") ? "counties?" : geo_level + "s?") + params;
 
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
@@ -81,7 +82,7 @@ stats.draw = function(genre) {
 
         bar.selectAll('.bar')
           .attr('y', function(d) {
-            return y(d.state_name)
+            return y(d.state_name);
           })
           .attr("height", y.bandwidth()); //assigning hieght of bars
 
@@ -96,16 +97,16 @@ stats.draw = function(genre) {
           return d.county_name
           })).padding(0.3);
 
-          bar.selectAll('.bar')
-            .attr('y', function(d) {
-              return y(d.county_name)
-            })
-            .attr("height", y.bandwidth()); //assigning hieght of bars
+        bar.selectAll('.bar')
+          .attr('y', function(d) {
+            return y(d.county_name)
+          })
+          .attr("height", y.bandwidth()); //assigning hieght of bars
 
-            bar.selectAll(".bar-text")
-            .attr("y", function(d) {
-              return y(d.county_name) + y.bandwidth() / 2
-            })
+        bar.selectAll(".bar-text")
+        .attr("y", function(d) {
+          return y(d.county_name) + y.bandwidth() / 2
+        })
       } else if (geo_level == "venue") {
         y.domain(data.map(function(d) {
           return d.venue
