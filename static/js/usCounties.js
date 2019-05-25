@@ -96,30 +96,6 @@ function onEachFeature(feature, layer, genre) {
   });
 }
 
-function getData(genre) {
-  var request_url = getrequestURL(genre)
-
-  d3.json(request_url, function(error, data) {
-    if (error) console.log(error);
-    data = data['data']
-
-    counties_geo.features.forEach(function(g) {
-      g.properties.COUNTY = +g.properties.COUNTY;
-      g.properties.STATE = +g.properties.STATE;
-      data.find(function(d) {
-        if(g.properties.STATE == d.state_code && g.properties.COUNTY == d.county_code) {
-          if (genre == "top") {
-            g.properties.value = d.dom_genre
-          } else {
-            g.properties.value = d.ranking
-          }
-        }
-      })
-    });
-  });
-  return counties_geo;
-}
-
 // defining style for county choropleth
 function county_style(genre) {
   return {
@@ -130,12 +106,12 @@ function county_style(genre) {
 }
 
 function getChoropleth(genre) {
-  var choropleth = L.choropleth(getData(genre), {
+  var choropleth = L.choropleth(counties_geo, {
     valueProperty: "value",
     fillColor: "#aaadb2",
     scale: [GENRES[genre].color, "white"],
     steps: 10,
-    mode: "q", // q for quantile
+    mode: "e", // e for equidistant
     style: county_style(genre),
     onEachFeature: onEachFeature
   });
@@ -151,9 +127,9 @@ function cat_style(feature) {
   }
 }
 
-function getCategorical(genre) {
-  var categorical = L.geoJson(getData(genre), {
-    style: cat_style,
+function getCategorical() {
+  var categorical = L.geoJson(counties_geo, {
+    style: function(feature) { return cat_style(feature) },
     onEachFeature: onEachFeature
   });
   return categorical;
@@ -161,48 +137,58 @@ function getCategorical(genre) {
 
 var usCounties = {};
 
+function drawLayers(genre) {
+  const params = jQuery.param({ genre: genre });
+  var request_url = "counties?" + params;
+
+  d3.json(request_url, function(error, data) {  
+    if (error) console.log(error);
+    data = data['data']
+
+    for (var i = 0; i < data.length; i++) {
+      var counties_geo_index = counties_geo.features.findIndex(function(f) {
+        return +f.properties.STATE == data[i].state_code && 
+               +f.properties.COUNTY == data[i].county_code } 
+      );
+
+      if (counties_geo_index != -1) {
+        if (genre == "top") {
+          counties_geo.features[counties_geo_index].properties.value = data[i].dom_genre;
+        } else {
+          counties_geo.features[counties_geo_index].properties.value = data[i].ranking;
+        }  
+      }
+    }
+
+    if (genre != "top") {
+      var choropleth = getChoropleth(genre);
+      choropleth.addTo(countyMap);
+    } else {
+      var categorical = getCategorical();
+      categorical.addTo(countyMap);
+    }
+
+    var stateLines = getStateLines();
+    stateLines.addTo(countyMap);
+
+    info.addTo(countyMap)
+
+  });
+}
+
 usCounties.draw = function(bbox, genre) {
   // resetting geo_level
   geo_level = "county";
   removeLayers();
   countyMap.fitBounds(bbox);
 
-  console.log("draw: " + genre)
-
-  if (genre != "top") {
-    var choropleth = getChoropleth(genre);
-    choropleth.addTo(countyMap);
-  } else {
-    var categorical = getCategorical(genre);
-    categorical.addTo(countyMap);
-  }
-
-  var stateLines = getStateLines();
-  stateLines.addTo(countyMap);
-
-  info.addTo(countyMap)
-
+  drawLayers(genre);
 }
 
 usCounties.recalculateGenres = function(genre) {
 
   removeLayers();
-
-  console.log("recalculate: " + genre)
-
-  if (genre != "top") {
-    var choropleth = getChoropleth(genre);
-    choropleth.addTo(countyMap);
-  } else {
-    var categorical = getCategorical(genre);
-    categorical.addTo(countyMap);
-  }
-
-  var stateLines = getStateLines();
-  stateLines.addTo(countyMap);
-
-  info.addTo(countyMap)
-
+  drawLayers(genre);
 }
 
 this.usCounties = usCounties

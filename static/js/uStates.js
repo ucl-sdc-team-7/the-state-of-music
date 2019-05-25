@@ -25,12 +25,9 @@ const uStates = {};
 uStates.draw = function(genre) {
 
   //Loading in genre data
-  const params = jQuery.param({
-      genre: genre,
-      level: 'state'
-  });
+  const params = jQuery.param({ genre: genre });
 
-  var request_url = "genre?" + params;
+  var request_url = "states?" + params;
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
