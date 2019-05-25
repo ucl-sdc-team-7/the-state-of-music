@@ -23,30 +23,36 @@ cursor.execute(query)
 
 for event in cursor:
     state = event[0]
-    # omit trailing space
-    county = event[1][:-1] if event[1][-1] == " " else event[1]
+    if len(event[1]) == 0:
+        county = ''
+    else:
+        county = event[1][:-1] if event[1][-1] == " " else event[1] # omit trailing space
     venue = event[2]
     dom_genre = event[3]
 
     query = """SELECT state_abbr, county_name, pop, rock, hip_hop, rnb,
                 classical_and_jazz, electronic, country_and_folk, all_genres,
-                dom_genre FROM venue_level_data WHERE state_abbr = %s AND
+                dom_genre, pop_num, rock_num, hip_hop_num, rnb_num,
+                classical_and_jazz_num, electronic_num, country_and_folk_num,
+                total_num
+                FROM venue_level_data
+                WHERE state_abbr = %s AND
                 county_name = %s AND venue = %s"""
     values = (state, county, venue)
     cursor2.execute(query, values)
 
-    for row in cursor2:
-        state_abbr = row[0]
-        county_name = row[1]
-        pop = float(row[2])
-        rock = float(row[3])
-        hip_hop = float(row[4])
-        rnb = float(row[5])
-        classical_and_jazz = float(row[6])
-        electronic = float(row[7])
-        country_and_folk = float(row[8])
-        all_genres = float(row[9])
-        dom_genre_venue = row[10]
+    for venue_row in cursor2:
+        state_abbr = venue_row[0]
+        county_name = venue_row[1]
+        pop = float(venue_row[2])
+        rock = float(venue_row[3])
+        hip_hop = float(venue_row[4])
+        rnb = float(venue_row[5])
+        classical_and_jazz = float(venue_row[6])
+        electronic = float(venue_row[7])
+        country_and_folk = float(venue_row[8])
+        all_genres = float(venue_row[9])
+        dom_genre_venue = venue_row[10]
         genre_dict = {'pop': pop,
                       'rock': rock,
                       'hip_hop': hip_hop,
@@ -55,8 +61,26 @@ for event in cursor:
                       'electronic': electronic,
                       'country_and_folk': country_and_folk}
 
+        pop_num = int(venue_row[11])
+        rock_num = int(venue_row[12])
+        hip_hop_num = int(venue_row[13])
+        rnb_num = int(venue_row[14])
+        classical_and_jazz_num = int(venue_row[15])
+        electronic_num = int(venue_row[16])
+        country_and_folk_num = int(venue_row[17])
+        total_num = venue_row[18]
+        num_dict = {'pop': pop_num,
+                    'rock': rock_num,
+                    'hip_hop': hip_hop_num,
+                    'rnb': rnb_num,
+                    'classical_and_jazz': classical_and_jazz_num,
+                    'electronic': electronic_num,
+                    'country_and_folk': country_and_folk_num}
+
         if len(dom_genre.split("/")) == 1 and dom_genre in genres:  # if a single genre is dominant
             genre_dict[dom_genre] = genre_dict[dom_genre] + 1
+            num_dict[dom_genre] = num_dict[dom_genre] + 1
+            total_num = total_num + 1
         elif len(dom_genre.split("/")) > 1:  # if multiple genres share dominance
             # assign weight for partial genres
             weight = (1 / len(dom_genre.split("/")))
@@ -64,6 +88,8 @@ for event in cursor:
                 if partial_dom_genre in genres:
                     genre_dict[partial_dom_genre] = genre_dict[
                         partial_dom_genre] + weight
+                    num_dict[partial_dom_genre] = num_dict[partial_dom_genre] + 1
+                    total_num = total_num + 1
 
         max = 0
         all_genres = 0
@@ -80,11 +106,18 @@ for event in cursor:
                     pop = %s, rock = %s, hip_hop = %s,
                     rnb = %s, classical_and_jazz = %s,
                     electronic = %s, country_and_folk = %s,
-                    all_genres = %s, dom_genre = %s
+                    all_genres = %s, dom_genre = %s, pop_num = %s,
+                    rock_num = %s, hip_hop_num = %s, rnb_num = %s,
+                    classical_and_jazz_num = %s, electronic_num = %s,
+                    country_and_folk_num = %s, total_num = %s
                     WHERE state_abbr = %s AND county_name = %s AND venue = %s;"""
         values = (genre_dict['pop'], genre_dict['rock'], genre_dict['hip_hop'],
                   genre_dict['rnb'], genre_dict['classical_and_jazz'],
                   genre_dict['electronic'], genre_dict['country_and_folk'],
-                  all_genres, dom_genre_venue, state_abbr, county_name, venue)
+                  all_genres, dom_genre_venue,num_dict['pop'],
+                  num_dict['rock'], num_dict['hip_hop'], num_dict['rnb'],
+                  num_dict['classical_and_jazz'], num_dict['electronic'],
+                  num_dict['country_and_folk'], total_num, state_abbr,
+                  county_name, venue)
         cursor3.execute(query, values)
         db.commit()

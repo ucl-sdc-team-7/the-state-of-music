@@ -5,19 +5,8 @@ function get_state_bbox(state_abbr) {
     ];
 }
 
-function getrequestURL(genre) {
-  //Loading in genre data
-  const params = jQuery.param({
-    genre: genre,
-    level: geo_level
-  });
-
-  return "genre?" + params;
-}
-
 function domgenre_colors(d) {
-  return typeof d === 'undefined' ? '#e2e2e2':
-          GENRES[d]["color"];
+  return d ? GENRES[d]["color"] : "#aaadb2";          
 }
 
 function marker_opacity(d) {
