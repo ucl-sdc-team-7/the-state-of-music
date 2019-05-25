@@ -28,10 +28,18 @@ function makegeoJSON(data) {
 function onEachFeature_venue(feature, layer) {
   layer.myTag = "myVenues"
 
-  var popupVenue = "<h4>" + feature.properties.venue + "</h4>" +
-    "<table><tr><td>R&B</td><td>" + feature.properties.value * 100 + "%</td></tr>" +
-    "</table>" +
-    "<small>(click to zoom)</small>"
+  var popupVenue = "<h4>" + feature.properties.name + " ("+feature.properties.abbr+")" + "</h4>" +
+  "<table><tr><td> Top Genre:</td><td>" + top_genre + "</td></tr>" +
+"<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
+"<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>x</td></tr>"+
+"<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>x</td></tr>"+
+"<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>x</td></tr>"+
+"<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>x</td></tr>"+
+"<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>x</td></tr>"+
+"<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>x</td></tr>"+
+"<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>x</td></tr>"+
+  "</table>" +
+  "<small>(click to zoom)</small>"
 
   layer.bindPopup(popupVenue, {
     'className': 'venue-info'

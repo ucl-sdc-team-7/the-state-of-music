@@ -33,7 +33,7 @@ uStates.draw = function(genre) {
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
-
+	console.log(data)
     /////////////////////////////////SETTING COLOUR RANGES/////////////////////////////////
 
     //setting colour range for genres
@@ -67,6 +67,9 @@ uStates.draw = function(genre) {
             value = data[i].ranking;
           }
 
+          ///var pop_2018
+          ///pop_2018 = data[i].pop_2018
+
 
           // Finding the corresponding state inside the JSON
           for (var j = 0; j < states.length; j++) {
@@ -74,6 +77,7 @@ uStates.draw = function(genre) {
             if (dataState == jsonState) {
               // Copying all genre scores into the JSON
               states[j].properties.value = value;
+              ///states[j].properties.pop_2018 = pop_2018;
               // Stop looking through the JSON
               break;
             };
@@ -88,6 +92,7 @@ uStates.draw = function(genre) {
           if (d.properties.value) {
             top_genre = GENRES[d.properties.value]["label"];
           }
+		  console.log(d.properties)
           d3.select("#tooltip")
             .attr("class", "toolTip")
             .transition().duration(300)
