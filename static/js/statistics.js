@@ -15,12 +15,8 @@ const stats = {};
 
 stats.draw = function(genre) {
 
-  const params = jQuery.param({
-    genre: genre,
-    level: geo_level
-  });
+  var request_url = getrequestURL(genre)
 
-  var request_url = "genre?" + params;
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
 
@@ -48,7 +44,7 @@ stats.draw = function(genre) {
 
       // setting domains for bars
       x.domain([0, d3.max(data, function(d) {
-        return d.ranking
+        return d.value
       })]);
 
       //drawing bars in chart
@@ -56,7 +52,7 @@ stats.draw = function(genre) {
         .enter().append('rect')
         .attr("class", "bar")
         .attr("width", function(d) {
-          return x(d.ranking);
+          return x(d.value);
         }) //assigning width of bars
         .attr("fill", function(d) {
           return GENRES[genre].color
@@ -69,7 +65,7 @@ stats.draw = function(genre) {
           .attr("class", "bar-text")
           .attr("dy", ".35em")
           .attr("x", function(d) {
-            return x(d.ranking) - 10
+            return x(d.value) - 10
           })
           .attr("text-anchor", "middle")
           .text(function(d) {
