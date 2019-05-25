@@ -25,29 +25,16 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/genre')
-def show_genre():
-    level = request.args.get('level') or 'state'
+@app.route('/states')
+def get_states_genres():
     genre = request.args.get('genre') or 'top'
 
     cur = mysql.connection.cursor()
 
-    table = level + '_level_data'
-    level_code_column = level + '_code'
-    level_name_column = level + '_name'
+    genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
 
-    if level != "venue":
-        genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
-
-        select_query = "SELECT " + level_code_column + ", " + \
-            "state_abbr, " + level_name_column + ", " + genre_column + " FROM " + table + \
-            " ORDER BY " + genre_column + ' DESC;'
-    else:
-        genre_column = genre if genre != 'top' else 'dom_genre'
-
-        select_query = "SELECT venue, venue_lat, venue_long, state_abbr, "  + \
-            genre_column + " FROM " + table + " ORDER BY " + genre_column + ' DESC;'
-
+    select_query = "SELECT state_code, state_abbr, " + genre_column + \
+        " FROM state_level_data ORDER BY " + genre_column + ' DESC;'
 
     cur.execute(select_query)
     data = cur.fetchall()
@@ -60,6 +47,69 @@ def show_genre():
             del state[genre_column]
         state['ranking'] = index + 1
 
+    return jsonify(data=data)
+
+
+@app.route('/counties')
+def get_counties_genres():
+    genre = request.args.get('genre') or 'top'
+
+    cur = mysql.connection.cursor()
+
+    genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
+
+    select_query = "SELECT state_code, state_abbr, " + \
+        "county_code, county_name, " + genre_column + \
+        " FROM county_level_data ORDER BY " + genre_column + ' DESC;'
+
+    cur.execute(select_query)
+    data = cur.fetchall()
+
+    index_no_events = 0
+    for index, county in enumerate(data):
+        if county.get('dom_genre'):
+            county['dom_genre'] = county['dom_genre'].split("/")[0]
+        else:
+            county['value'] = county[genre_column]
+            del county[genre_column]
+            if (county['value'] == 0):
+                if index_no_events == 0:
+                    index_no_events = index
+                county['ranking'] = index_no_events
+            else:
+                county['ranking'] = index + 1
+
+    return jsonify(data=data)
+
+
+@app.route('/venues')
+def get_venues_genres():
+    genre = request.args.get('genre') or 'top'
+
+    cur = mysql.connection.cursor()
+
+    genre_column = genre if genre != 'top' else 'dom_genre'
+
+    select_query = "SELECT venue, venue_lat, venue_long, " + \
+        genre_column + \
+        " FROM venue_level_data ORDER BY " + genre_column + ' DESC;'
+
+    cur.execute(select_query)
+    data = cur.fetchall()
+
+    index_no_events = 0
+    for index, venue in enumerate(data):
+        if venue.get('dom_genre'):
+            venue['dom_genre'] = venue['dom_genre'].split("/")[0]
+        else:
+            venue['value'] = venue[genre_column]
+            del venue[genre_column]
+            if (venue['value'] == 0):
+                if index_no_events == 0:
+                    index_no_events = index
+                venue['ranking'] = index_no_events
+            else:
+                venue['ranking'] = index + 1
 
     return jsonify(data=data)
 

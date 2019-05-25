@@ -30,4 +30,4 @@ const GENRES = {
 };
 
 var geo_level = "state";
-var current_genre = "topgenre"; 
+var current_genre = "top"; 
