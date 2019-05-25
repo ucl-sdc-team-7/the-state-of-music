@@ -23,7 +23,10 @@ cursor.execute(query)
 
 for event in cursor:
     state = event[0]
-    county = event[1][:-1] if event[1][-1] == " " else event[1]     # omit trailing space
+    if len(event[1]) == 0:
+        county = ''
+    else:
+        county = event[1][:-1] if event[1][-1] == " " else event[1] # omit trailing space
     venue = event[2]
     dom_genre = event[3]
 
