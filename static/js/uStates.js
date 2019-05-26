@@ -1,3 +1,5 @@
+var level = 'state'
+
 //sets dimentions
 const map_margin = {
     top: 0,
@@ -31,7 +33,7 @@ uStates.draw = function(genre) {
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
-  
+
     /////////////////////////////////SETTING COLOUR RANGES/////////////////////////////////
 
     //setting colour range for genres
@@ -194,6 +196,7 @@ uStates.draw = function(genre) {
             usCounties.draw(state_bbox, current_genre); //function that draws leaflet
             stats.draw(current_genre)
             current_state = state_abbr;
+            level = 'county';
           });
       });
   });

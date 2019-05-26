@@ -109,7 +109,14 @@ function zoomToCity(e, genre) {
   usVenues.draw(genre)
   venueInfo.addTo(countyMap)
   stats.draw(genre)
+  level = 'venue'
 }
+
+var button = new L.Control.Button('Go back', { position: 'topleft' });
+button.addTo(countyMap);
+button.on('click', function () {
+    alert('you clicked the button!');
+});
 
 // defining popups and county style on hover
 function onEachFeature(feature, layer, genre) {
