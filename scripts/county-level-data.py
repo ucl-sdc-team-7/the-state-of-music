@@ -23,8 +23,12 @@ cursor.execute(query)
 
 for event in cursor:
     state = event[0]
-    county = event[1][:-1] if event[1][-1] == " " else event[1] # omit trailing space
+    if len(event[1]) == 0:
+        county = ''
+    else:
+        county = event[1][:-1] if event[1][-1] == " " else event[1] # omit trailing space
     dom_genre = event[2]
+
 
     query = """SELECT state_abbr, county_name, pop, rock, hip_hop, rnb,
             classical_and_jazz, electronic, country_and_folk, all_genres,

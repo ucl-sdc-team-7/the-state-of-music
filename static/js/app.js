@@ -2,7 +2,7 @@ $("#top").addClass("selected")
 uStates.draw("top")
 stats.draw("top")
 
-function updateInfoBox(label, color) {
+function updateInfoBox(label) {
   $("#titleGenre").html(label);
   //this slightly  ugly solution shifts the colouring of the info boxes
   //it's repeated in the updatelogo function below
@@ -45,7 +45,11 @@ function updateData() {
         stats.draw(genre_id);
       }
 
-      updateInfoBox(GENRES[genre_id].label, GENRES[genre_id].color);
+      if (genre_id != "top") {
+        updateInfoBox(GENRES[genre_id].label);
+      } else {
+        updateInfoBox("music");
+      }
     });
 }
 
@@ -59,6 +63,8 @@ function updatelogo() {
       // removing state map and statistics
       d3.selectAll("svg#statesvg > *").remove();
       d3.selectAll("svg#stats > *").remove();
+
+      current_genre = "top"
 
       // adding new maps depending on geo_level
       if (geo_level == "state") {
