@@ -23,11 +23,26 @@ info.onAdd = function(map) {
   return this._div;
 }
 
-info.update = function(props) {
-      this._div.innerHTML = "<h4>" + (props ? props.NAME + " County</h4>" +
-        "<table><tr><td>R&B</td><td>" + props.value + "</td></tr>" +
-        "</table>" +
-        "<small>(click to zoom)</small>" : '<h4>Hover over a county</h4>')
+info.update = function(props,infoType) {
+  if (infoType == 'all') {
+      this._div.innerHTML = (props ? "<h4>" + props.NAME + " " + props.LSAD + " (" + "state abbr" + ")" + "</h4>" +
+      "<table><tr><td> Top Genre:</td><td>" + "top_genre" + "</td></tr>" +
+      "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
+      "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>"+props.num.pop+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>"+props.num.rock+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>"+props.num.hip_hop+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>"+props.num.rnb+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>"+props.num.classical_and_jazz+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>"+props.num.electronic+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>"+props.num.country_and_folk+"</td></tr>"+
+            "</table>" +
+            "<small>(click to zoom)</small>"
+      : '<h4>Hover over a county</h4>')}
+      else {this._div.innerHTML = (props ? "<h4>" + props.NAME + " " + props.LSAD + " (" + "state abbr" + ")" + "</h4>" +
+      "<table><tr><th>Rank:</th><td>" + "x" + " out of x</td></tr>"+
+"<th>Number of upcoming "+ GENRES[current_genre].label +" shows</th><td>"+ props.num +"</td></table>" +
+      "<small>(click to zoom)</small>"
+      :'<h4>Hover over a county</h4>')};
     }
 
 // defining style for state boundaries
@@ -54,7 +69,14 @@ function county_mouseover(e) {
   layer.setStyle({
     fillOpacity: 1
   });
-  info.update(layer.feature.properties)
+  //this is a slightly awkward solution to the issue of using objects within the info.update function
+  //this determines whether the function is targetting an 'all genres' or single genres polygons
+  //and sends this to the info.update function
+  //alternatively we could use the current_genre global variable, but I'm trying to limit the use of that to within the legend boxes
+  var infoType
+  if (typeof(layer.feature.properties.num) == 'object') {infoType = 'all'} else {infoType = 'single'};
+  //console.log(typeof(layer.feature.properties.num))
+  info.update(layer.feature.properties,infoType);
 }
 
 function county_mouseout(e) {
@@ -144,22 +166,35 @@ function drawLayers(genre) {
   const params = jQuery.param({ genre: genre });
   var request_url = "counties?" + params;
 
-  d3.json(request_url, function(error, data) {  
+  d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
+    console.log(data)
 
     for (var i = 0; i < data.length; i++) {
       var counties_geo_index = counties_geo.features.findIndex(function(f) {
-        return +f.properties.STATE == data[i].state_code && 
-               +f.properties.COUNTY == data[i].county_code } 
+        return +f.properties.STATE == data[i].state_code &&
+               +f.properties.COUNTY == data[i].county_code }
       );
 
       if (counties_geo_index != -1) {
         if (genre == "top") {
           counties_geo.features[counties_geo_index].properties.value = data[i].dom_genre;
+          //if the genre is set to top, this will go through the GENRES list and add all nums to an array
+          var numField = {}
+          for (genreCat in GENRES) {
+            numGenre = genreCat+"_num";
+            numField[genreCat]=[data[i][numGenre]];
+            };
         } else {
           counties_geo.features[counties_geo_index].properties.value = data[i].ranking;
-        }  
+          //if it's a single genre, it passes a single integer instead
+          var numField
+          numGenre = genre+"_num";
+          numField = data[i][numGenre];
+        }
+        //either way, the new variable is added to the object
+        counties_geo.features[counties_geo_index].properties.num = numField;
       }
     }
 
