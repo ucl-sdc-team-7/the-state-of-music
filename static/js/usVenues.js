@@ -30,7 +30,7 @@ function onEachFeatureClosure(genre) {
     layer.myTag = "myVenues"
 
     var label = (genre == 'top') ? "Top Genre: " : GENRES[genre].label + ": ";
-    
+
     var value = "";
     if (genre == 'top') {
       if (feature.properties.dom_genre) {
@@ -41,7 +41,7 @@ function onEachFeatureClosure(genre) {
     } else {
       value = feature.properties.value + " " + GENRES[genre].label + " shows playing at this venue";
     }
-      
+
 
     var popupVenue = "<h4>" + feature.properties.venue + "</h4>" +
       "<table><tr><td>" + label + "</td><td>" + value + "</td></tr>" +
@@ -54,6 +54,13 @@ function onEachFeatureClosure(genre) {
   }
 }
 
+function getColor(d,genre){
+  if(d!=0){
+    return GENRES[genre].color
+  } else {
+    return "#ddd"
+  }
+}
 
 function getMarkers(data, genre) {
 
@@ -63,8 +70,9 @@ function getMarkers(data, genre) {
       if (genre != "top") {
         var geojsonMarkerOptions = {
           radius: 10,
-          color: GENRES[genre].color,
-          fillColor: GENRES[genre].color,
+          color: getColor(feature.properties.value, genre),
+          fillColor: getColor(feature.properties.value, genre),
+
           weight: 2,
           fillOpacity: marker_opacity(feature.properties.value),
         }
@@ -99,6 +107,7 @@ usVenues.draw = function(genre) {
   d3.json(request_url, function(error, d) {
     if (error) console.log(error);
     data = d['data']
+    console.log(data)
 
     var venue_geo = makegeoJSON(data)
     var venues = getMarkers(venue_geo, genre)

@@ -24,11 +24,11 @@ info.onAdd = function(map) {
 }
 
 info.update = function(props) {
-      this._div.innerHTML = "<h4>" + (props ? props.NAME + " County</h4>" +
-        "<table><tr><td>R&B</td><td>" + props.value + "</td></tr>" +
-        "</table>" +
-        "<small>(click to zoom)</small>" : '<h4>Hover over a county</h4>')
-    }
+  this._div.innerHTML = "<h4>" + (props ? props.NAME + " County</h4>" +
+    "<table><tr><td>R&B</td><td>" + props.value + "</td></tr>" +
+    "</table>" +
+    "<small>(click to zoom)</small>" : '<h4>Hover over a county</h4>')
+}
 
 // defining style for state boundaries
 function state_style() {
@@ -51,10 +51,12 @@ function getStateLines() {
 
 function county_mouseover(e) {
   var layer = e.target;
-  layer.setStyle({
-    fillOpacity: 1
-  });
-  info.update(layer.feature.properties)
+  if (layer.feature.properties.value) {
+    layer.setStyle({
+      fillOpacity: 1
+    });
+    info.update(layer.feature.properties)
+  }
 }
 
 function county_mouseout(e) {
@@ -100,9 +102,9 @@ function onEachFeature(feature, layer, genre) {
 }
 
 // defining style for county choropleth
-function county_style(genre) {
+function county_style() {
   return {
-    color: GENRES[genre].color,
+    color: "#ddd",
     weight: 1,
     fillOpacity: 0.7,
   }
@@ -115,7 +117,7 @@ function getChoropleth(genre) {
     scale: [GENRES[genre].color, "white"],
     steps: 10,
     mode: "e", // e for equidistant
-    style: county_style(genre),
+    style: county_style,
     onEachFeature: onEachFeature
   });
   return choropleth;
@@ -132,7 +134,9 @@ function cat_style(feature) {
 
 function getCategorical() {
   var categorical = L.geoJson(counties_geo, {
-    style: function(feature) { return cat_style(feature) },
+    style: function(feature) {
+      return cat_style(feature)
+    },
     onEachFeature: onEachFeature
   });
   return categorical;
@@ -141,25 +145,27 @@ function getCategorical() {
 var usCounties = {};
 
 function drawLayers(genre) {
-  const params = jQuery.param({ genre: genre });
+  const params = jQuery.param({
+    genre: genre
+  });
   var request_url = "counties?" + params;
 
-  d3.json(request_url, function(error, data) {  
+  d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
 
     for (var i = 0; i < data.length; i++) {
       var counties_geo_index = counties_geo.features.findIndex(function(f) {
-        return +f.properties.STATE == data[i].state_code && 
-               +f.properties.COUNTY == data[i].county_code } 
-      );
+        return +f.properties.STATE == data[i].state_code &&
+          +f.properties.COUNTY == data[i].county_code
+      });
 
       if (counties_geo_index != -1) {
         if (genre == "top") {
           counties_geo.features[counties_geo_index].properties.value = data[i].dom_genre;
         } else {
           counties_geo.features[counties_geo_index].properties.value = data[i].ranking;
-        }  
+        }
       }
     }
 

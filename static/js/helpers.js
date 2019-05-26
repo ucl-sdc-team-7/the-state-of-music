@@ -6,16 +6,15 @@ function get_state_bbox(state_abbr) {
 }
 
 function domgenre_colors(d) {
-  return d ? GENRES[d]["color"] : "#aaadb2";          
+  return d ? GENRES[d]["color"] : "#aaadb2";
 }
 
 function marker_opacity(d) {
-  return d > 0.9 ? 0.9 :
-    d > 0.8 ? 0.8 :
-    d > 0.7 ? 0.7 :
-    d > 0.6 ? 0.6 :
-    d > 0.5 ? 0.5 :
-    d > 0.4 ? 0.4 :
-    d > 0.4 ? 0.3 :
-    0.2;
+  return d > 1 ? 0.9 :
+    d > 0.9 ? 0.8 :
+    d > 0.8 ? 0.7 :
+    d > 0.7 ? 0.6 :
+    d > 0.6 ? 0.5 :
+    d > 0.5 ? 0.4 :
+    0.3;
 }

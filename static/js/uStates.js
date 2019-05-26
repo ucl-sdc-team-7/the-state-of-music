@@ -25,7 +25,9 @@ const uStates = {};
 uStates.draw = function(genre) {
 
   //Loading in genre data
-  const params = jQuery.param({ genre: genre });
+  const params = jQuery.param({
+    genre: genre
+  });
 
   var request_url = "states?" + params;
   d3.json(request_url, function(error, data) {
@@ -81,51 +83,54 @@ uStates.draw = function(genre) {
 
         //tooptip for top genre page
         function mouseOver_topgenre(d) {
-          d3.select(this).style("opacity", 1)
           var top_genre = ""
           if (d.properties.value) {
+            d3.select(this).style("opacity", 1)
             top_genre = GENRES[d.properties.value]["label"];
-          }
-          d3.select("#tooltip")
-            .attr("class", "toolTip")
-            .transition().duration(300)
-            .style("opacity", 0.8);
-          d3.select("#tooltip").html(
-              "<h4>" + d.properties.name + " ("+d.properties.abbr+")" + "</h4>" +
-              "<table><tr><td> Top Genre:</td><td>" + top_genre + "</td></tr>" +
-			  "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
-			  "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>x</td></tr>"+
-			  "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>x</td></tr>"+
-			  "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>x</td></tr>"+
-			  "<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>x</td></tr>"+
-			  "<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>x</td></tr>"+
-			  "<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>x</td></tr>"+
-			  "<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>x</td></tr>"+
-              "</table>" +
-              "<small>(click to zoom)</small>")
-            .style("left", (d3.event.pageX - 345) + "px")
-            .style("top", (d3.event.pageY - 120) + "px");
 
+            d3.select("#tooltip")
+              .attr("class", "toolTip")
+              .transition().duration(300)
+              .style("opacity", 0.8);
+            d3.select("#tooltip").html(
+                "<h4>" + d.properties.name + " (" + d.properties.abbr + ")" + "</h4>" +
+                "<table><tr><td> Top Genre:</td><td>" + top_genre + "</td></tr>" +
+                "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>" +
+                "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>x</td></tr>" +
+                "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>x</td></tr>" +
+                "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>x</td></tr>" +
+                "<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>x</td></tr>" +
+                "<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>x</td></tr>" +
+                "<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>x</td></tr>" +
+                "<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>x</td></tr>" +
+                "</table>" +
+                "<small>(click to zoom)</small>")
+              .style("left", (d3.event.pageX - 345) + "px")
+              .style("top", (d3.event.pageY - 120) + "px");
+          }
         }
 
         //tooltip for all genres
         function mouseOver_genre(d) {
-          d3.select(this).style("opacity", 1)
-          d3.select("#tooltip")
-            .attr("class", "toolTip")
-            .transition().duration(300)
-            .style("opacity", 0.8);
-          d3.select("#tooltip").html(
-              "<h4 class='state-head'>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
-              "<table><tr><th>Rank:</th><td>" + (d.properties.value) + " out of 51</td></tr>"+
-			  "<th>Number of upcoming "+ GENRES[genre].label +" shows</th><td>x</td></table>" +
-              "<small>(click to zoom)</small>")
-            .style("left", (d3.event.pageX - 345) + "px")
-            .style("top", (d3.event.pageY - 120) + "px");
+          if (d.properties.value) {
+            d3.select(this).style("opacity", 1)
+
+            d3.select("#tooltip")
+              .attr("class", "toolTip")
+              .transition().duration(300)
+              .style("opacity", 0.8);
+            d3.select("#tooltip").html(
+                "<h4 class='state-head'>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
+                "<table><tr><th>Rank:</th><td>" + (d.properties.value) + " out of 51</td></tr>" +
+                "<th>Number of upcoming " + GENRES[genre].label + " shows</th><td>x</td></table>" +
+                "<small>(click to zoom)</small>")
+              .style("left", (d3.event.pageX - 345) + "px")
+              .style("top", (d3.event.pageY - 120) + "px");
+          }
         }
 
         function mouseOut() {
-          d3.selectAll(".map-path").style('opacity',0.7)
+          d3.selectAll(".map-path").style('opacity', 0.7)
           d3.select("#tooltip").transition().duration(500).style("opacity", 0);
         }
 
@@ -137,7 +142,13 @@ uStates.draw = function(genre) {
           .append("path")
           .attr("class", "map-path")
           .attr("d", map_path)
-          .style("stroke", "#fff")
+          .style("stroke", function(d) {
+            if (d.properties.value) {
+              return "#fff"
+            } else {
+              return "#ddd"
+            }
+          })
           .style("stroke-width", "1")
           .style("opacity", 0.7);
 
@@ -157,7 +168,7 @@ uStates.draw = function(genre) {
           if (genre != "top") {
             map.on("mouseover", mouseOver_genre).on("mouseout", mouseOut)
               .style("fill", function(d) {
-                if (d.properties.value){
+                if (d.properties.value) {
                   return color_genre(d.properties.value)
                 } else {
                   return "#555a66";
