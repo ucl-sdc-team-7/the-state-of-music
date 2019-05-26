@@ -107,6 +107,7 @@ function zoomToCity(e, genre) {
   removeLayers()
   d3.selectAll("svg#stats > *").remove();
   usVenues.draw(genre)
+  venueInfo.addTo(countyMap)
   stats.draw(genre)
 }
 
