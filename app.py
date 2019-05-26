@@ -120,6 +120,35 @@ def get_venues_genres():
 
     return jsonify(data=data)
 
+@app.route('/top')
+def get_top_stats():
+    level = request.args.get('level') or 'state'
+
+    cur = mysql.connection.cursor()
+
+    genre_column = 'dom_genre'
+    level_name_column = level + "_name"
+    table = level + "_level_data"
+
+    if level != "venue":
+
+        select_query = "SELECT pop, rock, hip_hop, rnb, classical_and_jazz, electronic, country_and_folk, " + \
+            level_name_column + ", " + genre_column + \
+            " FROM " + table + ";"
+
+    else:
+        select_query = "SELECT pop, rock, hip_hop, rnb, classical_and_jazz, electronic, country_and_folk, venue" + \
+            " FROM " + table + ";"
+
+    cur.execute(select_query)
+    data = cur.fetchall()
+
+    for index, genre in enumerate(data):
+        if genre.get('dom_genre'):
+            genre['dom_genre'] = genre['dom_genre'].split("/")[0]
+
+    return jsonify(data=data)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

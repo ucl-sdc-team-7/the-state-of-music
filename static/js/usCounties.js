@@ -85,7 +85,9 @@ function zoomToCity(e, genre) {
   removeLayers()
   d3.selectAll("svg#stats > *").remove();
   usVenues.draw(genre)
+  if(current_genre != "top"){
   stats.draw(genre)
+  } else { stats.top()}
 }
 
 // defining popups and county style on hover
@@ -144,14 +146,14 @@ function drawLayers(genre) {
   const params = jQuery.param({ genre: genre });
   var request_url = "counties?" + params;
 
-  d3.json(request_url, function(error, data) {  
+  d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
 
     for (var i = 0; i < data.length; i++) {
       var counties_geo_index = counties_geo.features.findIndex(function(f) {
-        return +f.properties.STATE == data[i].state_code && 
-               +f.properties.COUNTY == data[i].county_code } 
+        return +f.properties.STATE == data[i].state_code &&
+               +f.properties.COUNTY == data[i].county_code }
       );
 
       if (counties_geo_index != -1) {
@@ -159,7 +161,7 @@ function drawLayers(genre) {
           counties_geo.features[counties_geo_index].properties.value = data[i].dom_genre;
         } else {
           counties_geo.features[counties_geo_index].properties.value = data[i].ranking;
-        }  
+        }
       }
     }
 
