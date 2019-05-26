@@ -25,9 +25,11 @@ const uStates = {};
 uStates.draw = function(genre) {
 
   //Loading in genre data
-  const params = jQuery.param({ genre: genre });
-
-  var request_url = "states?" + params;
+  const params = jQuery.param({
+      genre: genre,
+      level: 'state'
+  });
+  var request_url = "genre?" + params;
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
@@ -56,8 +58,8 @@ uStates.draw = function(genre) {
         var states = json.features
         // Looping through each state data value in the .csv file
         for (var i = 0; i < data.length; i++) {
-          // Grabing State ID
-          var dataState = data[i].state_code;
+          // Grabing State Name
+          var dataState = data[i].state_abbr;
 
           var value = ''
           if (genre == 'top') {
@@ -89,7 +91,7 @@ uStates.draw = function(genre) {
 
           // Finding the corresponding state inside the JSON
           for (var j = 0; j < states.length; j++) {
-            var jsonState = states[j].id;
+            var jsonState = states[j].properties.abbr;
             if (dataState == jsonState) {
               // Copying all genre scores into the JSON
               states[j].properties.value = value;
@@ -172,7 +174,7 @@ uStates.draw = function(genre) {
               if (d.properties.value) {
                 return GENRES[d.properties.value]["color"];
               } else {
-                return "#555a66";
+                return '#e2e2e2';
               }
 
             });
@@ -180,11 +182,7 @@ uStates.draw = function(genre) {
           if (genre != "top") {
             map.on("mouseover", mouseOver_genre).on("mouseout", mouseOut)
               .style("fill", function(d) {
-                if (d.properties.value){
-                  return color_genre(d.properties.value)
-                } else {
-                  return "#555a66";
-                }
+                return color_genre(d.properties.value)
               });
           }
         }
