@@ -31,7 +31,6 @@ def get_states_genres():
 
     cur = mysql.connection.cursor()
 
-<<<<<<< HEAD
     table = level + '_level_data'
     level_code_column = level + '_code'
     level_name_column = level + '_name'
@@ -48,9 +47,6 @@ def get_states_genres():
 
         select_query = "SELECT venue, venue_lat, venue_long, state_abbr, "  + \
             genre_column + " FROM " + table + " ORDER BY " + genre_column + ' DESC;'
-=======
-    genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
->>>>>>> master
 
     select_query = "SELECT state_code, state_name, state_abbr, " + \
         genre_column + " FROM state_level_data ORDER BY " + \

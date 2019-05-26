@@ -25,7 +25,6 @@ function makegeoJSON(data) {
   return geoJSON;
 }
 
-<<<<<<< HEAD
 function onEachFeature_venue(feature, layer) {
   layer.myTag = "myVenues"
   console.log(feature.properties)
@@ -45,35 +44,6 @@ function onEachFeature_venue(feature, layer) {
   layer.bindPopup(popupVenue, {
     'className': 'venue-info'
   }, );
-=======
-function onEachFeatureClosure(genre) {
-  return function onEachFeature_venue(feature, layer) {
-    layer.myTag = "myVenues"
-
-    var label = (genre == 'top') ? "Top Genre: " : GENRES[genre].label + ": ";
-    
-    var value = "";
-    if (genre == 'top') {
-      if (feature.properties.dom_genre) {
-        value = GENRES[feature.properties.dom_genre].label;
-      } else {
-        value = "No dominant genre";
-      }
-    } else {
-      value = feature.properties.value + " " + GENRES[genre].label + " shows playing at this venue";
-    }
-      
-
-    var popupVenue = "<h4>" + feature.properties.venue + "</h4>" +
-      "<table><tr><td>" + label + "</td><td>" + value + "</td></tr>" +
-      "</table>" +
-      "<small>(click to zoom)</small>"
-
-    layer.bindPopup(popupVenue, {
-      'className': 'venue-info'
-    }, );
-  }
->>>>>>> master
 }
 
 
