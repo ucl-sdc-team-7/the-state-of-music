@@ -27,9 +27,9 @@ function makegeoJSON(data) {
 
 function onEachFeature_venue(feature, layer) {
   layer.myTag = "myVenues"
-
-  var popupVenue = "<h4>" + feature.properties.name + " ("+feature.properties.abbr+")" + "</h4>" +
-  "<table><tr><td> Top Genre:</td><td>" + top_genre + "</td></tr>" +
+  console.log(feature.properties)
+  var popupVenue = "<h4>" + feature.properties.venue + " ("+feature.properties.state_abbr+")" + "</h4>" +
+  "<table><tr><td> Top Genre:</td><td>" + "top_genre" + "</td></tr>" +
 "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
 "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>x</td></tr>"+
 "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>x</td></tr>"+
