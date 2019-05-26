@@ -23,6 +23,7 @@ info.onAdd = function(map) {
   return this._div;
 }
 
+<<<<<<< HEAD
 info.update = function (props) {
   console.log(props)
   this._div.innerHTML = "<h4>" + (props ? "<h4 class='state-head'>" +
@@ -31,6 +32,14 @@ info.update = function (props) {
 "<th>Number of upcoming "+ current_genre +" shows</th><td>x</td></table>" +
   "<small>(click to zoom)</small>":'<h4>Hover over a county</h4>')
 }
+=======
+info.update = function(props) {
+      this._div.innerHTML = "<h4>" + (props ? props.NAME + " County</h4>" +
+        "<table><tr><td>R&B</td><td>" + props.value + "</td></tr>" +
+        "</table>" +
+        "<small>(click to zoom)</small>" : '<h4>Hover over a county</h4>')
+    }
+>>>>>>> master
 
 // defining style for state boundaries
 function state_style() {
@@ -146,14 +155,14 @@ function drawLayers(genre) {
   const params = jQuery.param({ genre: genre });
   var request_url = "counties?" + params;
 
-  d3.json(request_url, function(error, data) {
+  d3.json(request_url, function(error, data) {  
     if (error) console.log(error);
     data = data['data']
 
     for (var i = 0; i < data.length; i++) {
       var counties_geo_index = counties_geo.features.findIndex(function(f) {
-        return +f.properties.STATE == data[i].state_code &&
-               +f.properties.COUNTY == data[i].county_code }
+        return +f.properties.STATE == data[i].state_code && 
+               +f.properties.COUNTY == data[i].county_code } 
       );
 
       if (counties_geo_index != -1) {
@@ -161,7 +170,7 @@ function drawLayers(genre) {
           counties_geo.features[counties_geo_index].properties.value = data[i].dom_genre;
         } else {
           counties_geo.features[counties_geo_index].properties.value = data[i].ranking;
-        }
+        }  
       }
     }
 
