@@ -32,10 +32,12 @@ info.onAdd = function(map) {
 }
 
 info.update = function (props) {
-  this._div.innerHTML = "<h4>" + (props ? props.NAME + " County</h4>" +
-    "<table><tr><td>R&B</td><td>" + props.value + "%</td></tr>" +
-    "</table>" +
-    "<small>(click to zoom)</small>":'<h4>Hover over a county</h4>')
+  console.log(props)
+  this._div.innerHTML = "<h4>" + (props ? "<h4 class='state-head'>" +
+   props.NAME + " " + props.LSAD + ", " + "state abbr?" + "</h4>" +
+  "<table><tr><th>Rank:</th><td>" + "x" + " out of 51</td></tr>"+
+"<th>Number of upcoming "+ current_genre +" shows</th><td>x</td></table>" +
+  "<small>(click to zoom)</small>":'<h4>Hover over a county</h4>')
 }
 
 // defining style for state boundaries
