@@ -38,9 +38,6 @@ stats.draw = function(genre) {
     const bar = chart.append("g")
       .attr("transform", "translate(" + bar_margin.left + "," + bar_margin.top + ")")
 
-    //creating y-axis
-    const yAxis = d3.axisLeft(y);
-
     if (genre != "top") {
 
       // setting domains for bars
@@ -124,7 +121,7 @@ stats.draw = function(genre) {
             })
       }
       //assigning y-axis
-      bar.append('g').attr("class", "y axis").call(d3.axisLeft(y));
+      bar.append('g').attr("class", "y axis").call(d3.axisLeft(y))
 
     }
 

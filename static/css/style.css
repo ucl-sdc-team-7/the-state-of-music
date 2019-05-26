@@ -70,14 +70,12 @@ html, body, {
 .axis {
   font-family: 'Roboto', sans-serif;
   fill: none;
-  stroke: #555a66;
-  stroke-width: 1px;
   shape-rendering: crispEdges;
 }
 
 .bar-text {
   font-family: 'Roboto', sans-serif;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 #mainPanel {
