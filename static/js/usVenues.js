@@ -68,13 +68,27 @@ function getMarkers(data, genre) {
 
     pointToLayer: function(feature, latlng) {
       if (genre != "top") {
+        
+        function getMax(data) {
+          var max = -10000000;
+          var min = 10000000;
+          for (var i=0 ; i<data.length ; i++) {
+            max = Math.max(data[i].properties.value, max);
+            if(data[i].properties.value != 0){
+              min = Math.min(data[i].properties.value, min);
+            }
+          }
+          return [min,max];
+        }
+        var val_range = getMax(data.features);
+
         var geojsonMarkerOptions = {
           radius: 10,
           color: getColor(feature.properties.value, genre),
           fillColor: getColor(feature.properties.value, genre),
 
           weight: 2,
-          fillOpacity: marker_opacity(feature.properties.value),
+          fillOpacity: marker_opacity(feature.properties.value,val_range[0], val_range[1]),
         }
       } else {
         var geojsonMarkerOptions = {
@@ -107,9 +121,9 @@ usVenues.draw = function(genre) {
   d3.json(request_url, function(error, d) {
     if (error) console.log(error);
     data = d['data']
-    console.log(data)
 
     var venue_geo = makegeoJSON(data)
+
     var venues = getMarkers(venue_geo, genre)
     venues.addTo(countyMap)
 
