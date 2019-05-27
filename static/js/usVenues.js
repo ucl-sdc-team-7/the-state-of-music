@@ -37,7 +37,7 @@ venueInfo.onAdd = function(map) {
 venueInfo.update = function(props) {
   if (current_genre == 'top') {
       this._div.innerHTML = (props ? "<h4>" + props.venue + "</h4>" +
-      "<table><tr><td> Top Genre:</td><td>" + props.dom_genre + "</td></tr>" +
+      "<table><tr><td> Top Genre:</td><td class='titleCase'>" + props.dom_genre_label + "</td></tr>" +
       "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
       "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>"+props.pop_num+"</td></tr>"+
       "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>"+props.rock_num+"</td></tr>"+
@@ -59,7 +59,6 @@ function venue_mouseover(e) {
   //layer.setStyle({
   //  fillOpacity: 1
   //});
-  console.log(layer.feature.properties)
   venueInfo.update(layer.feature.properties);
 }
 
@@ -99,7 +98,7 @@ function onEachFeatureClosure(genre) {
     //   "<table><tr><td>" + label + "</td><td>" + value + "</td></tr>" +
     //   "</table>" +
     //   "<small>(click to zoom)</small>"
-    // 
+    //
     // layer.bindPopup(popupVenue, {
     //   'className': 'venue-info'
     // }, );
@@ -151,6 +150,9 @@ usVenues.draw = function(genre) {
   d3.json(request_url, function(error, d) {
     if (error) console.log(error);
     data = d['data']
+    for (i in data){
+      data[i].dom_genre_label = (GENRES[data[i].dom_genre]["label"])
+    }
 
     var venue_geo = makegeoJSON(data)
     var venues = getMarkers(venue_geo, genre)

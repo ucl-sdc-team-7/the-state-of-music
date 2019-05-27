@@ -25,8 +25,8 @@ info.onAdd = function(map) {
 
 info.update = function(props,infoType) {
   if (infoType == 'all') {
-      this._div.innerHTML = (props ? "<h4>" + props.NAME + " " + props.LSAD + " (" + "state abbr" + ")" + "</h4>" +
-      "<table><tr><td> Top Genre:</td><td>" + "top_genre" + "</td></tr>" +
+      this._div.innerHTML = (props ? "<h4>" + props.NAME + " " + props.LSAD + " (" + props.state_abbr + ")" + "</h4>" +
+      "<table><tr><td> Top Genre:</td><td class='titleCase'>" + props.dom_genre + "</td></tr>" +
       "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
       "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>"+props.num.pop+"</td></tr>"+
       "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>"+props.num.rock+"</td></tr>"+
@@ -38,7 +38,7 @@ info.update = function(props,infoType) {
             "</table>" +
             "<small>(click to zoom)</small>"
       : '<h4>Hover over a county</h4>')}
-      else {this._div.innerHTML = (props ? "<h4>" + props.NAME + " " + props.LSAD + " (" + "state abbr" + ")" + "</h4>" +
+      else {this._div.innerHTML = (props ? "<h4>" + props.NAME + " " + props.LSAD + " (" + props.state_abbr + ")" + "</h4>" +
       "<table><tr><th>Rank:</th><td>" + "x" + " out of x</td></tr>"+
 "<th>Number of upcoming "+ GENRES[current_genre].label +" shows</th><td>"+ props.num +"</td></table>" +
       "<small>(click to zoom)</small>"
@@ -112,11 +112,27 @@ function zoomToCity(e, genre) {
   level = 'venue'
 }
 
+//'Go Back' button
 var button = new L.Control.Button('Go back', { position: 'topleft' });
 button.addTo(countyMap);
 button.on('click', function () {
-    alert('you clicked the button!');
+  if (level == 'venue') {
+  //this is taken from uStates.js - could be turned into a seperate function used by both for efficiency
+  var state_abbr = 'MA';
+  var state_bbox = get_state_bbox(state_abbr);
+  countyMap.removeControl(venueInfo)
+  usCounties.draw(state_bbox, current_genre); //function that draws leaflet
+  stats.draw(current_genre)
+  current_state = state_abbr;
+  level = 'county';;
+  } else {
+  console.log("Go to states")
+  }
 });
+
+
+
+
 
 // defining popups and county style on hover
 function onEachFeature(feature, layer, genre) {
@@ -177,7 +193,6 @@ function drawLayers(genre) {
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
-    console.log(data)
 
     for (var i = 0; i < data.length; i++) {
       var counties_geo_index = counties_geo.features.findIndex(function(f) {
@@ -186,8 +201,17 @@ function drawLayers(genre) {
       );
 
       if (counties_geo_index != -1) {
+        //adding state abbr
+        counties_geo.features[counties_geo_index].properties.state_abbr = data[i].state_abbr;
         if (genre == "top") {
           counties_geo.features[counties_geo_index].properties.value = data[i].dom_genre;
+          //I've had to leave the previous line attributing dom_genre to the value attribute
+          //because it's used to colour the polygons
+          //dom_genre_label is the cleaned version without underscores etc.
+          var dom_genre_label
+          if (GENRES[data[i].dom_genre]) {dom_genre_label = (GENRES[data[i].dom_genre]["label"])} else {dom_genre_label = "none"};
+          counties_geo.features[counties_geo_index].properties.dom_genre = dom_genre_label;
+
           //if the genre is set to top, this will go through the GENRES list and add all nums to an array
           var numField = {}
           for (genreCat in GENRES) {
