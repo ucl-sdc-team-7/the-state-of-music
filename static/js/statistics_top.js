@@ -102,24 +102,6 @@ stats.top = function(genre) {
       .style("fill", "#555a66;")
       .call(wrap, bar_margin.left);
 
-    //adding values to bars
-    bar.selectAll(".text")
-      .data(max_genres).enter()
-      .append("text")
-      .attr("class", "bar-text")
-      .attr("dy", ".35em")
-      .attr("x", function(d) {
-        return x(d.max) - 20
-      })
-      .attr("y", function(d) {
-        return y(d.genre) + y.bandwidth() / 2
-      })
-      .attr("text-anchor", "middle")
-      .text(function(d) {
-        return Math.round(d.max*1000)/1000
-      })
-      .style("fill", "#ffffff");
-
     //assigning y-axis
     bar.append('g').attr("class", "y axis").call(d3.axisLeft(y).tickFormat(function(d) {
       return d.name;

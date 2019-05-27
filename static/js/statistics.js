@@ -23,19 +23,25 @@ stats.draw = function(genre) {
 
   var request_url = "stats/" + geo_level + "?" + params;
 
-  d3.json(request_url, function(error, data) {
+  d3.json(request_url, function(error, d) {
     if (error) console.log(error);
 
-    data = data['data']
+    d = d['data']
 
     //sort bars based on value
-    data = data.sort(function(a, b) {
+    d = d.sort(function(a, b) {
       return a.ranking - b.ranking
     })
-    console.log(data)
 
     //finding top five states
-    data = data.slice(0, 5).reverse();
+    d = d.slice(0, 5).reverse();
+
+    var data = [];
+    for(var i = 0; i < d.length; i++){
+      if(d[i].value != 0){
+        data.push(d[i])
+      }
+    }
 
     //creating svg object
     const chart = d3.select("#displayStats").select("svg")
@@ -62,35 +68,20 @@ stats.draw = function(genre) {
           return GENRES[genre].color
         })
 
-        //adding labels to axis
-        bar.selectAll(".text")
-          .data(data).enter()
-          .append("text")
-          .attr("class", "axis-text")
-          .attr("dy", ".35em")
-          .attr("x", function(d) {
-            return -100
-          })
-          .attr("text-anchor", "right")
-          .style("fill", "#555a66;");
-
-        //adding values to bars
-        bar.selectAll(".text")
-          .data(data).enter()
-          .append("text")
-          .attr("class", "bar-text")
-          .attr("dy", ".35em")
-          .attr("x", function(d) {
-            return x(d.value) - 10
-          })
-          .attr("text-anchor", "middle")
-          .text(function(d) {
-            return d.ranking
-          })
-          .style("fill", "white")
+      //adding labels to axis
+      bar.selectAll(".text")
+        .data(data).enter()
+        .append("text")
+        .attr("class", "axis-text")
+        .attr("dy", ".35em")
+        .attr("x", function(d) {
+          return -100
+        })
+        .attr("text-anchor", "right")
+        .style("fill", "#555a66;");
 
 
-      if(geo_level == "state"){
+      if (geo_level == "state") {
         y.domain(data.map(function(d) {
           return d.state_name
         })).padding(0.3);
@@ -101,12 +92,7 @@ stats.draw = function(genre) {
           })
           .attr("height", y.bandwidth()); //assigning hieght of bars
 
-          bar.selectAll(".bar-text")
-          .attr("y", function(d) {
-            return y(d.state_name) + y.bandwidth() / 2
-          })
-
-          bar.selectAll(".axis-text")
+        bar.selectAll(".axis-text")
           .attr("y", function(d) {
             return y(d.state_name) + y.bandwidth() / 2
           })
@@ -119,7 +105,7 @@ stats.draw = function(genre) {
 
         y.domain(data.map(function(d) {
           return d.county_name
-          })).padding(0.3);
+        })).padding(0.3);
 
         bar.selectAll('.bar')
           .attr('y', function(d) {
@@ -127,44 +113,34 @@ stats.draw = function(genre) {
           })
           .attr("height", y.bandwidth()); //assigning hieght of bars
 
-        bar.selectAll(".bar-text")
-        .attr("y", function(d) {
-          return y(d.county_name) + y.bandwidth() / 2
-        })
-
         bar.selectAll(".axis-text")
-        .attr("y", function(d) {
-          return y(d.county_name) + y.bandwidth() / 2
-        })
-        .text(function(d) {
-          return d.county_name
-        })
-        .call(wrap, bar_margin.left);
+          .attr("y", function(d) {
+            return y(d.county_name) + y.bandwidth() / 2
+          })
+          .text(function(d) {
+            return d.county_name
+          })
+          .call(wrap, bar_margin.left);
 
       } else if (geo_level == "venue") {
         y.domain(data.map(function(d) {
           return d.venue
-          })).padding(0.3);
+        })).padding(0.3);
 
-          bar.selectAll('.bar')
-            .attr('y', function(d) {
-              return y(d.venue)
-            })
-            .attr("height", y.bandwidth()); //assigning hieght of bars
+        bar.selectAll('.bar')
+          .attr('y', function(d) {
+            return y(d.venue)
+          })
+          .attr("height", y.bandwidth()); //assigning hieght of bars
 
-            bar.selectAll(".bar-text")
-            .attr("y", function(d) {
-              return y(d.venue) + y.bandwidth() / 2
-            })
-
-            bar.selectAll(".axis-text")
-            .attr("y", function(d) {
-              return y(d.venue) + y.bandwidth() / 2
-            })
-            .text(function(d) {
-              return d.venue
-            })
-            .call(wrap, bar_margin.left);
+        bar.selectAll(".axis-text")
+          .attr("y", function(d) {
+            return y(d.venue) + y.bandwidth() / 2
+          })
+          .text(function(d) {
+            return d.venue
+          })
+          .call(wrap, bar_margin.left);
       }
 
       //assigning y-axis

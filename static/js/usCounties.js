@@ -241,7 +241,6 @@ function drawLayers(genre) {
             };
         } else {
           counties_geo.features[counties_geo_index].properties.value = data[i].ranking;
-<<<<<<< HEAD
           //if it's a single genre, it passes a single integer instead
           var numField
           numGenre = genre+"_num";
@@ -249,9 +248,7 @@ function drawLayers(genre) {
         }
         //either way, the new variable is added to the object
         counties_geo.features[counties_geo_index].properties.num = numField;
-=======
-        }
->>>>>>> first attempt at top genre charts
+
       }
     }
 
