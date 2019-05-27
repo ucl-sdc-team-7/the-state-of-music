@@ -8,44 +8,47 @@ stats.top = function(genre) {
 
   var request_url = "stats/" + geo_level + "?" + params;
 
-  d3.json(request_url, function(error, data) {
+  d3.json(request_url, function(error, d) {
     if (error) console.log(error);
 
-    data = data['data']
+    d = d['data']
 
     var max_genres = [];
     var mygenres = Object.keys(GENRES);
 
-    for (var i in mygenres) {
-      var max = data.reduce((max, p) => p[mygenres[i]] > max ? p[mygenres[i]] : max, data[0][mygenres[i]]);
-      var max_obj = data.filter(obj => {
-        return obj[mygenres[i]] === max
-      })
-      if (geo_level == "state") {
-        var name = max_obj[0]["state_name"]
-        max_genres.push({
-          genre: mygenres[i],
-          name: name,
-          max: parseInt(max*100)
-        })
-      }
-      if (geo_level == "county") {
-        var name = max_obj[0]["county_name"]
-        max_genres.push({
-          genre: mygenres[i],
-          name: name,
-          max: max
-        })
-      }
-      if (geo_level == "venue") {
-        var name = max_obj[0]["venue"]
-        max_genres.push({
-          genre: mygenres[i],
-          name: name,
-          max: max
-        })
-      }
+    if (d.length > 1) {
 
+      for (var i in mygenres) {
+        var max = d.reduce((max, p) => p[mygenres[i]] > max ? p[mygenres[i]] : max, d[0][mygenres[i]]);
+        var max_obj = d.filter(obj => {
+          return obj[mygenres[i]] === max
+        })
+        if (geo_level == "state") {
+          var name = max_obj[0]["state_name"]
+          max_genres.push({
+            genre: mygenres[i],
+            name: name,
+            max: parseInt(max * 100)
+          })
+        }
+        if (geo_level == "county") {
+          var name = max_obj[0]["county_name"]
+          max_genres.push({
+            genre: mygenres[i],
+            name: name,
+            max: max
+          })
+        }
+        if (geo_level == "venue") {
+          var name = max_obj[0]["venue"]
+          max_genres.push({
+            genre: mygenres[i],
+            name: name,
+            max: max
+          })
+        }
+
+      }
     }
 
     //sort bars based on value
@@ -53,60 +56,75 @@ stats.top = function(genre) {
       return a.max - b.max
     })
 
-    //creating svg object
-    const chart = d3.select("#displayStats").select("svg")
+    var data = [];
+    for (var i = 0; i < max_genres.length; i++) {
+      if (max_genres[i].max != 0) {
+        data.push(max_genres[i])
+      }
+    }
+    
+    if (data.length == 1) {
+      d3.selectAll("svg#stats > *").remove();
+      $("#stats-text").html("<small>Only " + data[0].name + " is playing " + data[0].genre + "this month.</small>");
+    } else if (data.length == 0) {
+      d3.selectAll("svg#stats > *").remove();
+      $("#stats-text").html("<small>Noone is playing this genre this month.</small>");
+    } else if (data.length > 1) {
 
-    //assigning margins
-    const bar = chart.append("g")
-      .attr("transform", "translate(" + bar_margin.left + "," + bar_margin.top + ")")
+      //creating svg object
+      const chart = d3.select("#displayStats").select("svg")
 
-    // setting domains for bars
-    x.domain([0, d3.max(max_genres, function(d) {
-      return d.max
-    })]);
-    y.domain(max_genres.map(function(d) {
-      return d.genre
-    })).padding(0.3);
+      //assigning margins
+      const bar = chart.append("g")
+        .attr("transform", "translate(" + bar_margin.left + "," + bar_margin.top + ")")
 
-    //drawing bars in chart
-    bar.selectAll('.bar').data(max_genres)
-      .enter().append('rect')
-      .attr("class", "bar")
-      .attr("width", function(d) {
-        return x(d.max);
-      }) //assigning width of bars
-      .attr('y', function(d) {
-        return y([d.genre]);
-      })
-      .attr("height", y.bandwidth()) //assigning hieght of bars
-      .attr("fill", function(d) {
-        return GENRES[d.genre]["color"]
-      })
+      // setting domains for bars
+      x.domain([0, d3.max(data, function(d) {
+        return d.max
+      })]);
+      y.domain(data.map(function(d) {
+        return d.genre
+      })).padding(0.3);
 
-    //adding labels to axis
-    bar.selectAll(".text")
-      .data(max_genres).enter()
-      .append("text")
-      .attr("class", "axis-text")
-      .attr("dy", ".35em")
-      .attr("x", function(d) {
-        return -100
-      })
-      .attr("y", function(d) {
-        return y(d.genre) + y.bandwidth() / 2
-      })
-      .attr("text-anchor", "right")
-      .text(function(d) {
-        return d.name
-      })
-      .style("fill", "#555a66;")
-      .call(wrap, bar_margin.left);
+      //drawing bars in chart
+      bar.selectAll('.bar').data(data)
+        .enter().append('rect')
+        .attr("class", "bar")
+        .attr("width", function(d) {
+          return x(d.max);
+        }) //assigning width of bars
+        .attr('y', function(d) {
+          return y([d.genre]);
+        })
+        .attr("height", y.bandwidth()) //assigning hieght of bars
+        .attr("fill", function(d) {
+          return GENRES[d.genre]["color"]
+        })
 
-    //assigning y-axis
-    bar.append('g').attr("class", "y axis").call(d3.axisLeft(y).tickFormat(function(d) {
-      return d.name;
-    }));
+      //adding labels to axis
+      bar.selectAll(".text")
+        .data(data).enter()
+        .append("text")
+        .attr("class", "axis-text")
+        .attr("dy", ".35em")
+        .attr("x", function(d) {
+          return -100
+        })
+        .attr("y", function(d) {
+          return y(d.genre) + y.bandwidth() / 2
+        })
+        .attr("text-anchor", "right")
+        .text(function(d) {
+          return d.name
+        })
+        .style("fill", "#555a66;")
+        .call(wrap, bar_margin.left);
 
+      //assigning y-axis
+      bar.append('g').attr("class", "y axis").call(d3.axisLeft(y).tickFormat(function(d) {
+        return d.name;
+      }));
+    }
   });
 };
 
