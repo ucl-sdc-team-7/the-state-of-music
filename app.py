@@ -120,38 +120,113 @@ def get_venues_genres():
 
     return jsonify(data=data)
 
-@app.route('/top')
-def get_top_stats():
-    level = request.args.get('level') or 'state'
+
+@app.route('/stats/state')
+def get_state_stats():
+
+    genre = request.args.get('genre') or 'top'
 
     cur = mysql.connection.cursor()
 
-    genre_column = 'dom_genre'
-    level_name_column = level + "_name"
-    table = level + "_level_data"
+    genre_column = genre + '_norm'
 
-    if level != "venue":
+    if genre != "top":
+        select_query = "SELECT state_code, state_name, state_abbr, " + \
+            genre_column + " FROM state_level_data ORDER BY " + \
+            genre_column + ' DESC;'
 
-        select_query = "SELECT pop_norm, rock_norm, hip_hop_norm, rnb_norm, classical_and_jazz_norm, electronic_norm, country_and_folk_norm, " + \
-            level_name_column + ", " + genre_column + \
-            " FROM " + table + ";"
 
     else:
-        select_query = "SELECT pop, rock, hip_hop, rnb, classical_and_jazz, electronic, country_and_folk, venue" + \
-            " FROM " + table + ";"
+        select_query = "SELECT pop_norm, rock_norm, hip_hop_norm, rnb_norm, classical_and_jazz_norm, electronic_norm, country_and_folk_norm, " + \
+            "state_name FROM state_level_data;"
 
     cur.execute(select_query)
     data = cur.fetchall()
 
-    for index, genre in enumerate(data):
-        if genre.get('dom_genre'):
-            genre['dom_genre'] = genre['dom_genre'].split("/")[0]
+    for index, state in enumerate(data):
+        if genre != "top":
+            state['value'] = state[genre_column]
+            del state[genre_column]
+            if (state['value'] != 0):
+                state['ranking'] = index + 1
 
-        if level != "venue":
+        else:
             for i in ['pop_norm', 'rock_norm', 'hip_hop_norm', 'rnb_norm', 'classical_and_jazz_norm', 'electronic_norm', 'country_and_folk_norm']:
                 head,sep,tail = i.partition('_norm')
-                genre[head] = genre[i]
-                del genre[i]
+                state[head] = state[i]
+                del state[i]
+
+
+    return jsonify(data=data)
+
+@app.route('/stats/county')
+def get_county_stats():
+    genre = request.args.get('genre') or 'top'
+    filter_state = request.args.get('filter_state')
+
+    genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
+
+    cur = mysql.connection.cursor()
+
+    if genre == "top":
+        select_query = "SELECT pop_norm, rock_norm, hip_hop_norm, rnb_norm, classical_and_jazz_norm, electronic_norm, country_and_folk_norm, " + \
+                "county_name FROM county_level_data WHERE state_abbr = " + "'" + filter_state + "';"
+
+    else:
+        select_query = "SELECT state_code, state_abbr, " + \
+            "county_code, county_name, " + genre_column + \
+            " FROM county_level_data WHERE state_abbr = " + "'" + filter_state + "'" + \
+            " ORDER BY " + genre_column + ' DESC;'
+
+    cur.execute(select_query)
+    data = cur.fetchall()
+
+    for index, county in enumerate(data):
+        if genre != "top":
+            county['value'] = county[genre_column]
+            del county[genre_column]
+            if (county['value'] != 0):
+                county['ranking'] = index + 1
+        else:
+            for i in ['pop_norm', 'rock_norm', 'hip_hop_norm', 'rnb_norm', 'classical_and_jazz_norm', 'electronic_norm', 'country_and_folk_norm']:
+                head,sep,tail = i.partition('_norm')
+                county[head] = county[i]
+                del county[i]
+
+
+    return jsonify(data=data)
+
+@app.route('/stats/venue')
+def get_venue_stats():
+    genre = request.args.get('genre') or 'top'
+    filter_state = request.args.get('filter_state')
+    filter_county = request.args.get('filter_county')
+
+    cur = mysql.connection.cursor()
+
+    genre_column = genre if genre != 'top' else 'dom_genre'
+
+    if genre == "top":
+        select_query = "SELECT pop, rock, hip_hop, rnb, classical_and_jazz, electronic, country_and_folk, venue, " + \
+                "county_name FROM venue_level_data WHERE state_abbr = " + "'" + filter_state + "'" + \
+                " AND county_name = " + "'" + filter_county + "';"
+
+    else:
+        select_query = "SELECT venue, venue_lat, venue_long, " + \
+            genre_column + \
+            " FROM venue_level_data WHERE state_abbr = " + "'" + filter_state + "'" + \
+            " AND county_name = " + "'" + filter_county + "'"\
+            " ORDER BY " + genre_column + ' DESC;'
+
+    cur.execute(select_query)
+    data = cur.fetchall()
+
+    for index, venue in enumerate(data):
+        if genre != "top":
+            venue['value'] = venue[genre_column]
+            del venue[genre_column]
+            if (venue['value'] != 0):
+                venue['ranking'] = index + 1
 
     return jsonify(data=data)
 

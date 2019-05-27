@@ -78,6 +78,7 @@ function removeLayers() {
 
 function zoomToCity(e, genre) {
   genre = current_genre
+  current_county = e.target.feature.properties.NAME
 
   countyMap.fitBounds(e.target.getBounds());
   countyMap.removeControl(info)

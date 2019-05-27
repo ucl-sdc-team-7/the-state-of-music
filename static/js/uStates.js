@@ -176,10 +176,11 @@ uStates.draw = function(genre) {
             var state_abbr = d.properties.abbr;
             var state_bbox = get_state_bbox(state_abbr);
             usCounties.draw(state_bbox, current_genre); //function that draws leaflet
+            current_state = state_abbr;
             if(current_genre != "top"){
             stats.draw(current_genre)
-            } else { stats.top()}
-            current_state = state_abbr;
+          } else { stats.top("top")}
+
           });
       });
   });

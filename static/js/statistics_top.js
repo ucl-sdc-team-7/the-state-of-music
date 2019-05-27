@@ -1,15 +1,17 @@
-stats.top = function() {
+stats.top = function(genre) {
 
-  const params = jQuery.param({
-    level: geo_level
+  var params = jQuery.param({
+    genre: "top",
+    filter_state: current_state,
+    filter_county: current_county,
   });
-  var request_url = "top?" + params;
+
+  var request_url = "stats/" + geo_level + "?" + params;
 
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
 
     data = data['data']
-    console.log(data)
 
     var max_genres = [];
     var mygenres = Object.keys(GENRES);
@@ -21,18 +23,29 @@ stats.top = function() {
       })
       if (geo_level == "state") {
         var name = max_obj[0]["state_name"]
+        max_genres.push({
+          genre: mygenres[i],
+          name: name,
+          max: parseInt(max*100)
+        })
       }
       if (geo_level == "county") {
         var name = max_obj[0]["county_name"]
+        max_genres.push({
+          genre: mygenres[i],
+          name: name,
+          max: max
+        })
       }
       if (geo_level == "venue") {
         var name = max_obj[0]["venue"]
+        max_genres.push({
+          genre: mygenres[i],
+          name: name,
+          max: max
+        })
       }
-      max_genres.push({
-        genre: mygenres[i],
-        name: name,
-        max: parseInt(max*100)
-      })
+
     }
 
     //sort bars based on value
@@ -70,11 +83,11 @@ stats.top = function() {
         return GENRES[d.genre]["color"]
       })
 
-    //adding values to bars
+    //adding labels to axis
     bar.selectAll(".text")
       .data(max_genres).enter()
       .append("text")
-      .attr("class", "bar-text")
+      .attr("class", "axis-text")
       .attr("dy", ".35em")
       .attr("x", function(d) {
         return -100
@@ -86,7 +99,8 @@ stats.top = function() {
       .text(function(d) {
         return d.name
       })
-      .style("fill", "#555a66;");
+      .style("fill", "#555a66;")
+      .call(wrap, bar_margin.left);
 
     //adding values to bars
     bar.selectAll(".text")
@@ -95,14 +109,14 @@ stats.top = function() {
       .attr("class", "bar-text")
       .attr("dy", ".35em")
       .attr("x", function(d) {
-        return x(d.max) - 12
+        return x(d.max) - 20
       })
       .attr("y", function(d) {
         return y(d.genre) + y.bandwidth() / 2
       })
       .attr("text-anchor", "middle")
       .text(function(d) {
-        return d.max
+        return Math.round(d.max*1000)/1000
       })
       .style("fill", "#ffffff");
 

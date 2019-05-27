@@ -3,7 +3,7 @@ const bar_margin = {
     top: 20,
     right: 20,
     bottom: 20,
-    left: 100
+    left: 120
   },
   bar_width = 300 - bar_margin.left - bar_margin.right,
   bar_height = 300 - bar_margin.top - bar_margin.bottom;
@@ -15,8 +15,13 @@ const stats = {};
 
 stats.draw = function(genre) {
 
-  const params = jQuery.param({ genre: genre });
-  var request_url = ((geo_level == "county") ? "counties?" : geo_level + "s?") + params;
+  var params = jQuery.param({
+    genre: genre,
+    filter_state: current_state,
+    filter_county: current_county,
+  });
+
+  var request_url = "stats/" + geo_level + "?" + params;
 
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
@@ -27,6 +32,7 @@ stats.draw = function(genre) {
     data = data.sort(function(a, b) {
       return a.ranking - b.ranking
     })
+    console.log(data)
 
     //finding top five states
     data = data.slice(0, 5).reverse();
@@ -55,6 +61,18 @@ stats.draw = function(genre) {
         .attr("fill", function(d) {
           return GENRES[genre].color
         })
+
+        //adding labels to axis
+        bar.selectAll(".text")
+          .data(data).enter()
+          .append("text")
+          .attr("class", "axis-text")
+          .attr("dy", ".35em")
+          .attr("x", function(d) {
+            return -100
+          })
+          .attr("text-anchor", "right")
+          .style("fill", "#555a66;");
 
         //adding values to bars
         bar.selectAll(".text")
@@ -88,6 +106,15 @@ stats.draw = function(genre) {
             return y(d.state_name) + y.bandwidth() / 2
           })
 
+          bar.selectAll(".axis-text")
+          .attr("y", function(d) {
+            return y(d.state_name) + y.bandwidth() / 2
+          })
+          .text(function(d) {
+            return d.state_name
+          })
+          .call(wrap, bar_margin.left);
+
       } else if (geo_level == "county") {
 
         y.domain(data.map(function(d) {
@@ -104,6 +131,16 @@ stats.draw = function(genre) {
         .attr("y", function(d) {
           return y(d.county_name) + y.bandwidth() / 2
         })
+
+        bar.selectAll(".axis-text")
+        .attr("y", function(d) {
+          return y(d.county_name) + y.bandwidth() / 2
+        })
+        .text(function(d) {
+          return d.county_name
+        })
+        .call(wrap, bar_margin.left);
+
       } else if (geo_level == "venue") {
         y.domain(data.map(function(d) {
           return d.venue
@@ -119,9 +156,21 @@ stats.draw = function(genre) {
             .attr("y", function(d) {
               return y(d.venue) + y.bandwidth() / 2
             })
+
+            bar.selectAll(".axis-text")
+            .attr("y", function(d) {
+              return y(d.venue) + y.bandwidth() / 2
+            })
+            .text(function(d) {
+              return d.venue
+            })
+            .call(wrap, bar_margin.left);
       }
+
       //assigning y-axis
-      bar.append('g').attr("class", "y axis").call(d3.axisLeft(y))
+      bar.append('g').attr("class", "y axis").call(d3.axisLeft(y).tickFormat(function(d) {
+        return d.county_name;
+      }));
 
     }
 
