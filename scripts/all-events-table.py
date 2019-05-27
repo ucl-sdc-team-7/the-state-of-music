@@ -21,7 +21,7 @@ def load(extract_cursor, data_source, source_id, load_cursor):
     for row in extract_cursor:
         source = data_source
         source_id = row[0]
-        venue_name = row[1]
+        venue_name = row[1].lower() if row[1] else None
         venue_lat = row[2]
         venue_long = row[3]
         pop = row[4]
@@ -56,19 +56,28 @@ def load(extract_cursor, data_source, source_id, load_cursor):
                 dom_genre = dom_genre + "/" + genre
 
         if (state and county) or (state == 'DC'):
-            query = """INSERT IGNORE INTO all_events
-                    (source, source_id, venue, venue_lat, venue_long, state,
-                    county, pop, rock, hip_hop, rnb, classical_and_jazz,
-                    electronic, country_and_folk, dom_genre) VALUES
-                    (%s, %s, %s, %s, %s, %s, %s, %s,
-                    %s, %s, %s, %s, %s, %s, %s);"""
-            values = (source, source_id, venue_name,
-                      venue_lat, venue_long, state, county,
-                      pop, rock, hip_hop, rnb, classical_and_jazz, electronic,
-                      country_and_folk, dom_genre)
+            select_query = "SELECT source_id FROM all_events " + \
+                "WHERE source_id = '" + source_id + "'"
 
-            load_cursor.execute(query, values)
-            db.commit()
+            load_cursor.execute(select_query)
+            existing_event = load_cursor.fetchall()
+
+            if (not existing_event):
+                query = """INSERT INTO all_events
+                        (source, source_id, venue, venue_lat, venue_long,
+                        state, county, pop, rock, hip_hop, rnb,
+                        classical_and_jazz, electronic, country_and_folk,
+                        dom_genre) VALUES
+                        (%s, %s, %s, %s, %s, %s, %s, %s,
+                        %s, %s, %s, %s, %s, %s, %s);"""
+                values = (source, source_id, venue_name,
+                          venue_lat, venue_long, state, county,
+                          pop, rock, hip_hop, rnb, classical_and_jazz,
+                          electronic, country_and_folk, dom_genre)
+
+                load_cursor.execute(query, values)
+                db.commit()
+
 
 query = """SELECT ticketmaster_id, venue, venue_lat, venue_long, pop, rock,
         hip_hop, rnb, classical_and_jazz, electronic, country_and_folk, state,
@@ -78,7 +87,8 @@ query = """SELECT ticketmaster_id, venue, venue_lat, venue_long, pop, rock,
         country_and_folk != 0) AND (state != 'AB' AND state != 'BC' AND
         state != 'MB' AND state != 'NB' AND state != 'NL' AND state != 'NS' AND
         state != 'NT' AND state != 'NU' AND state != 'ON' AND state != 'PE' AND
-        state != 'QC' AND state != 'SK' AND state != 'YT');"""
+        state != 'QC' AND state != 'SK' AND state != 'YT') AND
+        (venue_lat > 18.910361 AND venue_long < -66.94989);"""
 
 cursor.execute(query)
 
@@ -92,7 +102,8 @@ query = """SELECT eventbrite_id, venue_name, venue_lat, venue_long, pop, rock,
         country_and_folk != 0) AND (state != 'AB' AND state != 'BC' AND
         state != 'MB' AND state != 'NB' AND state != 'NL' AND state != 'NS' AND
         state != 'NT' AND state != 'NU' AND state != 'ON' AND state != 'PE' AND
-        state != 'QC' AND state != 'SK' AND state != 'YT');"""
+        state != 'QC' AND state != 'SK' AND state != 'YT') AND
+        (venue_lat > 18.910361 AND venue_long < -66.94989);"""
 
 cursor3.execute(query)
 
