@@ -9,6 +9,7 @@ stats.top = function() {
     if (error) console.log(error);
 
     data = data['data']
+    console.log(data)
 
     var max_genres = [];
     var mygenres = Object.keys(GENRES);
@@ -30,7 +31,7 @@ stats.top = function() {
       max_genres.push({
         genre: mygenres[i],
         name: name,
-        max: max
+        max: parseInt(max*100)
       })
     }
 
@@ -94,7 +95,7 @@ stats.top = function() {
       .attr("class", "bar-text")
       .attr("dy", ".35em")
       .attr("x", function(d) {
-        return x(d.max) - 15
+        return x(d.max) - 12
       })
       .attr("y", function(d) {
         return y(d.genre) + y.bandwidth() / 2
