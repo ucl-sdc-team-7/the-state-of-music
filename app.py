@@ -132,7 +132,7 @@ def get_top_stats():
 
     if level != "venue":
 
-        select_query = "SELECT pop, rock, hip_hop, rnb, classical_and_jazz, electronic, country_and_folk, " + \
+        select_query = "SELECT pop_norm, rock_norm, hip_hop_norm, rnb_norm, classical_and_jazz_norm, electronic_norm, country_and_folk_norm, " + \
             level_name_column + ", " + genre_column + \
             " FROM " + table + ";"
 
@@ -146,6 +146,12 @@ def get_top_stats():
     for index, genre in enumerate(data):
         if genre.get('dom_genre'):
             genre['dom_genre'] = genre['dom_genre'].split("/")[0]
+
+        if level != "venue":
+            for i in ['pop_norm', 'rock_norm', 'hip_hop_norm', 'rnb_norm', 'classical_and_jazz_norm', 'electronic_norm', 'country_and_folk_norm']:
+                head,sep,tail = i.partition('_norm')
+                genre[head] = genre[i]
+                del genre[i]
 
     return jsonify(data=data)
 
