@@ -1,3 +1,4 @@
+
 // initializing county map
 var countyMap = L.map('countymap')
 
@@ -23,6 +24,9 @@ info.onAdd = function(map) {
   return this._div;
 }
 
+//used by later function and second popup
+var maxRank = 0;
+
 info.update = function(props,infoType) {
   if (infoType == 'all') {
       this._div.innerHTML = (props ? "<h4>" + props.NAME + " " + props.LSAD + " (" + props.state_abbr + ")" + "</h4>" +
@@ -39,7 +43,7 @@ info.update = function(props,infoType) {
             "<small>(click to zoom)</small>"
       : '<h4>Hover over a county</h4>')}
       else {this._div.innerHTML = (props ? "<h4>" + props.NAME + " " + props.LSAD + " (" + props.state_abbr + ")" + "</h4>" +
-      "<table><tr><th>Rank:</th><td>" + "x" + " out of x</td></tr>"+
+      "<table><tr><th>Rank:</th><td>" + props.rank_label + " out of "+ maxRank +"</td></tr>"+
 "<th>Number of upcoming "+ GENRES[current_genre].label +" shows</th><td>"+ props.num +"</td></table>" +
       "<small>(click to zoom)</small>"
       :'<h4>Hover over a county</h4>')};
@@ -66,6 +70,7 @@ function getStateLines() {
 
 function county_mouseover(e) {
   var layer = e.target;
+  //console.log(layer.feature.properties)
   layer.setStyle({
     fillOpacity: 1
   });
@@ -75,7 +80,6 @@ function county_mouseover(e) {
   //alternatively we could use the current_genre global variable, but I'm trying to limit the use of that to within the legend boxes
   var infoType
   if (typeof(layer.feature.properties.num) == 'object') {infoType = 'all'} else {infoType = 'single'};
-  //console.log(typeof(layer.feature.properties.num))
   info.update(layer.feature.properties,infoType);
 }
 
@@ -194,6 +198,7 @@ function drawLayers(genre) {
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
+    test = data
 
     for (var i = 0; i < data.length; i++) {
       var counties_geo_index = counties_geo.features.findIndex(function(f) {
@@ -221,7 +226,15 @@ function drawLayers(genre) {
             };
         } else {
           counties_geo.features[counties_geo_index].properties.value = data[i].ranking;
-          //if it's a single genre, it passes a single integer instead
+          //adding a rank label (the value field is used for colouring polys and so can't be edited)
+          //since we can't target props inside the wider popup function this is a work around
+          for(key in data) {
+              if(data[key].ranking > maxRank) {
+                maxRank = data[key].ranking;};}
+          maxRank=maxRank-1;
+          if (data[i].ranking > maxRank) {counties_geo.features[counties_geo_index].properties.rank_label = 0}
+          else {counties_geo.features[counties_geo_index].properties.rank_label = data[i].ranking};
+          //if view is single genre, it passes a single integer instead
           var numField
           numGenre = genre+"_num";
           numField = data[i][numGenre];
