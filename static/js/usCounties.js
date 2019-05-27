@@ -99,8 +99,7 @@ function removeLayers() {
 
 
 function zoomToCity(e, genre) {
-  genre = current_genre
-
+  genre = current_genre;
   countyMap.fitBounds(e.target.getBounds());
   countyMap.removeControl(info)
 
@@ -109,7 +108,10 @@ function zoomToCity(e, genre) {
   usVenues.draw(genre)
   venueInfo.addTo(countyMap)
   stats.draw(genre)
-  level = 'venue'
+  level = 'venue';
+  //this change to current_state has been added so that if the user clicks a county in  a
+  //different state to their original choice, when they go back it will zoom out to the new one
+  current_state = e.target.feature.properties.state_abbr;
 }
 
 //'Go Back' button
@@ -118,12 +120,11 @@ button.addTo(countyMap);
 button.on('click', function () {
   if (level == 'venue') {
   //this is taken from uStates.js - could be turned into a seperate function used by both for efficiency
-  var state_abbr = 'MA';
+  var state_abbr = current_state;
   var state_bbox = get_state_bbox(state_abbr);
   countyMap.removeControl(venueInfo)
   usCounties.draw(state_bbox, current_genre); //function that draws leaflet
   stats.draw(current_genre)
-  current_state = state_abbr;
   level = 'county';;
   } else {
   console.log("Go to states")

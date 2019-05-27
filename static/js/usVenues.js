@@ -151,7 +151,8 @@ usVenues.draw = function(genre) {
     if (error) console.log(error);
     data = d['data']
     for (i in data){
-      data[i].dom_genre_label = (GENRES[data[i].dom_genre]["label"])
+      if (data[i].dom_genre) {
+      data[i].dom_genre_label = (GENRES[data[i].dom_genre]["label"])}
     }
 
     var venue_geo = makegeoJSON(data)
