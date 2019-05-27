@@ -11,115 +11,112 @@ db = mysql.connect(
     passwd=config['mysql']['pass'],
     database="state_of_music"
 )
-cursor = db.cursor(buffered=True)
-cursor2 = db.cursor(buffered=True)
-cursor3 = db.cursor(buffered=True)
+cursor = db.cursor()
 
-genres = ['pop', 'rock', 'hip_hop', 'rnb',
-          'classical_and_jazz', 'electronic', 'country_and_folk']
+query = """SELECT state_code, state_name, state_abbr, county_code,
+        county_name, pop_2018
+        FROM populations WHERE sum_level = 50;"""
 
-query = """SELECT state, county, dom_genre FROM all_events"""
 cursor.execute(query)
+counties = cursor.fetchall()
 
-for event in cursor:
-    state = event[0]
-    if len(event[1]) == 0:
-        county = ''
+top_level_genres = ['pop', 'rock', 'hip_hop', 'rnb',
+                    'classical_and_jazz', 'electronic', 'country_and_folk']
+
+for county in counties:
+    state_code = county[0]
+    state_name = county[1]
+    state_abbr = county[2]
+    county_code = county[3]
+    county_name = county[4].rstrip()
+    pop_2018 = county[5]
+
+    if county_name == 'District of Columbia':
+        query_events = 'SELECT dom_genre FROM all_events WHERE state = "DC"'
     else:
-        county = event[1][:-1] if event[1][-1] == " " else event[1] # omit trailing space
-    dom_genre = event[2]
+        query_events = 'SELECT dom_genre FROM all_events WHERE county = "' + \
+            county_name + '"'
 
+    cursor.execute(query_events)
+    events_in_county = cursor.fetchall()
 
-    query = """SELECT state_abbr, county_name, pop, rock, hip_hop, rnb,
-            classical_and_jazz, electronic, country_and_folk, all_genres,
-            dom_genre, pop_num, rock_num, hip_hop_num, rnb_num,
-            classical_and_jazz_num, electronic_num, country_and_folk_num,
-            total_num
-            FROM county_level_data
-            WHERE state_abbr = %s and county_name = %s"""
-    values = (state, county)
-    cursor2.execute(query, values)
+    num_events_in_county = len(events_in_county)
 
+    num_events_per_genre = {}
+    total_weights_per_genre = {}
+    normalised_weights_per_genre = {}
 
+    for event in events_in_county:
+        event_genres = event[0].split("/")
+        weight = 1 / len(event_genres)
+        for event_genre in event_genres:
+            num_events_per_genre[event_genre] = \
+                num_events_per_genre[event_genre] + 1 \
+                if event_genre in num_events_per_genre else 1
 
-    for county_row in cursor2:
-        state_abbr = county_row[0]
-        county_name = county_row[1]
-        pop = float(county_row[2])
-        rock = float(county_row[3])
-        hip_hop = float(county_row[4])
-        rnb = float(county_row[5])
-        classical_and_jazz = float(county_row[6])
-        electronic = float(county_row[7])
-        country_and_folk = float(county_row[8])
-        all_genres = float(county_row[9])
-        dom_genre_county = county_row[10]
-        genre_dict = {'pop': pop,
-                      'rock': rock,
-                      'hip_hop': hip_hop,
-                      'rnb': rnb,
-                      'classical_and_jazz': classical_and_jazz,
-                      'electronic': electronic,
-                      'country_and_folk': country_and_folk}
+            total_weights_per_genre[event_genre] = \
+                total_weights_per_genre[event_genre] + weight \
+                if event_genre in total_weights_per_genre else weight
 
-        pop_num = int(county_row[11])
-        rock_num = int(county_row[12])
-        hip_hop_num = int(county_row[13])
-        rnb_num = int(county_row[14])
-        classical_and_jazz_num = int(county_row[15])
-        electronic_num = int(county_row[16])
-        country_and_folk_num = int(county_row[17])
-        total_num = county_row[18]
-        num_dict = {'pop': pop_num,
-                    'rock': rock_num,
-                    'hip_hop': hip_hop_num,
-                    'rnb': rnb_num,
-                    'classical_and_jazz': classical_and_jazz_num,
-                    'electronic': electronic_num,
-                    'country_and_folk': country_and_folk_num}
+    dom_genre_value = 0
+    dom_genre = None
 
-        if len(dom_genre.split("/")) == 1 and dom_genre in genres:  # if a single genre is dominant
-            genre_dict[dom_genre] = genre_dict[dom_genre] + 1
-            num_dict[dom_genre] = num_dict[dom_genre] + 1
-            total_num = total_num + 1
-        elif len(dom_genre.split("/")) > 1:  # if multiple genres share dominance
-            # assign weight for partial genres
-            weight = (1 / len(dom_genre.split("/")))
-            for partial_dom_genre in dom_genre.split("/"):
-                if partial_dom_genre in genres:
-                    genre_dict[partial_dom_genre] = genre_dict[
-                        partial_dom_genre] + weight
-                    num_dict[partial_dom_genre] = num_dict[partial_dom_genre] + 1
-                    total_num = total_num + 1
+    for genre_weight in total_weights_per_genre.keys():
+        if total_weights_per_genre[genre_weight] > dom_genre_value:
+            dom_genre_value = total_weights_per_genre[genre_weight]
+            dom_genre = genre_weight
 
-        max = 0
-        all_genres = 0
-        for genre in genre_dict:
-            if genre_dict[genre] > 0:
-                all_genres = all_genres + genre_dict[genre]
-            if genre_dict[genre] > max and genre_dict[genre] > 0:
-                max = genre_dict[genre]
-                dom_genre_county = genre
-            elif genre_dict[genre] == max and genre_dict[genre] > 0:
-                dom_genre_county = dom_genre_county + "/" + genre
+    for top_level_genre in top_level_genres:
+        if top_level_genre not in num_events_per_genre:
+            num_events_per_genre[top_level_genre] = 0
 
-        query = """UPDATE county_level_data SET
-                pop = %s, rock = %s, hip_hop = %s,
-                rnb = %s, classical_and_jazz = %s,
-                electronic = %s, country_and_folk = %s,
-                all_genres = %s, dom_genre = %s, pop_num = %s,
-                rock_num = %s, hip_hop_num = %s, rnb_num = %s,
-                classical_and_jazz_num = %s, electronic_num = %s,
-                country_and_folk_num = %s, total_num = %s
-                WHERE state_abbr = %s AND county_name = %s;"""
-        values = (genre_dict['pop'], genre_dict['rock'],
-                  genre_dict['hip_hop'], genre_dict['rnb'],
-                  genre_dict['classical_and_jazz'],
-                  genre_dict['electronic'], genre_dict['country_and_folk'],
-                  all_genres, dom_genre_county, num_dict['pop'],
-                  num_dict['rock'], num_dict['hip_hop'], num_dict['rnb'],
-                  num_dict['classical_and_jazz'], num_dict['electronic'],
-                  num_dict['country_and_folk'], total_num, state_abbr,
-                  county_name)
-        cursor3.execute(query, values)
-        db.commit()
+        if top_level_genre not in total_weights_per_genre:
+            total_weights_per_genre[top_level_genre] = 0
+
+    for genre_weight in total_weights_per_genre.keys():
+        normalised_weights_per_genre[genre_weight] = \
+            total_weights_per_genre[genre_weight] * pop_2018 / 1000
+
+    query = """INSERT INTO county_level_data
+            (state_code, state_name, state_abbr, county_code,
+            county_name, pop_2018,
+            pop, rock, hip_hop, rnb, classical_and_jazz,
+            electronic, country_and_folk, dom_genre,
+            pop_norm, rock_norm, hip_hop_norm, rnb_norm,
+            classical_and_jazz_norm, electronic_norm,
+            country_and_folk_norm, pop_num, rock_num,
+            hip_hop_num, rnb_num, classical_and_jazz_num,
+            electronic_num, country_and_folk_num, total_num)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+            %s, %s, %s, %s, %s, %s, %s);"""
+
+    values = (state_code, state_name, state_abbr,
+              county_code, county_name, pop_2018,
+              total_weights_per_genre['pop'],
+              total_weights_per_genre['rock'],
+              total_weights_per_genre['hip_hop'],
+              total_weights_per_genre['rnb'],
+              total_weights_per_genre['classical_and_jazz'],
+              total_weights_per_genre['electronic'],
+              total_weights_per_genre['country_and_folk'],
+              dom_genre,
+              normalised_weights_per_genre['pop'],
+              normalised_weights_per_genre['rock'],
+              normalised_weights_per_genre['hip_hop'],
+              normalised_weights_per_genre['rnb'],
+              normalised_weights_per_genre['classical_and_jazz'],
+              normalised_weights_per_genre['electronic'],
+              normalised_weights_per_genre['country_and_folk'],
+              num_events_per_genre['pop'],
+              num_events_per_genre['rock'],
+              num_events_per_genre['hip_hop'],
+              num_events_per_genre['rnb'],
+              num_events_per_genre['classical_and_jazz'],
+              num_events_per_genre['electronic'],
+              num_events_per_genre['country_and_folk'],
+              num_events_in_county
+              )
+
+    cursor.execute(query, values)
+    db.commit()

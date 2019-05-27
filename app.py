@@ -2,7 +2,6 @@ from flask import Flask
 from flask_mysqldb import MySQL
 from flask import render_template, request, jsonify
 import configparser
-import simplejson as json
 import os
 app = Flask(__name__)
 
