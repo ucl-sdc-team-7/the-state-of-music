@@ -52,9 +52,13 @@ function getStateLines() {
 function county_mouseover(e) {
   var layer = e.target;
   if (layer.feature.properties.value) {
+    layer.bringToFront();
     layer.setStyle({
-      fillOpacity: 1
+      fillOpacity: 1,
+      color: "#fff",
+      weight: 2
     });
+
     info.update(layer.feature.properties)
   }
 }
@@ -62,7 +66,9 @@ function county_mouseover(e) {
 function county_mouseout(e) {
   var layer = e.target;
   layer.setStyle({
-    fillOpacity: 0.7
+    fillOpacity: 0.7,
+    color: "#ddd",
+    weight: 1
   });
   info.update()
 }

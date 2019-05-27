@@ -58,7 +58,7 @@ function getColor(d,genre){
   if(d!=0){
     return GENRES[genre].color
   } else {
-    return "#ddd"
+    return "#555a66"
   }
 }
 
