@@ -36,7 +36,7 @@ venueInfo.onAdd = function(map) {
 
 venueInfo.update = function(props) {
   if (current_genre == 'top') {
-    this._div.innerHTML = (props ? "<h4>" + props.venue + "</h4>" +
+      this._div.innerHTML = (props ? "<h4 class='titleCase'>" + props.venue + "</h4>" +
       "<table><tr><td> Top Genre:</td><td class='titleCase'>" + props.dom_genre_label + "</td></tr>" +
       "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>" +
       "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>" + props.pop_num + "</td></tr>" +
@@ -171,11 +171,9 @@ usVenues.draw = function(genre) {
   d3.json(request_url, function(error, d) {
     if (error) console.log(error);
     data = d['data']
-
-    if (genre == "top") {
-      for (i in data) {
-        data[i].dom_genre_label = (GENRES[data[i].dom_genre]["label"])
-      }
+    for (i in data){
+      if (data[i].dom_genre) {
+      data[i].dom_genre_label = (GENRES[data[i].dom_genre]["label"])}
     }
 
     var venue_geo = makegeoJSON(data)

@@ -62,14 +62,18 @@ stats.top = function(genre) {
         data.push(max_genres[i])
       }
     }
-    
+
     if (data.length == 1) {
       d3.selectAll("svg#stats > *").remove();
       $("#stats-text").html("<small>Only " + data[0].name + " is playing " + data[0].genre + "this month.</small>");
-    } else if (data.length == 0) {
+    }
+
+    else if (data.length == 0) {
       d3.selectAll("svg#stats > *").remove();
       $("#stats-text").html("<small>Noone is playing this genre this month.</small>");
-    } else if (data.length > 1) {
+    }
+
+    else if (data.length > 1) {
 
       //creating svg object
       const chart = d3.select("#displayStats").select("svg")

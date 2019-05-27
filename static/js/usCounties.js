@@ -1,3 +1,4 @@
+
 // initializing county map
 var countyMap = L.map('countymap')
 
@@ -23,29 +24,30 @@ info.onAdd = function(map) {
   return this._div;
 }
 
-info.update = function(props, infoType) {
+//used by later function and second popup
+var maxRank = 0;
+
+info.update = function(props,infoType) {
   if (infoType == 'all') {
     this._div.innerHTML = (props ? "<h4>" + props.NAME + " " + props.LSAD + " (" + props.state_abbr + ")" + "</h4>" +
       "<table><tr><td> Top Genre:</td><td class='titleCase'>" + props.dom_genre + "</td></tr>" +
-      "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>" +
-      "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>" + props.num.pop + "</td></tr>" +
-      "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>" + props.num.rock + "</td></tr>" +
-      "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>" + props.num.hip_hop + "</td></tr>" +
-      "<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>" + props.num.rnb + "</td></tr>" +
-      "<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>" + props.num.classical_and_jazz + "</td></tr>" +
-      "<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>" + props.num.electronic + "</td></tr>" +
-      "<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>" + props.num.country_and_folk + "</td></tr>" +
-      "</table>" +
-      "<small>(click to zoom)</small>" :
-      '<h4>Hover over a county</h4>')
-  } else {
-    this._div.innerHTML = (props ? "<h4>" + props.NAME + " " + props.LSAD + " (" + props.state_abbr + ")" + "</h4>" +
-      "<table><tr><th>Rank:</th><td>" + "x" + " out of x</td></tr>" +
-      "<th>Number of upcoming " + GENRES[current_genre].label + " shows</th><td>" + props.num + "</td></table>" +
-      "<small>(click to zoom)</small>" :
-      '<h4>Hover over a county</h4>')
-  };
-}
+      "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
+      "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>"+props.num.pop+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>"+props.num.rock+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>"+props.num.hip_hop+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>"+props.num.rnb+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>"+props.num.classical_and_jazz+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>"+props.num.electronic+"</td></tr>"+
+      "<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>"+props.num.country_and_folk+"</td></tr>"+
+            "</table>" +
+            "<small>(click to zoom)</small>"
+      : '<h4>Hover over a county</h4>')}
+      else {this._div.innerHTML = (props ? "<h4>" + props.NAME + " " + props.LSAD + " (" + props.state_abbr + ")" + "</h4>" +
+      "<table><tr><th>Rank:</th><td>" + props.rank_label + " out of "+ maxRank +"</td></tr>"+
+"<th>Number of upcoming "+ GENRES[current_genre].label +" shows</th><td>"+ props.num +"</td></table>" +
+      "<small>(click to zoom)</small>"
+      :'<h4>Hover over a county</h4>')};
+    }
 
 // defining style for state boundaries
 function state_style() {
@@ -112,21 +114,24 @@ function removeLayers() {
 }
 
 
-function zoomToCity(e, genre) {
+function zoomToCity(e) {
   genre = current_genre
-  current_county = e.target.feature.properties.NAME
-
+  current_county = e.target.feature.properties.NAME;
   countyMap.fitBounds(e.target.getBounds());
   countyMap.removeControl(info)
 
   removeLayers()
   d3.selectAll("svg#stats > *").remove();
-  usVenues.draw(genre)
+  usVenues.draw(current_genre)
   venueInfo.addTo(countyMap)
   if(genre!="top"){
     stats.draw(genre)
   } else {stats.top("top")}
   level = 'venue'
+  updateInfoBox(current_county);
+  //this change to current_state has been added so that if the user clicks a county in  a
+  //different state to their original choice, when they go back it will zoom out to the new one
+  current_state = e.target.feature.properties.state_abbr;
 }
 
 //'Go Back' button
@@ -136,14 +141,14 @@ var button = new L.Control.Button('Go back', {
 button.addTo(countyMap);
 button.on('click', function() {
   if (level == 'venue') {
-    //this is taken from uStates.js - could be turned into a seperate function used by both for efficiency
-    var state_abbr = 'MA';
+  //this is taken from uStates.js - could be turned into a seperate function used by both for efficiency
+    var state_abbr = current_state;
     var state_bbox = get_state_bbox(state_abbr);
-    countyMap.removeControl(venueInfo);
+    countyMap.removeControl(venueInfo)
     usCounties.draw(state_bbox, current_genre); //function that draws leaflet
     stats.draw(current_genre)
-    current_state = state_abbr;
-    level = 'county';;
+    level = 'county';
+    updateInfoBox(current_state)
   } else {
     console.log("Go to states")
   }
@@ -214,6 +219,7 @@ function drawLayers(genre) {
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
+    test = data
 
     for (var i = 0; i < data.length; i++) {
       var counties_geo_index = counties_geo.features.findIndex(function(f) {
@@ -241,7 +247,15 @@ function drawLayers(genre) {
             };
         } else {
           counties_geo.features[counties_geo_index].properties.value = data[i].ranking;
-          //if it's a single genre, it passes a single integer instead
+          //adding a rank label (the value field is used for colouring polys and so can't be edited)
+          //since we can't target props inside the wider popup function this is a work around
+          for(key in data) {
+              if(data[key].ranking > maxRank) {
+                maxRank = data[key].ranking;};}
+          maxRank=maxRank-1;
+          if (data[i].ranking > maxRank) {counties_geo.features[counties_geo_index].properties.rank_label = 0}
+          else {counties_geo.features[counties_geo_index].properties.rank_label = data[i].ranking};
+          //if view is single genre, it passes a single integer instead
           var numField
           numGenre = genre+"_num";
           numField = data[i][numGenre];

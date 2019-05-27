@@ -211,6 +211,7 @@ uStates.draw = function(genre) {
           } else { stats.top("top")}
             current_state = state_abbr;
             level = 'county';
+            updateInfoBox(current_state);
           });
       });
   });
