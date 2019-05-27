@@ -17,31 +17,41 @@ function capitalizeFirstLetter(string) {
 }
 
 function updateInfoBox(geog) {
+//this function updates the grey box
+//the geog argument passes it venues or counties as required
+//global variables for genre and the map level are counties_geo_index
+//the title is built from two strings, one for genre and one for geography
 var gen_text
 var geo_text
-if (current_genre == 'top') {
-  gen_text = 'All genres'
+//genre component
+if (current_genre == "top") {
+  gen_text = 'All genres';
+  gen_text_2 = 'each genre';
 }
 else {
-  gen_text = GENRES[current_genre].label
-  gen_text = capitalizeFirstLetter(gen_text)
+  gen_text = GENRES[current_genre].label;
+  gen_text_2 = gen_text;
+  gen_text = capitalizeFirstLetter(gen_text);
 }
-
+//geographical component
 if (geo_level == 'state') {
-  geo_text = 'at state level'
+  geo_text = 'at state level';
+  geo_text_2 = 'states';
 }
 else if (geo_level == 'county') {
   for (i = 0; i < 51; i++) {
   if (states_geo.features[i].properties.abbr == geog) {
     geo_text = states_geo.features[i].properties.name_2;
   }}
-  geo_text = 'in '+geo_text
+  geo_text = 'in '+geo_text;
+  geo_text_2 = 'counties';
 }
 else if (geo_level == 'venue') {
   geo_text = 'in '+geog;
+  geo_text_2 = 'venues';
 }
-console.log(gen_text + " " + geo_text);
 $("#titleGenre").html(gen_text + " " + geo_text);
+$("#displayStatsTitle").html("Which "+geo_text_2+" feel the strongest about "+gen_text_2+"?")
 }
 
 //Update data section (Called from the onclick)
@@ -110,11 +120,14 @@ function updatelogo() {
 
       // adding top genre stats
       stats.draw("top");
+      //updating infoBox and ensuring venue popup has been removed
+      updateInfoBox();
+      countyMap.removeControl(venueInfo)
 
       // $("#titleGenre").html("music");
-      document.documentElement.style.setProperty('--displayInfo-color', "#888b94");
+      //document.documentElement.style.setProperty('--displayInfo-color', "#888b94");
       // $("#titleCategory").html("The most popular types of live music")
-      document.documentElement.style.setProperty('--displayInfo-text-color', "#FFFFFF");
+      //document.documentElement.style.setProperty('--displayInfo-text-color', "#FFFFFF");
       //$("#displayStatsTitle").html("Which states feel the strongest about each genre?");
     });
 }

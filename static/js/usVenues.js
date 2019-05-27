@@ -36,7 +36,7 @@ venueInfo.onAdd = function(map) {
 
 venueInfo.update = function(props) {
   if (current_genre == 'top') {
-      this._div.innerHTML = (props ? "<h4>" + props.venue + "</h4>" +
+      this._div.innerHTML = (props ? "<h4 class='titleCase'>" + props.venue + "</h4>" +
       "<table><tr><td> Top Genre:</td><td class='titleCase'>" + props.dom_genre_label + "</td></tr>" +
       "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
       "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>"+props.pop_num+"</td></tr>"+
