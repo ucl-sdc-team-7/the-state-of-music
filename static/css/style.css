@@ -73,7 +73,7 @@ html, body, {
   shape-rendering: crispEdges;
 }
 
-.bar-text {
+.bar-text, .axis-text {
   font-family: 'Roboto', sans-serif;
   font-size: 10px;
 }

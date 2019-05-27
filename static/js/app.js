@@ -1,6 +1,6 @@
 $("#top").addClass("selected")
 uStates.draw("top")
-stats.top()
+stats.top("top")
 
 function updateInfoBox(label) {
   $("#titleGenre").html(label);
@@ -34,7 +34,7 @@ function updateData() {
       d3.selectAll("svg#stats > *").remove();
 
       if(genre_id == "top") {
-        stats.top()
+        stats.top("top")
       }
       // adding new maps depending on geo_level
       if (geo_level == "state") {

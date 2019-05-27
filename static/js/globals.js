@@ -30,4 +30,6 @@ const GENRES = {
 };
 
 var geo_level = "state";
-var current_genre = "top"; 
+var current_genre = "top";
+var current_state = "AL";
+var current_county = "Escambia";
