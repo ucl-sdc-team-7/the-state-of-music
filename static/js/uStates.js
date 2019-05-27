@@ -123,7 +123,6 @@ uStates.draw = function(genre) {
                 "<small>(click to zoom)</small>")
             .style("left", (d3.event.pageX - 345) + "px")
             .style("top", (d3.event.pageY - 120) + "px");
-
         }
 
         //tooltip for all genres
@@ -197,6 +196,7 @@ uStates.draw = function(genre) {
             stats.draw(current_genre)
             current_state = state_abbr;
             level = 'county';
+            updateInfoBox(current_state);
           });
       });
   });

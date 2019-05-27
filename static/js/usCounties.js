@@ -70,7 +70,7 @@ function getStateLines() {
 
 function county_mouseover(e) {
   var layer = e.target;
-  //console.log(layer.feature.properties)
+  //console.log(layer.feature.properties);
   layer.setStyle({
     fillOpacity: 1
   });
@@ -102,20 +102,22 @@ function removeLayers() {
 }
 
 
-function zoomToCity(e, genre) {
-  genre = current_genre;
+function zoomToCity(e) {
+  current_county = e.target.feature.properties.NAME;
   countyMap.fitBounds(e.target.getBounds());
   countyMap.removeControl(info)
 
   removeLayers()
   d3.selectAll("svg#stats > *").remove();
-  usVenues.draw(genre)
+  usVenues.draw(current_genre)
   venueInfo.addTo(countyMap)
-  stats.draw(genre)
+  stats.draw(current_genre)
   level = 'venue';
+  updateInfoBox(current_county);
   //this change to current_state has been added so that if the user clicks a county in  a
   //different state to their original choice, when they go back it will zoom out to the new one
   current_state = e.target.feature.properties.state_abbr;
+
 }
 
 //'Go Back' button
@@ -124,14 +126,15 @@ button.addTo(countyMap);
 button.on('click', function () {
   if (level == 'venue') {
   //this is taken from uStates.js - could be turned into a seperate function used by both for efficiency
-  var state_abbr = current_state;
-  var state_bbox = get_state_bbox(state_abbr);
-  countyMap.removeControl(venueInfo)
-  usCounties.draw(state_bbox, current_genre); //function that draws leaflet
-  stats.draw(current_genre)
-  level = 'county';;
+    var state_abbr = current_state;
+    var state_bbox = get_state_bbox(state_abbr);
+    countyMap.removeControl(venueInfo)
+    usCounties.draw(state_bbox, current_genre); //function that draws leaflet
+    stats.draw(current_genre)
+    level = 'county';
+    updateInfoBox(current_state)
   } else {
-  console.log("Go to states")
+    console.log("Go to states")
   }
 });
 
