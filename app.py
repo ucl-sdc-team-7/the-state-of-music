@@ -2,7 +2,6 @@ from flask import Flask
 from flask_mysqldb import MySQL
 from flask import render_template, request, jsonify
 import configparser
-import simplejson as json
 import os
 app = Flask(__name__)
 
@@ -41,18 +40,13 @@ def get_states_genres():
     cur.execute(select_query)
     data = cur.fetchall()
 
-    index_no_events = 0
     for index, state in enumerate(data):
         if state.get('dom_genre'):
             state['dom_genre'] = state['dom_genre'].split("/")[0]
         else:
             state['value'] = state[genre_column]
             del state[genre_column]
-            if (state['value'] == 0):
-                if index_no_events == 0:
-                    index_no_events = index
-                state['ranking'] = index_no_events
-            else:
+            if (state['value'] != 0):
                 state['ranking'] = index + 1
 
     return jsonify(data=data)
@@ -74,18 +68,13 @@ def get_counties_genres():
     cur.execute(select_query)
     data = cur.fetchall()
 
-    index_no_events = 0
     for index, county in enumerate(data):
         if county.get('dom_genre'):
             county['dom_genre'] = county['dom_genre'].split("/")[0]
         else:
             county['value'] = county[genre_column]
             del county[genre_column]
-            if (county['value'] == 0):
-                if index_no_events == 0:
-                    index_no_events = index
-                county['ranking'] = index_no_events
-            else:
+            if (county['value'] != 0):
                 county['ranking'] = index + 1
 
     return jsonify(data=data)
@@ -107,18 +96,13 @@ def get_venues_genres():
     cur.execute(select_query)
     data = cur.fetchall()
 
-    index_no_events = 0
     for index, venue in enumerate(data):
         if venue.get('dom_genre'):
             venue['dom_genre'] = venue['dom_genre'].split("/")[0]
         else:
             venue['value'] = venue[genre_column]
             del venue[genre_column]
-            if (venue['value'] == 0):
-                if index_no_events == 0:
-                    index_no_events = index
-                venue['ranking'] = index_no_events
-            else:
+            if (venue['value'] != 0):
                 venue['ranking'] = index + 1
 
     return jsonify(data=data)
