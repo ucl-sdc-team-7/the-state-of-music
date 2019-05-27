@@ -36,37 +36,34 @@ venueInfo.onAdd = function(map) {
 
 venueInfo.update = function(props) {
   if (current_genre == 'top') {
-      this._div.innerHTML = (props ? "<h4>" + props.venue + "</h4>" +
+    this._div.innerHTML = (props ? "<h4>" + props.venue + "</h4>" +
       "<table><tr><td> Top Genre:</td><td class='titleCase'>" + props.dom_genre_label + "</td></tr>" +
-      "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
-      "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>"+props.pop_num+"</td></tr>"+
-      "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>"+props.rock_num+"</td></tr>"+
-      "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>"+props.hip_hop_num+"</td></tr>"+
-      "<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>"+props.rnb_num+"</td></tr>"+
-      "<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>"+props.classical_and_jazz_num+"</td></tr>"+
-      "<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>"+props.electronic_num+"</td></tr>"+
-      "<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>"+props.country_and_folk_num+"</td></tr>"+
-            "</table>"
-      : '<h4>Hover over a venue</h4>')}
-      else {this._div.innerHTML = (props ? "<h4>" + props.venue + "</h4>" +
-"<table><th>Number of upcoming "+ GENRES[current_genre].label +" shows </th><td> </td><td>"+ props.value +"</td></table>"
-      :'<h4>Hover over a venue</h4>')};
-    }
+      "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>" +
+      "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>" + props.pop_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>" + props.rock_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>" + props.hip_hop_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>" + props.rnb_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>" + props.classical_and_jazz_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>" + props.electronic_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>" + props.country_and_folk_num + "</td></tr>" +
+      "</table>" :
+      '<h4>Hover over a venue</h4>')
+  } else {
+    this._div.innerHTML = (props ? "<h4>" + props.venue + "</h4>" +
+      "<table><th>Number of upcoming " + GENRES[current_genre].label + " shows </th><td> </td><td>" + props.value + "</td></table>" :
+      '<h4>Hover over a venue</h4>')
+  };
+}
 //end of infobox
 
 function venue_mouseover(e) {
   var layer = e.target;
-  //layer.setStyle({
-  //  fillOpacity: 1
-  //});
+
   venueInfo.update(layer.feature.properties);
 }
 
 function venue_mouseout(e) {
   var layer = e.target;
-  //layer.setStyle({
-  //  fillOpacity: 0.7
-  //});
   venueInfo.update()
 }
 
@@ -105,6 +102,13 @@ function onEachFeatureClosure(genre) {
   }
 }
 
+function getColor(d, genre) {
+  if (d != 0) {
+    return GENRES[genre].color
+  } else {
+    return "#555a66"
+  }
+}
 
 function getMarkers(data, genre) {
 
@@ -112,12 +116,27 @@ function getMarkers(data, genre) {
 
     pointToLayer: function(feature, latlng) {
       if (genre != "top") {
+
+        function getMax(data) {
+          var max = -10000000;
+          var min = 10000000;
+          for (var i = 0; i < data.length; i++) {
+            max = Math.max(data[i].properties.value, max);
+            if (data[i].properties.value != 0) {
+              min = Math.min(data[i].properties.value, min);
+            }
+          }
+          return [min, max];
+        }
+        var val_range = getMax(data.features);
+
         var geojsonMarkerOptions = {
           radius: 10,
-          color: GENRES[genre].color,
-          fillColor: GENRES[genre].color,
+          color: getColor(feature.properties.value, genre),
+          fillColor: getColor(feature.properties.value, genre),
+
           weight: 2,
-          fillOpacity: marker_opacity(feature.properties.value),
+          fillOpacity: marker_opacity(feature.properties.value, val_range[0], val_range[1]),
         }
       } else {
         var geojsonMarkerOptions = {
@@ -144,14 +163,19 @@ usVenues.draw = function(genre) {
   geo_level = "venue"
   removeLayers()
 
-  const params = jQuery.param({ genre: genre });
+  const params = jQuery.param({
+    genre: genre
+  });
   var request_url = "venues?" + params;
 
   d3.json(request_url, function(error, d) {
     if (error) console.log(error);
     data = d['data']
-    for (i in data){
-      data[i].dom_genre_label = (GENRES[data[i].dom_genre]["label"])
+
+    if (genre == "top") {
+      for (i in data) {
+        data[i].dom_genre_label = (GENRES[data[i].dom_genre]["label"])
+      }
     }
 
     var venue_geo = makegeoJSON(data)

@@ -27,7 +27,9 @@ const uStates = {};
 uStates.draw = function(genre) {
 
   //Loading in genre data
-  const params = jQuery.param({ genre: genre });
+  const params = jQuery.param({
+    genre: genre
+  });
 
   var request_url = "states?" + params;
   d3.json(request_url, function(error, data) {
@@ -99,9 +101,9 @@ uStates.draw = function(genre) {
 
         //tooptip for top genre page
         function mouseOver_topgenre(d) {
-          d3.select(this).style("opacity", 1)
           var top_genre = ""
           if (d.properties.value) {
+            d3.select(this).style("opacity", 1)
             top_genre = GENRES[d.properties.value]["label"];
           } else {top_genre = "none"}
           d3.select("#tooltip")
@@ -124,10 +126,12 @@ uStates.draw = function(genre) {
             .style("left", (d3.event.pageX - 345) + "px")
             .style("top", (d3.event.pageY - 120) + "px");
 
-        }
+          }
+    
 
         //tooltip for all genres
         function mouseOver_genre(d) {
+          if (d.properties.value) {
           d3.select(this).style("opacity", 1)
           d3.select("#tooltip")
             .attr("class", "toolTip")
@@ -140,10 +144,11 @@ uStates.draw = function(genre) {
             "<small>(click to zoom)</small>")
             .style("left", (d3.event.pageX - 345) + "px")
             .style("top", (d3.event.pageY - 120) + "px");
+          }
         }
 
         function mouseOut() {
-          d3.selectAll(".map-path").style('opacity',0.7)
+          d3.selectAll(".map-path").style('opacity', 0.7)
           d3.select("#tooltip").transition().duration(500).style("opacity", 0);
         }
 
@@ -155,7 +160,13 @@ uStates.draw = function(genre) {
           .append("path")
           .attr("class", "map-path")
           .attr("d", map_path)
-          .style("stroke", "#fff")
+          .style("stroke", function(d) {
+            if (d.properties.value) {
+              return "#fff"
+            } else {
+              return "#ddd"
+            }
+          })
           .style("stroke-width", "1")
           .style("opacity", 0.7);
 
@@ -175,7 +186,7 @@ uStates.draw = function(genre) {
           if (genre != "top") {
             map.on("mouseover", mouseOver_genre).on("mouseout", mouseOut)
               .style("fill", function(d) {
-                if (d.properties.value){
+                if (d.properties.value) {
                   return color_genre(d.properties.value)
                 } else {
                   return "#555a66";
