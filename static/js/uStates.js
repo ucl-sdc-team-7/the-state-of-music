@@ -1,3 +1,5 @@
+var level = 'state'
+
 //sets dimentions
 const map_margin = {
     top: 0,
@@ -67,6 +69,21 @@ uStates.draw = function(genre) {
             value = data[i].ranking;
           }
 
+          //I'm keeping this section of code seperate for now to make working it easier
+          //This finds the number of shows and passes it on
+          //In single genre view it just passes the number of shows for that genre
+          //In the top genre view it stores a dictionary of all numbers for each genre
+          if (genre =='top') {
+            var numField = {}
+            for (genreCat in GENRES) {
+              numGenre = genreCat+"_num";
+              numField[genreCat]=[data[i][numGenre]];
+              };
+            } else {
+              var numField
+              numGenre = genre+"_num";
+              numField = data[i][numGenre];
+              }
 
           // Finding the corresponding state inside the JSON
           for (var j = 0; j < states.length; j++) {
@@ -74,6 +91,7 @@ uStates.draw = function(genre) {
             if (dataState == jsonState) {
               // Copying all genre scores into the JSON
               states[j].properties.value = value;
+              states[j].properties.num = numField;
               // Stop looking through the JSON
               break;
             };
@@ -87,45 +105,45 @@ uStates.draw = function(genre) {
           if (d.properties.value) {
             d3.select(this).style("opacity", 1)
             top_genre = GENRES[d.properties.value]["label"];
-
-            d3.select("#tooltip")
-              .attr("class", "toolTip")
-              .transition().duration(300)
-              .style("opacity", 0.8);
-            d3.select("#tooltip").html(
-                "<h4>" + d.properties.name + " (" + d.properties.abbr + ")" + "</h4>" +
-                "<table><tr><td> Top Genre:</td><td>" + top_genre + "</td></tr>" +
-                "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>" +
-                "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>x</td></tr>" +
-                "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>x</td></tr>" +
-                "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>x</td></tr>" +
-                "<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>x</td></tr>" +
-                "<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>x</td></tr>" +
-                "<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>x</td></tr>" +
-                "<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>x</td></tr>" +
+          } else {top_genre = "none"}
+          d3.select("#tooltip")
+            .attr("class", "toolTip")
+            .transition().duration(300)
+            .style("opacity", 0.8);
+          d3.select("#tooltip").html(
+          "<h4>" + d.properties.name + " ("+d.properties.abbr+")" + "</h4>" +
+          "<table><tr><td> Top Genre:</td><td class='titleCase'>" + top_genre + "</td></tr>" +
+  			  "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
+  			  "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>"+d.properties.num.pop+"</td></tr>"+
+  			  "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>"+d.properties.num.rock+"</td></tr>"+
+  			  "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>"+d.properties.num.hip_hop+"</td></tr>"+
+  			  "<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>"+d.properties.num.rnb+"</td></tr>"+
+  			  "<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>"+d.properties.num.classical_and_jazz+"</td></tr>"+
+  			  "<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>"+d.properties.num.electronic+"</td></tr>"+
+  			  "<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>"+d.properties.num.country_and_folk+"</td></tr>"+
                 "</table>" +
                 "<small>(click to zoom)</small>")
-              .style("left", (d3.event.pageX - 345) + "px")
-              .style("top", (d3.event.pageY - 120) + "px");
+            .style("left", (d3.event.pageX - 345) + "px")
+            .style("top", (d3.event.pageY - 120) + "px");
+
           }
-        }
+    
 
         //tooltip for all genres
         function mouseOver_genre(d) {
           if (d.properties.value) {
-            d3.select(this).style("opacity", 1)
-
-            d3.select("#tooltip")
-              .attr("class", "toolTip")
-              .transition().duration(300)
-              .style("opacity", 0.8);
-            d3.select("#tooltip").html(
-                "<h4 class='state-head'>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
-                "<table><tr><th>Rank:</th><td>" + (d.properties.value) + " out of 51</td></tr>" +
-                "<th>Number of upcoming " + GENRES[genre].label + " shows</th><td>x</td></table>" +
-                "<small>(click to zoom)</small>")
-              .style("left", (d3.event.pageX - 345) + "px")
-              .style("top", (d3.event.pageY - 120) + "px");
+          d3.select(this).style("opacity", 1)
+          d3.select("#tooltip")
+            .attr("class", "toolTip")
+            .transition().duration(300)
+            .style("opacity", 0.8);
+          d3.select("#tooltip").html(
+            "<h4 class='state-head'>" + d.properties.name + " (" + d.properties.abbr + ")</h4>" +
+            "<table><tr><th>Rank:</th><td>" + (d.properties.value) + " out of 51</td></tr>"+
+      "<th>Number of upcoming "+ GENRES[genre].label +" shows</th><td>"+ d.properties.num +"</td></table>" +
+            "<small>(click to zoom)</small>")
+            .style("left", (d3.event.pageX - 345) + "px")
+            .style("top", (d3.event.pageY - 120) + "px");
           }
         }
 
@@ -189,6 +207,7 @@ uStates.draw = function(genre) {
             usCounties.draw(state_bbox, current_genre); //function that draws leaflet
             stats.draw(current_genre)
             current_state = state_abbr;
+            level = 'county';
           });
       });
   });

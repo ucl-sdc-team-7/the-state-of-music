@@ -179,6 +179,10 @@ th {
 	text-align: left;
 }
 
+.titleCase {
+  text-transform: capitalize;
+}
+
 .legend-color {
   float: left;
   width: 10px;
@@ -213,4 +217,10 @@ th {
 
 .country_folk {
 	background: #56371b;
+}
+
+/* viewport width fix */
+
+.row {
+  margin-right: 0;
 }

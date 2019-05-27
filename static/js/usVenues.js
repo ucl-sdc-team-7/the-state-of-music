@@ -25,9 +25,57 @@ function makegeoJSON(data) {
   return geoJSON;
 }
 
+var venueInfo = L.control();
+
+//adding venue level info box
+venueInfo.onAdd = function(map) {
+  this._div = L.DomUtil.create('div', 'county-info');
+  this.update();
+  return this._div;
+}
+
+venueInfo.update = function(props) {
+  if (current_genre == 'top') {
+    this._div.innerHTML = (props ? "<h4>" + props.venue + "</h4>" +
+      "<table><tr><td> Top Genre:</td><td class='titleCase'>" + props.dom_genre_label + "</td></tr>" +
+      "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>" +
+      "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>" + props.pop_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>" + props.rock_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>" + props.hip_hop_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color rnb'></div>R&B</td><td>" + props.rnb_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color classical_jazz'></div>Classical & Jazz</td><td>" + props.classical_and_jazz_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color electronic'></div>Electronic</td><td>" + props.electronic_num + "</td></tr>" +
+      "<tr><td class='left'><div class='legend-color country_folk'></div>Country & Folk</td><td>" + props.country_and_folk_num + "</td></tr>" +
+      "</table>" :
+      '<h4>Hover over a venue</h4>')
+  } else {
+    this._div.innerHTML = (props ? "<h4>" + props.venue + "</h4>" +
+      "<table><th>Number of upcoming " + GENRES[current_genre].label + " shows </th><td> </td><td>" + props.value + "</td></table>" :
+      '<h4>Hover over a venue</h4>')
+  };
+}
+//end of infobox
+
+function venue_mouseover(e) {
+  var layer = e.target;
+
+  venueInfo.update(layer.feature.properties);
+}
+
+function venue_mouseout(e) {
+  var layer = e.target;
+  venueInfo.update()
+}
+
+
 function onEachFeatureClosure(genre) {
   return function onEachFeature_venue(feature, layer) {
     layer.myTag = "myVenues"
+
+    layer.on({
+      mouseover: venue_mouseover,
+      mouseout: venue_mouseout,
+    });
 
     var label = (genre == 'top') ? "Top Genre: " : GENRES[genre].label + ": ";
 
@@ -42,20 +90,20 @@ function onEachFeatureClosure(genre) {
       value = feature.properties.value + " " + GENRES[genre].label + " shows playing at this venue";
     }
 
-
-    var popupVenue = "<h4>" + feature.properties.venue + "</h4>" +
-      "<table><tr><td>" + label + "</td><td>" + value + "</td></tr>" +
-      "</table>" +
-      "<small>(click to zoom)</small>"
-
-    layer.bindPopup(popupVenue, {
-      'className': 'venue-info'
-    }, );
+    //removed as now using info box
+    // var popupVenue = "<h4>" + feature.properties.venue + "</h4>" +
+    //   "<table><tr><td>" + label + "</td><td>" + value + "</td></tr>" +
+    //   "</table>" +
+    //   "<small>(click to zoom)</small>"
+    //
+    // layer.bindPopup(popupVenue, {
+    //   'className': 'venue-info'
+    // }, );
   }
 }
 
-function getColor(d,genre){
-  if(d!=0){
+function getColor(d, genre) {
+  if (d != 0) {
     return GENRES[genre].color
   } else {
     return "#555a66"
@@ -68,17 +116,17 @@ function getMarkers(data, genre) {
 
     pointToLayer: function(feature, latlng) {
       if (genre != "top") {
-        
+
         function getMax(data) {
           var max = -10000000;
           var min = 10000000;
-          for (var i=0 ; i<data.length ; i++) {
+          for (var i = 0; i < data.length; i++) {
             max = Math.max(data[i].properties.value, max);
-            if(data[i].properties.value != 0){
+            if (data[i].properties.value != 0) {
               min = Math.min(data[i].properties.value, min);
             }
           }
-          return [min,max];
+          return [min, max];
         }
         var val_range = getMax(data.features);
 
@@ -88,7 +136,7 @@ function getMarkers(data, genre) {
           fillColor: getColor(feature.properties.value, genre),
 
           weight: 2,
-          fillOpacity: marker_opacity(feature.properties.value,val_range[0], val_range[1]),
+          fillOpacity: marker_opacity(feature.properties.value, val_range[0], val_range[1]),
         }
       } else {
         var geojsonMarkerOptions = {
@@ -115,15 +163,22 @@ usVenues.draw = function(genre) {
   geo_level = "venue"
   removeLayers()
 
-  const params = jQuery.param({ genre: genre });
+  const params = jQuery.param({
+    genre: genre
+  });
   var request_url = "venues?" + params;
 
   d3.json(request_url, function(error, d) {
     if (error) console.log(error);
     data = d['data']
 
-    var venue_geo = makegeoJSON(data)
+    if (genre == "top") {
+      for (i in data) {
+        data[i].dom_genre_label = (GENRES[data[i].dom_genre]["label"])
+      }
+    }
 
+    var venue_geo = makegeoJSON(data)
     var venues = getMarkers(venue_geo, genre)
     venues.addTo(countyMap)
 

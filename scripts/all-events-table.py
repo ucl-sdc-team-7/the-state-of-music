@@ -45,14 +45,14 @@ def load(extract_cursor, data_source, source_id, load_cursor):
         for genre in genres:
             genre_dict[genre] = eval(genre)
 
-        max = 0
+        max_genre = 0
         dom_genre = 'other'
 
         for genre in genre_dict:
-            if genre_dict[genre] > max and genre_dict[genre] != 0:
+            if genre_dict[genre] > max_genre and genre_dict[genre] != 0:
                 dom_genre = genre
-                max = genre_dict[genre]
-            elif genre_dict[genre] == max and max > 0:
+                max_genre = genre_dict[genre]
+            elif genre_dict[genre] == max_genre and max_genre > 0:
                 dom_genre = dom_genre + "/" + genre
 
         if (state and county) or (state == 'DC'):
@@ -60,9 +60,11 @@ def load(extract_cursor, data_source, source_id, load_cursor):
                     (source, source_id, venue, venue_lat, venue_long, state,
                     county, pop, rock, hip_hop, rnb, classical_and_jazz,
                     electronic, country_and_folk, dom_genre) VALUES
-                    (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
-            values = (source, source_id, venue_name, venue_lat, venue_long, state,
-                      county, pop, rock, hip_hop, rnb, classical_and_jazz, electronic,
+                    (%s, %s, %s, %s, %s, %s, %s, %s,
+                    %s, %s, %s, %s, %s, %s, %s);"""
+            values = (source, source_id, venue_name,
+                      venue_lat, venue_long, state, county,
+                      pop, rock, hip_hop, rnb, classical_and_jazz, electronic,
                       country_and_folk, dom_genre)
 
             load_cursor.execute(query, values)

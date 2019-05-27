@@ -49,16 +49,74 @@
 <!-- Tab panes -->
 	<div class="tab-content">
 		<div class="tab-pane container active" id="home">
-			<p> The state of music is a coursework presented by Group 7 - International Super Friends (Cleo Au, William Low, Pili Mayora, Richa Sud and Matthew Sutton) for UCL CASA's module CASA0009 Spatial Data Capture, Storage and Analysis.</p>
+			<div class='flowchart' id='flow'><img src="{{url_for('static',filename = 'images/flow.png')}}" width="100%"></div>
 			<p> The website utilises music performance information (name, event location and genre) extracted from <a href="https://developer.ticketmaster.com/products-and-docs/apis/getting-started/">ticketmaster's</a> and <a
 							href="https://www.eventbrite.com/platform/api">eventbrite's</a> API for the next 30 days. </p>
 			<p> The genre of playing artists were then match with the one classified by <a href="https://developer.spotify.com/documentation/web-api/">Spotify’s API</a> to ensure higher accuracy of the events' genre. </p>
 			<p> All events are then grouped by genre according to a dictionary created from web-scraping <a href="https://en.wikipedia.org/wiki/List_of_music_styles">the List of Music Styles in Wikipedia</a>.</p>
-			<p> Explaination of the normalisation method here... (from Matt) </p>
+			<p> Explaination of the normalisation method here </p>
 		</div>
 	<div class="tab-pane container fade" id="menu1">Our APIs can be accessed through the magic of the internet</div>
 
-	<div class="tab-pane container fade" id="menu2">Our team is great</div>
+	<div class="tab-pane container fade" id="menu2">
+						 <p>The state of music is a coursework presented by Group 7 - International Super Friends for
+							 <a href="https://www.ucl.ac.uk/bartlett/casa/">UCL CASA's</a> module CASA0009 Spatial Data Capture, Storage and Analysis.</p>
+							<p> Feel free to check our project on <a href="https://github.com/ucl-sdc-team-7/the-state-of-music"> Github</a>.</p>
+							 <table>
+          				<thead></thead>
+          				<tbody class="table">
+
+										<tr>
+										<td><div class='avatar' id='cleo'><img src="{{url_for('static',filename = 'images/cleo.jpeg')}}" width="100%"></div></td>
+										<td>
+											<a href="https://github.com/cleoau"><div class='github' id='cleogithub'> <img src="{{url_for('static',filename = 'images/github.png')}}" style="float: right;"></div></a>
+											<a href="https://www.linkedin.com/in/cleoau/"><div class='linkedin' id='cleolinkedin'> <img src="{{url_for('static',filename = 'images/linkedin.png')}}" style="float: right;"></div></a>
+											<a href="mailto:cleoau.1996@gmail.com">	<div class='email' id='cleomail'><img src="{{url_for('static',filename = 'images/email.png')}}" style="float: right;" ></div></a>
+											<b>Cleo Au</b><br><i>Team Secretary and Marketeer</i><p>Genre Grouping, User Experience, Content Management, Development Testing, Text Layout and Editing </p>
+										</td>
+									</tr>
+
+									<tr>
+									<td><div class='avatar' id='will'><img src="{{url_for('static',filename = 'images/will.jpeg')}}" width="100%"></div></td>
+									<td>
+										<a href="https://github.com/williamlow"><div class='github' id='willgithub'> <img src="{{url_for('static',filename = 'images/github.png')}}" style="float: right;"></div></a>
+										<a href="https://www.linkedin.com/in/william-low-19898174/"><div class='linkedin' id='willlinkedin'> <img src="{{url_for('static',filename = 'images/linkedin.png')}}" style="float: right;"></div></a>
+										<a href="mailto:william.d.low@gmail.com">	<div class='email' id='willmail'><img src="{{url_for('static',filename = 'images/email.png')}}" style="float: right;" ></div></a>
+										<b>William Low</b><br><i>Love to put things in boxes</i><p>Genre Grouping, User Experience, User Interface, Modal Page and Buttons, Tooltips Creation</p>
+									</td>
+								</tr>
+
+								<tr>
+								<td><div class='avatar' id='pili'><img src="{{url_for('static',filename = 'images/pili.jpeg')}}" width="100%"></div></td>
+								<td>
+									<a href="https://github.com/pilimayora"><div class='github' id='piligithub'> <img src="{{url_for('static',filename = 'images/github.png')}}" style="float: right;"></div></a>
+									<a href="https://www.linkedin.com/in/pili-mayora/"><div class='linkedin' id='pililinkedin'> <img src="{{url_for('static',filename = 'images/linkedin.png')}}" style="float: right;"></div></a>
+									<a href="mailto:pili.mayora@gmail.com">	<div class='email' id='pilimail'><img src="{{url_for('static',filename = 'images/email.png')}}" style="float: right;" ></div></a>
+									<b>Pili Mayora</b><br><i>Technical Intergration Wizard</i><p>Technical Intergration, API Management, Endpoint Creation, Trouble Shooting, User Interface, User Experience</p>
+								</td>
+							</tr>
+
+							<tr>
+							<td><div class='avatar' id='richa'><img src="{{url_for('static',filename = 'images/richa.jpeg')}}" width="100%"></div></td>
+							<td>
+								<a href="https://github.com/richa-sud"><div class='github' id='richagithub'> <img src="{{url_for('static',filename = 'images/github.png')}}" style="float: right;"></div></a>
+								<a href="https://www.linkedin.com/in/richa-sud-aab13397/"><div class='linkedin' id='richalinkedin'> <img src="{{url_for('static',filename = 'images/linkedin.png')}}" style="float: right;"></div></a>
+								<a href="mailto:richasud@gmail.com">	<div class='email' id='richamail'><img src="{{url_for('static',filename = 'images/email.png')}}" style="float: right;" ></div></a>
+								<b>Richa Sud</b><br><i>Grandmaster of User Interface</i><p>User Interface, Website Layout and Design, Map Creation, Barcharts</p>
+							</td>
+						</tr>
+
+						<tr>
+						<td><div class='avatar' id='matt'><img src="{{url_for('static',filename = 'images/matt.jpeg')}}" width="100%"></div></td>
+						<td>
+							<a href="https://github.com/nottuswehttam"><div class='github' id='mattgithub'> <img src="{{url_for('static',filename = 'images/github.png')}}" style="float: right;"></div></a>
+							<a href="mailto:ms0064a@alumni.american.edu">	<div class='email' id='mattmail'><img src="{{url_for('static',filename = 'images/email.png')}}" style="float: right;" ></div></a>
+							<b>Matthew Sutton</b><br><i>Resident American Geography Expert</i><p>Database Management, Data Cleaning, Data Normalisation, API Management, User Experience</p>
+						</td>
+					</tr>
+          				</tbody>
+      					</table>
+	</div>
 			</div>
 			</div>
 
@@ -201,6 +259,7 @@
 <script src="{{url_for('static',filename = 'libs/leaflet/dist/leaflet.js')}}"></script>
 <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
 <script src="{{url_for('static',filename = 'libs/leaflet-choropleth/dist/choropleth.js')}}"></script>
+<script src="{{url_for('static',filename = 'libs/L.Control.Button.js')}}"></script>
 
 <!-- global variables and helper functions -->
 <script src="{{url_for('static',filename = 'js/globals.js')}}"></script>
