@@ -1,3 +1,5 @@
+var level = 'state'
+
 //sets dimentions
 const map_margin = {
     top: 0,
@@ -31,7 +33,7 @@ uStates.draw = function(genre) {
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
     data = data['data']
-  
+
     /////////////////////////////////SETTING COLOUR RANGES/////////////////////////////////
 
     //setting colour range for genres
@@ -66,9 +68,9 @@ uStates.draw = function(genre) {
           }
 
           //I'm keeping this section of code seperate for now to make working it easier
-                    //This finds the number of shows and passes it on
-                    //In single genre view it just passes the number of shows for that genre
-                    //In the top genre view it stores a dictionary of all numbers for each genre
+          //This finds the number of shows and passes it on
+          //In single genre view it just passes the number of shows for that genre
+          //In the top genre view it stores a dictionary of all numbers for each genre
           if (genre =='top') {
             var numField = {}
             for (genreCat in GENRES) {
@@ -101,14 +103,14 @@ uStates.draw = function(genre) {
           var top_genre = ""
           if (d.properties.value) {
             top_genre = GENRES[d.properties.value]["label"];
-          }
+          } else {top_genre = "none"}
           d3.select("#tooltip")
             .attr("class", "toolTip")
             .transition().duration(300)
             .style("opacity", 0.8);
           d3.select("#tooltip").html(
           "<h4>" + d.properties.name + " ("+d.properties.abbr+")" + "</h4>" +
-          "<table><tr><td> Top Genre:</td><td>" + top_genre + "</td></tr>" +
+          "<table><tr><td> Top Genre:</td><td class='titleCase'>" + top_genre + "</td></tr>" +
   			  "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
   			  "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>"+d.properties.num.pop+"</td></tr>"+
   			  "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>"+d.properties.num.rock+"</td></tr>"+
@@ -132,7 +134,7 @@ uStates.draw = function(genre) {
             .transition().duration(300)
             .style("opacity", 0.8);
           d3.select("#tooltip").html(
-            "<h4 class='state-head'>" + d.properties.name + ", " + d.properties.abbr + "</h4>" +
+            "<h4 class='state-head'>" + d.properties.name + " (" + d.properties.abbr + ")</h4>" +
             "<table><tr><th>Rank:</th><td>" + (d.properties.value) + " out of 51</td></tr>"+
       "<th>Number of upcoming "+ GENRES[genre].label +" shows</th><td>"+ d.properties.num +"</td></table>" +
             "<small>(click to zoom)</small>")
@@ -194,6 +196,7 @@ uStates.draw = function(genre) {
             usCounties.draw(state_bbox, current_genre); //function that draws leaflet
             stats.draw(current_genre)
             current_state = state_abbr;
+            level = 'county';
           });
       });
   });
