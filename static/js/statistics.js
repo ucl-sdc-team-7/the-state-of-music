@@ -32,6 +32,7 @@ stats.draw = function(genre) {
     d = d.sort(function(a, b) {
       return a.ranking - b.ranking
     })
+    console.log(data)
 
     //finding top five states
     d = d.slice(0, 5).reverse();
