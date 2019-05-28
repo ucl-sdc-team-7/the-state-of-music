@@ -138,19 +138,32 @@ var button = new L.Control.Button('Go back', {
 });
 button.addTo(countyMap);
 button.on('click', function() {
-  if (level == 'venue') {
+  if (geo_level == 'venue') {
   //this is taken from uStates.js - could be turned into a seperate function used by both for efficiency
     var state_abbr = current_state;
     var state_bbox = get_state_bbox(state_abbr);
     countyMap.removeControl(venueInfo)
     usCounties.draw(state_bbox, current_genre); //function that draws leaflet
-    stats.draw(current_genre)
-    level = 'county';
+    geo_level = 'county';
     updateInfoBox(current_state)
   } else {
-    console.log("Go to states")
+    ////this is also adapated from uStates.js
+    // removing state map and statistics
+    d3.selectAll("svg#statesvg > *").remove();
+    d3.selectAll("svg#stats > *").remove();
+
+    // adding new maps depending on geo_level
+      $("#countymap").toggle();
+      geo_level = "state";
+      uStates.draw(current_genre);
+      updateInfoBox();
+    }
+    // adding top genre stats
+    stats.draw(current_genre);
+    //Ensuring venue popup has been removed
+    //countyMap.removeControl(venueInfo)
   }
-});
+);
 
 
 
