@@ -33,7 +33,7 @@ def get_states_genres():
     genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
     genre_num = genre + '_num' if genre != 'top' else 'pop_num, rock_num, hip_hop_num, rnb_num, classical_and_jazz_num, electronic_num, country_and_folk_num'
 
-    select_query = "SELECT state_code, state_name, state_abbr, " + \
+    select_query = "SELECT state_code, state_name, state_abbr, total_num, " + \
         genre_column + ", " + genre_num + " FROM state_level_data ORDER BY " + \
         genre_column + ' DESC;'
 
@@ -61,7 +61,7 @@ def get_counties_genres():
     genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
     genre_num = genre + '_num' if genre != 'top' else 'pop_num, rock_num, hip_hop_num, rnb_num, classical_and_jazz_num, electronic_num, country_and_folk_num'
 
-    select_query = "SELECT state_code, state_abbr, " + \
+    select_query = "SELECT state_code, state_abbr, total_num, " + \
         "county_code, county_name, " + genre_column + ", " + genre_num + \
         " FROM county_level_data ORDER BY " + genre_column + ' DESC;'
 

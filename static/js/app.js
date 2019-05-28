@@ -27,11 +27,13 @@ var geo_text
 if (current_genre == "top") {
   gen_text = 'All genres';
   gen_text_2 = 'each genre';
+  gen_sub_text = national_num;
 }
 else {
   gen_text = GENRES[current_genre].label;
   gen_text_2 = gen_text;
   gen_text = capitalizeFirstLetter(gen_text);
+  gen_sub_text = national_num + " " + gen_text_2
 }
 //geographical component
 if (geo_level == 'state') {
@@ -52,6 +54,8 @@ else if (geo_level == 'venue') {
 }
 $("#titleGenre").html(gen_text + " " + geo_text);
 $("#displayStatsTitle").html("Which "+geo_text_2+" feel the strongest about "+gen_text_2+"?")
+$("#subtitleGenre").html(gen_sub_text + " shows playing in the next 30 days")
+
 }
 
 //Update data section (Called from the onclick)
