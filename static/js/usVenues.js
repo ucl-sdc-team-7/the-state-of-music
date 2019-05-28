@@ -89,16 +89,6 @@ function onEachFeatureClosure(genre) {
     } else {
       value = feature.properties.value + " " + GENRES[genre].label + " shows playing at this venue";
     }
-
-    //removed as now using info box
-    // var popupVenue = "<h4>" + feature.properties.venue + "</h4>" +
-    //   "<table><tr><td>" + label + "</td><td>" + value + "</td></tr>" +
-    //   "</table>" +
-    //   "<small>(click to zoom)</small>"
-    //
-    // layer.bindPopup(popupVenue, {
-    //   'className': 'venue-info'
-    // }, );
   }
 }
 

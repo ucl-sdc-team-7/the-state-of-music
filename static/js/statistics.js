@@ -43,24 +43,24 @@ stats.draw = function(genre) {
       }
     }
 
-    if (data.length == 1) {
-
-      if (geo_level == "county") {
-        d3.selectAll("svg#stats > *").remove();
-        $("#stats-text").html("<small>Only " + data[0].county_name + " is playing this genre this month.</small>");
-      } else if (geo_level == "venue") {
-        d3.selectAll("svg#stats > *").remove();
-        $("#stats-text").html("<small>Only " + data[0].venue + " is playing this genre this month.</small>");
-      }
-    }
-
-    else if (data.length == 0) {
+    if (data.length == 0) {
+      $("stats-text").empty();
       d3.selectAll("svg#stats > *").remove();
-      $("#stats-text").html("<small>Noone is playing this genre this month.</small>");
-    }
-
-    else if (data.length > 1) {
-
+      if (geo_level == "county") {
+        $("#stats-text").html("<small>No upcoming " + GENRES[current_genre].label + " shows in " + current_state + " this month.</small>");
+      } else if (geo_level == "venue") {
+        $("#stats-text").html("<small>No upcoming " + GENRES[current_genre].label + " shows in " + current_county + " county this month.</small>");
+      }
+    } else if (data.length == 1) {
+      $("stats-text").empty();
+      d3.selectAll("svg#stats > *").remove();
+      if (geo_level == "county") {
+        $("#stats-text").html("<small>Only " + data[0].county_name + " county is playing " + GENRES[current_genre].label + " in " + current_state + " this month.</small>");
+      } else if (geo_level == "venue") {
+        $("#stats-text").html("<small>Only " + data[0].venue + " is playing " + GENRES[current_genre].label + " in " + current_county + " this month.</small>");
+      }
+    } else if (data.length > 1) {
+      $("#stats-text").empty();
       //creating svg object
       const chart = d3.select("#displayStats").select("svg")
 
