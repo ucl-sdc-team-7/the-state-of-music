@@ -56,7 +56,30 @@
 			<p> All events are then grouped by genre according to a dictionary created from web-scraping <a href="https://en.wikipedia.org/wiki/List_of_music_styles">the List of Music Styles in Wikipedia</a>.</p>
 			<p> Explaination of the normalisation method here </p>
 		</div>
-	<div class="tab-pane container fade" id="menu1">Our APIs can be accessed through the magic of the internet</div>
+	<div class="tab-pane container fade" id="menu1">
+		<div style="margin-top: 10px;">
+			<h3>The State of Music's Search API</h3>
+			<h4>Resource URL</h4>
+			<p><code>http://35.185.97.77/search</code></p>
+
+			<h4>Parameters</h4>
+			<ul>
+				<li><code>genre</code><span>: Filter by genre (ex: pop)</span></li>
+				<li><code>admin_level</code><span>: Filter by administrative level. Admin level 1: states; admin level 2: counties and parishes; admin level 3: venues.</span></li>
+				<li><code>state</code><span>: Filter by state (ex: CA)</span></li>
+				<li><code>county</code><span>: Filter by county (ex: San Francisco)</span></li>
+			</ul>
+
+			<h4>Examples</h4>
+			<p>Get music stats from all venues in San Francisco County, California: <code>/search?admin_level=3&state=CA&county=San%20Francisco</code></p>
+			<p>Get music stats for all counties playing pop in Nevada: <code>/search?genre=pop&admin_level=2&state=NV</code></p>
+			<p>Get aggregated music stats for the state of New York: <code>/search?admin_level=1&state=NY</code></p>
+
+			<hr />
+			<p>Use this API responsibly. We don't currently have rate limiting implemented; be nice.</p>
+
+		</div>
+	</div>
 
 	<div class="tab-pane container fade" id="menu2">
 						 <p>The state of music is a coursework presented by Group 7 - International Super Friends for
