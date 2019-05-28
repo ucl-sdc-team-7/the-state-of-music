@@ -36,27 +36,39 @@
 				<!-- Nav tabs -->
 	<ul class="nav nav-tabs">
 		<li class="nav-item">
-			<a class="nav-link active" data-toggle="tab" href="#home">How does this work?</a>
+			<a class="nav-link active" data-toggle="tab" href="#home">the Website</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" data-toggle="tab" href="#menu1">Using our API</a>
+			<a class="nav-link" data-toggle="tab" href="#menu1">the Methodology</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" data-toggle="tab" href="#menu2">Meet the team</a>
+			<a class="nav-link" data-toggle="tab" href="#menu2">the API</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#menu3">the Team</a>
 		</li>
 	</ul>
 
 <!-- Tab panes -->
-	<div class="tab-content">
-		<div class="tab-pane container active" id="home">
-			<div class='flowchart' id='flow'><img src="{{url_for('static',filename = 'images/flow.png')}}" width="100%"></div>
-			<p> The website utilises music performance information (name, event location and genre) extracted from <a href="https://developer.ticketmaster.com/products-and-docs/apis/getting-started/">ticketmaster's</a> and <a
-							href="https://www.eventbrite.com/platform/api">eventbrite's</a> API for the next 30 days. </p>
-			<p> The genre of playing artists were then match with the one classified by <a href="https://developer.spotify.com/documentation/web-api/">Spotify’s API</a> to ensure higher accuracy of the events' genre. </p>
-			<p> All events are then grouped by genre according to a dictionary created from web-scraping <a href="https://en.wikipedia.org/wiki/List_of_music_styles">the List of Music Styles in Wikipedia</a>.</p>
+<div class="tab-content">
+	<div class="tab-pane container active" id="home">
+		<div style="margin-top: 10px;">
+		<h3>The State of Music</h3>
+		<p>The state of music is a coursework presented by Group 7 - International Super Friends for
+			<a href="https://www.ucl.ac.uk/bartlett/casa/">UCL CASA's</a> module CASA0009 Spatial Data Capture, Storage and Analysis.
+			Feel free to check our project on <a href="https://github.com/ucl-sdc-team-7/the-state-of-music"> Github</a>.</p>
+		<div class='flowchart' id='flow'><img src="{{url_for('static',filename = 'images/flow.png')}}" width="100%"></div>
+		<p> The website utilises music performance information (name, event location and genre) extracted from <a href="https://developer.ticketmaster.com/products-and-docs/apis/getting-started/">ticketmaster's</a> and <a
+						href="https://www.eventbrite.com/platform/api">eventbrite's</a> API for the next 30 days. </p>
+		<p> The genre of playing artists were then match with the one classified by <a href="https://developer.spotify.com/documentation/web-api/">Spotify’s API</a> to ensure higher accuracy of the events' genre. </p>
+		<p> All events are then grouped by genre according to a dictionary created from web-scraping <a href="https://en.wikipedia.org/wiki/List_of_music_styles">the List of Music Styles in Wikipedia</a>.</p>
+	</div></div>
+		<div class="tab-pane container active" id="menu1">
+		<div style="margin-top: 10px;">
+			<h3>The State of Music's Calculation</h3>
 			<p> Explaination of the normalisation method here </p>
-		</div>
-	<div class="tab-pane container fade" id="menu1">
+		</div></div>
+	<div class="tab-pane container fade" id="menu2">
 		<div style="margin-top: 10px;">
 			<h3>The State of Music's Search API</h3>
 			<h4>Resource URL</h4>
@@ -81,12 +93,11 @@
 		</div>
 	</div>
 
-	<div class="tab-pane container fade" id="menu2">
-						 <p>The state of music is a coursework presented by Group 7 - International Super Friends for
-							 <a href="https://www.ucl.ac.uk/bartlett/casa/">UCL CASA's</a> module CASA0009 Spatial Data Capture, Storage and Analysis.</p>
-							<p> Feel free to check our project on <a href="https://github.com/ucl-sdc-team-7/the-state-of-music"> Github</a>.</p>
+	<div class="tab-pane container fade" id="menu3">
+		<div style="margin-top: 10px;">
+		<h3>The State of Music's Member</h3>
 							 <table>
-          				<thead></thead>
+          				<thead><p> Group 7 - International Super Friends</p></thead>
           				<tbody class="table">
 
 										<tr>
@@ -139,7 +150,7 @@
 					</tr>
           				</tbody>
       					</table>
-	</div>
+	</div></div>
 			</div>
 			</div>
 
