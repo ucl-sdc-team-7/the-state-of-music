@@ -154,9 +154,10 @@ usVenues.draw = function(genre) {
   removeLayers()
 
   const params = jQuery.param({
-    genre: genre
+    genre: genre,
+    admin_level: 3
   });
-  var request_url = "venues?" + params;
+  var request_url = "search?" + params;
 
   d3.json(request_url, function(error, d) {
     if (error) console.log(error);

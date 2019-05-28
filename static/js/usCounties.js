@@ -245,9 +245,10 @@ var usCounties = {};
 
 function drawLayers(genre) {
   const params = jQuery.param({
-    genre: genre
+    genre: genre,
+    admin_level: 2
   });
-  var request_url = "counties?" + params;
+  var request_url = "search?" + params;
 
   d3.json(request_url, function(error, data) {
     if (error) console.log(error);
