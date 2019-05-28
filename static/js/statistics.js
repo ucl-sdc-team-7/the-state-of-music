@@ -80,7 +80,7 @@ stats.draw = function(genre) {
             .html(Math.round(d.value * 10000 / 100) + " " + GENRES[current_genre].label + " shows per 1M people");
         } else if (geo_level == "county") {
           d3.select("#stats-tooltip")
-            .html(d.value.toFixed(3) + " " + GENRES[current_genre].label + " shows per 1000 people")
+            .html(d.value.toFixed(4) + " " + GENRES[current_genre].label + " shows per 1000 people")
         } else if (geo_level == "venue") {
           d3.select("#stats-tooltip")
             .html(d.value + " " + GENRES[current_genre].label + " shows coming up at this venue")
