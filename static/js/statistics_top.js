@@ -1,6 +1,3 @@
-var tooltip = d3.select("#stats-tooltip")
-  .attr("class", "toolTip")
-
 stats.top = function(genre) {
 
   var params = jQuery.param({

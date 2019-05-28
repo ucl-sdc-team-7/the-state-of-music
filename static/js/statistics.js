@@ -109,7 +109,7 @@ stats.draw = function(genre) {
             return GENRES[genre].color
           })
           .on("mouseover", mouseOver_topstats)
-          .on("mouseout", mouseOut_stats)
+          .on("mouseout", mouseOut_stats);
 
 
         //adding labels to axis
@@ -135,7 +135,7 @@ stats.draw = function(genre) {
             .attr('y', function(d) {
               return y(d.state_name);
             })
-            .attr("height", y.bandwidth()) //assigning hieght of bars
+            .attr("height", y.bandwidth()); //assigning hieght of bars
 
           bar.selectAll(".axis-text")
             .attr("y", function(d) {
@@ -156,7 +156,7 @@ stats.draw = function(genre) {
             .attr('y', function(d) {
               return y(d.county_name)
             })
-            .attr("height", y.bandwidth()) //assigning hieght of bars
+            .attr("height", y.bandwidth()); //assigning hieght of bars
 
           bar.selectAll(".axis-text")
             .attr("y", function(d) {
@@ -176,7 +176,7 @@ stats.draw = function(genre) {
             .attr('y', function(d) {
               return y(d.venue)
             })
-            .attr("height", y.bandwidth()) //assigning hieght of bars
+            .attr("height", y.bandwidth()); //assigning hieght of bars
 
           bar.selectAll(".axis-text")
             .attr("y", function(d) {
