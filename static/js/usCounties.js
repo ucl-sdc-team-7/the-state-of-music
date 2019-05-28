@@ -151,7 +151,7 @@ function zoomToCity(e) {
 
 //'Go Back' button
 var button = new L.Control.Button('Back to previous level', {
-  position: 'topleft'
+  position: 'bottomleft',
 });
 
 button.addTo(countyMap);
