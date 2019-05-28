@@ -23,6 +23,15 @@ html, body, {
   padding: 0px 5px 0px 5px;
 }
 
+.abouttext {
+   white-space:nowrap;
+   justify-content: flex-start;
+}
+
+.avatar {
+  justify-content:  flex-end;
+}
+
 .genre-icon {
   text-align: center;
   opacity: 0.3;
