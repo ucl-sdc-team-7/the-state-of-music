@@ -76,19 +76,18 @@ function updateData() {
 
       if(genre_id == "top") {
         stats.top("top")
+      } else {
+        stats.draw(genre_id)
       }
       // adding new maps depending on geo_level
       if (geo_level == "state") {
         uStates.draw(genre_id);
-        stats.draw(genre_id);
         updateInfoBox();
       } else if (geo_level == "county") {
         usCounties.recalculateGenres(genre_id);
-        stats.draw(genre_id);
         updateInfoBox(current_state);
       } else if (geo_level == "venue") {
         usVenues.draw(genre_id)
-        stats.draw(genre_id);
         updateInfoBox(current_county);
       }
       // if (genre_id != "top") {

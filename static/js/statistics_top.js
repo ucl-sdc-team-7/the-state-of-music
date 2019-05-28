@@ -16,7 +16,7 @@ stats.top = function(genre) {
     var max_genres = [];
     var mygenres = Object.keys(GENRES);
 
-    if (d.length > 1) {
+    if (d.length >= 1) {
 
       for (var i in mygenres) {
         var max = d.reduce((max, p) => p[mygenres[i]] > max ? p[mygenres[i]] : max, d[0][mygenres[i]]);
@@ -58,23 +58,27 @@ stats.top = function(genre) {
 
     var data = [];
     for (var i = 0; i < max_genres.length; i++) {
-      if (max_genres[i].max != 0) {
+      if (max_genres[i].max > 0) {
         data.push(max_genres[i])
       }
     }
 
     if (data.length == 1) {
+      $("#stats-text").empty();
       d3.selectAll("svg#stats > *").remove();
-      $("#stats-text").html("<small>Only " + data[0].name + " is playing " + data[0].genre + "this month.</small>");
-    }
-
-    else if (data.length == 0) {
+      $("#stats-text").html("<small>Only " + data[0].name + " is playing " + GENRES[data[0].genre].label + " this month.</small>");
+    } else if (data.length == 0) {
+      $("#stats-text").empty();
       d3.selectAll("svg#stats > *").remove();
-      $("#stats-text").html("<small>Noone is playing this genre this month.</small>");
-    }
+      if (geo_level == "county") {
+        $("#stats-text").html("<small>No upcoming shows in " + current_state + " this month.</small>");
+      }
+      if (geo_level == "venue") {
+        $("#stats-text").html("<small>No upcoming shows in " + current_county + " county this month.</small>");
+      }
+    } else if (data.length > 1) {
 
-    else if (data.length > 1) {
-
+      $("#stats-text").empty();
       //creating svg object
       const chart = d3.select("#displayStats").select("svg")
 
