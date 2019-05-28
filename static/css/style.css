@@ -17,8 +17,13 @@ html, body, {
   width: 80%;
 }
 
+#icons {
+  text-align: center;
+  padding: 0px 5px 0px 5px;
+}
+
 .genre-icon {
-  text-align: left;
+  text-align: center;
   opacity: 0.3;
   width: 100%;
 }
@@ -29,6 +34,7 @@ html, body, {
 }
 
 .genre-icon.selected {
+  text-align: center;
   opacity: 1;
 }
 
