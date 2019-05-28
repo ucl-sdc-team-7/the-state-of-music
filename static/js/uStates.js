@@ -113,7 +113,7 @@ uStates.draw = function(genre) {
           d3.select("#tooltip").html(
           "<h4>" + d.properties.name + " ("+d.properties.abbr+")" + "</h4>" +
           "<table><tr><td> Top Genre:</td><td class='titleCase'>" + top_genre + "</td></tr>" +
-  			  "<tr><th class='center'>Genre</th><th class='center'>No. of Venues</th></tr>"+
+  			  "<tr><th class='center'>Genre</th><th class='center'>No. of shows</th></tr>"+
   			  "<tr><td class='left'><div class='legend-color pop'></div>Pop</td><td>"+d.properties.num.pop+"</td></tr>"+
   			  "<tr><td class='left'><div class='legend-color rock'></div>Rock</td><td>"+d.properties.num.rock+"</td></tr>"+
   			  "<tr><td class='left'><div class='legend-color hip-hop'></div>Hip Hop</td><td>"+d.properties.num.hip_hop+"</td></tr>"+
