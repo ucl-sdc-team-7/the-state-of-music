@@ -115,6 +115,7 @@ function removeLayers() {
 
 
 function zoomToCity(e) {
+  genre = current_genre
   current_county = e.target.feature.properties.NAME;
   countyMap.fitBounds(e.target.getBounds());
   countyMap.removeControl(info)
@@ -123,13 +124,14 @@ function zoomToCity(e) {
   d3.selectAll("svg#stats > *").remove();
   usVenues.draw(current_genre)
   venueInfo.addTo(countyMap)
-  stats.draw(current_genre)
-  level = 'venue';
+  if(genre!="top"){
+    stats.draw(genre)
+  } else {stats.top("top")}
+  level = 'venue'
   updateInfoBox(current_county);
   //this change to current_state has been added so that if the user clicks a county in  a
   //different state to their original choice, when they go back it will zoom out to the new one
   current_state = e.target.feature.properties.state_abbr;
-
 }
 
 //'Go Back' button
@@ -273,6 +275,7 @@ function drawLayers(genre) {
         }
         //either way, the new variable is added to the object
         counties_geo.features[counties_geo_index].properties.num = numField;
+
       }
     }
 

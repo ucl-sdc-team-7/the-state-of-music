@@ -9,6 +9,15 @@ import time
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
+db = mysql.connect(
+    host=config['mysql']['host'],
+    user=config['mysql']['user'],
+    passwd=config['mysql']['pass'],
+    database="state_of_music"
+)
+
+cursor = db.cursor()
+
 base_url = "https://www.eventbriteapi.com/v3/"
 
 us_states_and_viewports = list()
@@ -17,8 +26,25 @@ with open('state_bounding_boxes.csv', 'r', encoding="utf-8") as csvfile:
     for row in states_and_viewports:
         us_states_and_viewports.append(row)
 
-date_range = [datetime.datetime.today() + datetime.timedelta(days=x) for x in
-              range(25, 30)]
+today = datetime.datetime.today()
+
+query_largest_date = """SELECT local_date FROM eventbrite_events
+                        ORDER BY local_date DESC LIMIT 1"""
+
+cursor.execute(query_largest_date)
+largest_date = cursor.fetchall()
+
+if len(largest_date):
+    largest_date = largest_date[0][0]
+    largest_date = datetime.datetime(
+        largest_date.year, largest_date.month, largest_date.day)
+else:
+    largest_date = today
+
+num_days = (today + datetime.timedelta(days=30) - largest_date).days
+
+date_range = [largest_date + datetime.timedelta(days=x) for x in
+              range(1, num_days + 1)]
 start_date = date_range[0].strftime("%Y-%m-%d" + "T00:00:00Z")
 end_date = date_range[-1].strftime("%Y-%m-%d" + "T23:59:59Z")
 
@@ -146,15 +172,24 @@ def retrieve_events_for_states(us_states, oauth_token):
                     else:
                         subcategory_name = ''
 
-                    query = """INSERT INTO eventbrite_events
-                            (eventbrite_id, local_date, event_name,
-                            venue_name, venue_lat, venue_long, genre) VALUES
-                            (%s, %s, %s, %s, %s, %s, %s)"""
-                    values = (event_id, event_date, event_name, venue_name,
-                              venue_lat, venue_long, subcategory_name)
+                    event_exists_query = """SELECT eventbrite_id
+                                            FROM eventbrite_events
+                                            WHERE eventbrite_id =
+                                            '""" + event_id + "'"
 
-                    cursor.execute(query, values)
-                    db.commit()
+                    cursor.execute(event_exists_query)
+                    existing_event = cursor.fetchall()
+
+                    if (not len(existing_event)):
+                        query = """INSERT INTO eventbrite_events
+                                (eventbrite_id, local_date, event_name,
+                                venue_name, venue_lat, venue_long, genre)
+                                VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+                        values = (event_id, event_date, event_name, venue_name,
+                                  venue_lat, venue_long, subcategory_name)
+
+                        cursor.execute(query, values)
+                        db.commit()
         db.close()
 
 
