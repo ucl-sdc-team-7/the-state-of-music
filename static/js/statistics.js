@@ -68,6 +68,29 @@ stats.draw = function(genre) {
       const bar = chart.append("g")
         .attr("transform", "translate(" + bar_margin.left + "," + bar_margin.top + ")")
 
+      function mouseOver_topstats(d) {
+        d3.select("#stats-tooltip")
+          .attr("class", "toolTip")
+          .transition().duration(300)
+          .style("opacity", 0.8).style("left", d3.event.pageX + 10 + "px")
+          .style("top", d3.event.pageY - 200 + "px")
+
+        if (geo_level == "state") {
+          d3.select("#stats-tooltip")
+            .html(Math.round(d.value * 10000 / 100) + " " + GENRES[current_genre].label + " shows per 1M people");
+        } else if (geo_level == "county") {
+          d3.select("#stats-tooltip")
+            .html(d.value.toFixed(3) + " " + GENRES[current_genre].label + " shows per 1000 people")
+        } else if (geo_level == "venue") {
+          d3.select("#stats-tooltip")
+            .html(d.value + " " + GENRES[current_genre].label + " shows coming up at this venue")
+        }
+      }
+
+      function mouseOut_stats() {
+        d3.select("#stats-tooltip").transition().duration(500).style("opacity", 0);
+      }
+
       if (genre != "top") {
 
         // setting domains for bars
@@ -85,6 +108,9 @@ stats.draw = function(genre) {
           .attr("fill", function(d) {
             return GENRES[genre].color
           })
+          .on("mouseover", mouseOver_topstats)
+          .on("mouseout", mouseOut_stats)
+
 
         //adding labels to axis
         bar.selectAll(".text")
@@ -99,6 +125,7 @@ stats.draw = function(genre) {
           .style("fill", "#555a66;");
 
 
+
         if (geo_level == "state") {
           y.domain(data.map(function(d) {
             return d.state_name
@@ -108,7 +135,7 @@ stats.draw = function(genre) {
             .attr('y', function(d) {
               return y(d.state_name);
             })
-            .attr("height", y.bandwidth()); //assigning hieght of bars
+            .attr("height", y.bandwidth()) //assigning hieght of bars
 
           bar.selectAll(".axis-text")
             .attr("y", function(d) {
@@ -129,7 +156,7 @@ stats.draw = function(genre) {
             .attr('y', function(d) {
               return y(d.county_name)
             })
-            .attr("height", y.bandwidth()); //assigning hieght of bars
+            .attr("height", y.bandwidth()) //assigning hieght of bars
 
           bar.selectAll(".axis-text")
             .attr("y", function(d) {
@@ -149,7 +176,7 @@ stats.draw = function(genre) {
             .attr('y', function(d) {
               return y(d.venue)
             })
-            .attr("height", y.bandwidth()); //assigning hieght of bars
+            .attr("height", y.bandwidth()) //assigning hieght of bars
 
           bar.selectAll(".axis-text")
             .attr("y", function(d) {

@@ -28,6 +28,13 @@ html, body, {
   width: 100%;
 }
 
+.leaflet-left .leaflet-control {
+  background-color: #555a66;
+  color: #ffffff;
+  font-size: 15px;
+  border-radius: 5px;
+}
+
 .genre-icon:hover {
   opacity: 1;
   /*chrome doesn't seem to like hovering to opacity: 1*/
@@ -103,7 +110,7 @@ html, body, {
   align-items: center;
 }
 
-#tooltip {
+#tooltip, #stats-tooltip{
   font-family: 'Roboto', sans-serif;
   position: absolute;
   text-align: center;
@@ -117,6 +124,7 @@ html, body, {
   padding: 4px;
   color: white;
   opacity: 0;
+  display: inline-block;
 }
 
 .county-info, .venue-info .leaflet-popup-content-wrapper {
@@ -130,7 +138,7 @@ html, body, {
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
 
-#tooltip h4,
+#tooltip h4, #stats-tooltip h4,
 .county-info h4,
 .venue-info .leaflet-popup-content-wrapper h4 {
   margin: 0;

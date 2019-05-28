@@ -1,3 +1,6 @@
+var tooltip = d3.select("#stats-tooltip")
+  .attr("class", "toolTip")
+
 stats.top = function(genre) {
 
   var params = jQuery.param({
@@ -94,6 +97,23 @@ stats.top = function(genre) {
         return d.genre
       })).padding(0.3);
 
+      function mouseOver_stats(d) {
+
+          d3.select("#stats-tooltip")
+            .attr("class", "toolTip")
+            .transition().duration(300)
+            .style("opacity", 0.8)
+            .style("left", d3.event.pageX + 10 + "px")
+            .style("top", d3.event.pageY - 200 + "px")
+
+          d3.select("#stats-tooltip")
+            .html(GENRES[d.genre].label);
+          }
+
+      function mouseOut_stats() {
+        d3.select("#stats-tooltip").transition().duration(500).style("opacity", 0);
+      }
+
       //drawing bars in chart
       bar.selectAll('.bar').data(data)
         .enter().append('rect')
@@ -108,6 +128,8 @@ stats.top = function(genre) {
         .attr("fill", function(d) {
           return GENRES[d.genre]["color"]
         })
+        .on("mouseover", mouseOver_stats)
+    		.on("mouseout", mouseOut_stats);
 
       //adding labels to axis
       bar.selectAll(".text")
