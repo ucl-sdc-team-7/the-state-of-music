@@ -112,6 +112,7 @@ function updateInfoBox(geog) {
   $("#displayStatsTitle").html("Which " + geo_text_2 + " feel the strongest about " + gen_text_2 + "?")
 }
 
+
 function updateSums(genre) {
 
   var params = jQuery.param({
@@ -133,6 +134,14 @@ function updateSums(genre) {
       return total + num;
     }
 
+    if (geo_level == "state") {
+      var level = "the United States"
+    } else if (geo_level == "county") {
+      var level = "this state"
+    } else if (geo_level == "venue") {
+      var level = "this county"
+    }
+
 
     if (genre != "top") {
 
@@ -147,14 +156,10 @@ function updateSums(genre) {
         num: nums.reduce(getSum)
       }
 
+
       $("#infoText").empty()
-      if (geo_level == "state") {
-        $("#infoText").html("<small>There are " + nums_arr.num + " " + GENRES[nums_arr.genre].label + " shows playing in the United States in the next 30 days.</small>");
-      } else if (geo_level == "county") {
-        $("#infoText").html("<small>There are " + nums_arr.num + " " + GENRES[nums_arr.genre].label + " shows playing in this state in the next 30 days.</small>");
-      } else if (geo_level == "venue") {
-        $("#infoText").html("<small>There are " + nums_arr.num + " " + GENRES[nums_arr.genre].label + " shows playing in this county in the next 30 days.</small>");
-      }
+      $("#infoText").html("<small>There are " + nums_arr.num + " " + GENRES[nums_arr.genre].label + " shows playing in " + level + " in the next 30 days. </br>" +
+      " Some examples of this genre include " + GENRES[nums_arr.genre].sub_genres + ".</small>");
 
     } else {
       var mygenres = Object.keys(GENRES);
@@ -184,15 +189,6 @@ function updateSums(genre) {
 
       var total_shows = sums.reduce(getSum)
 
-      $("#infoText").empty()
-      if (geo_level == "state") {
-        var level = "the United States"
-      } else if (geo_level == "county") {
-        var level = "this state"
-      } else if (geo_level == "venue") {
-        var level = "this county"
-      }
-
       var pop_perc = nums_arr[0]['pop'] / total_shows * 100
       pop_perc = pop_perc.toFixed(0)
 
@@ -214,12 +210,15 @@ function updateSums(genre) {
       var countryfolk_perc = nums_arr[6]['country_and_folk'] / total_shows * 100
       countryfolk_perc = countryfolk_perc.toFixed(0)
 
+
+      $("#infoText").empty()
+
       $("#infoText").html("<small>There are a total of " + total_shows + " shows playing in " + level + " this month." +
         " Out of which, " +
         pop_perc + "% are pop shows, " +
         rock_perc + "% are rock, " +
         hiphop_perc + "% are hip hop, " +
-        rnb_perc + "% are r&b, " +
+        rnb_perc + "% are R&B, " +
         classicaljazz_perc + "% are classical & jazz, " +
         electronic_perc + "% are electronic and " +
         countryfolk_perc + "% are country & folk.</small>"

@@ -57,7 +57,7 @@ stats.draw = function(genre) {
       if (geo_level == "county") {
         $("#stats-text").html("<small>Only " + data[0].county_name + " county is playing " + GENRES[current_genre].label + " in " + current_state + " this month.</small>");
       } else if (geo_level == "venue") {
-        $("#stats-text").html("<small>Only " + data[0].venue + " is playing " + GENRES[current_genre].label + " in " + current_county + " this month.</small>");
+        $("#stats-text").html("<small>Only " + data[0].venue + " is playing " + GENRES[current_genre].label + " in " + current_county + " county this month.</small>");
       }
     } else if (data.length > 1) {
       $("#stats-text").empty();
@@ -73,7 +73,7 @@ stats.draw = function(genre) {
           .attr("class", "toolTip")
           .transition().duration(300)
           .style("opacity", 0.8).style("left", d3.event.pageX + 10 + "px")
-          .style("top", d3.event.pageY - 200 + "px")
+          .style("top", d3.event.pageY - 300 + "px")
 
         if (geo_level == "state") {
           d3.select("#stats-tooltip")
