@@ -69,7 +69,7 @@ for state in states:
 
     for genre_weight in total_weights_per_genre.keys():
         normalised_weights_per_genre[genre_weight] = \
-            total_weights_per_genre[genre_weight] * pop_2018 / 100000
+            total_weights_per_genre[genre_weight] / pop_2018 * 100000
 
     query = """INSERT INTO state_level_data
             (state_code, state_name, state_abbr, pop_2018,

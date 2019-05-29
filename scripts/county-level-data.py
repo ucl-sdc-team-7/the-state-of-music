@@ -75,7 +75,7 @@ for county in counties:
 
     for genre_weight in total_weights_per_genre.keys():
         normalised_weights_per_genre[genre_weight] = \
-            total_weights_per_genre[genre_weight] * pop_2018 / 1000
+            total_weights_per_genre[genre_weight] / pop_2018 * 1000
 
     query = """INSERT INTO county_level_data
             (state_code, state_name, state_abbr, county_code,
