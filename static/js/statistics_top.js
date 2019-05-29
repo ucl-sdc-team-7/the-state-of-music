@@ -101,7 +101,7 @@ stats.top = function(genre) {
             .transition().duration(300)
             .style("opacity", 0.8)
             .style("left", d3.event.pageX + 10 + "px")
-            .style("top", d3.event.pageY - 200 + "px")
+            .style("top", d3.event.pageY - 300 + "px")
 
           d3.select("#stats-tooltip")
             .html(GENRES[d.genre].label);

@@ -107,18 +107,15 @@ function getMarkers(data, genre) {
     pointToLayer: function(feature, latlng) {
       if (genre != "top") {
 
-        function getMax(data) {
-          var max = -10000000;
-          var min = 10000000;
-          for (var i = 0; i < data.length; i++) {
-            max = Math.max(data[i].properties.value, max);
-            if (data[i].properties.value != 0) {
-              min = Math.min(data[i].properties.value, min);
-            }
+        var val_range = []
+        for (var i = 0; i < data.features.length; i++) {
+          var value = data.features[i].properties.value
+          if (value != 0) {
+            val_range.push(data.features[i].properties.value)
           }
-          return [min, max];
         }
-        var val_range = getMax(data.features);
+        var min = d3.min(val_range);
+        var max = d3.max(val_range);
 
         var geojsonMarkerOptions = {
           radius: 10,
@@ -126,7 +123,7 @@ function getMarkers(data, genre) {
           fillColor: getColor(feature.properties.value, genre),
 
           weight: 2,
-          fillOpacity: marker_opacity(feature.properties.value, val_range[0], val_range[1]),
+          fillOpacity: marker_opacity(feature.properties.value, min, max),
         }
       } else {
         var geojsonMarkerOptions = {

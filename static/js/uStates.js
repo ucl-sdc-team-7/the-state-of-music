@@ -147,7 +147,7 @@ uStates.draw = function(genre) {
           if (d.properties.value) {
             d3.select("#tooltip").html(
                 "<h4 class='state-head'>" + d.properties.name + " (" + d.properties.abbr + ")</h4>" +
-                "<table><tr><th>Rank:</th><td>" + (d.properties.value) + " out of 51</td></tr>" +
+                "<table><tr><th>Rank:</th><td>" + (d.properties.value) + " out of "+ max + "</td></tr>" +
                 "<th>Number of upcoming " + GENRES[genre].label + " shows</th><td>" + d.properties.num + "</td></table>" +
                 "<small>(click to zoom)</small>")
           } else {
@@ -223,6 +223,7 @@ uStates.draw = function(genre) {
             }
             current_state = state_abbr;
             updateInfoBox(current_state);
+            updateSums(current_genre)
           });
       });
   });
