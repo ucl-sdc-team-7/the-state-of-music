@@ -144,6 +144,7 @@ function zoomToCity(e) {
   }
   //level = 'venue'
   updateInfoBox(current_county);
+  updateSums(genre)
   //this change to current_state has been added so that if the user clicks a county in  a
   //different state to their original choice, when they go back it will zoom out to the new one
   current_state = layer.feature.properties.state_abbr;

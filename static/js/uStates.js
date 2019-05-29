@@ -161,7 +161,7 @@ uStates.draw = function(genre) {
           d3.selectAll(".map-path").style('opacity', 0.7)
           d3.select("#tooltip").transition().duration(500).style("opacity", 0);
         }
-        
+
         var map = d3.select("#statesvg")
           //Binding the data to the SVG and create one path per json feature
           .selectAll("path")
@@ -223,6 +223,7 @@ uStates.draw = function(genre) {
             }
             current_state = state_abbr;
             updateInfoBox(current_state);
+            updateSums(current_genre)
           });
       });
   });

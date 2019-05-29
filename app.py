@@ -157,16 +157,17 @@ def get_state_stats():
 
     cur = mysql.connection.cursor()
 
-    genre_column = genre + '_norm'
+    genre_column = genre + '_norm' \
+        if genre != 'top' \
+        else 'pop_norm, rock_norm, hip_hop_norm, rnb_norm, classical_and_jazz_norm, electronic_norm, country_and_folk_norm'
 
-    if genre != "top":
-        select_query = "SELECT state_code, state_name, state_abbr, " + \
-            genre_column + " FROM state_level_data ORDER BY " + \
-            genre_column + ' DESC;'
+    genre_num = genre + '_num' \
+        if genre != 'top' \
+        else 'pop_num, rock_num, hip_hop_num, rnb_num, classical_and_jazz_num, electronic_num, country_and_folk_num'
 
-    else:
-        select_query = "SELECT pop_norm, rock_norm, hip_hop_norm, rnb_norm, classical_and_jazz_norm, electronic_norm, country_and_folk_norm, " + \
-            "state_name FROM state_level_data;"
+
+    select_query = "SELECT state_name, " + genre_column + ", " + genre_num + " FROM state_level_data" + \
+        " ORDER BY " + genre_column + " DESC;"
 
     cur.execute(select_query)
     data = cur.fetchall()
@@ -192,19 +193,19 @@ def get_county_stats():
     genre = request.args.get('genre') or 'top'
     filter_state = request.args.get('filter_state')
 
-    genre_column = genre + '_norm' if genre != 'top' else 'dom_genre'
+    genre_column = genre + '_norm' \
+        if genre != 'top' \
+        else 'pop_norm, rock_norm, hip_hop_norm, rnb_norm, classical_and_jazz_norm, electronic_norm, country_and_folk_norm'
+
+    genre_num = genre + '_num' \
+        if genre != 'top' \
+        else 'pop_num, rock_num, hip_hop_num, rnb_num, classical_and_jazz_num, electronic_num, country_and_folk_num'
 
     cur = mysql.connection.cursor()
 
-    if genre == "top":
-        select_query = "SELECT pop_norm, rock_norm, hip_hop_norm, rnb_norm, classical_and_jazz_norm, electronic_norm, country_and_folk_norm, " + \
-            "county_name FROM county_level_data WHERE state_abbr = " + "'" + filter_state + "';"
-
-    else:
-        select_query = "SELECT state_code, state_abbr, " + \
-            "county_code, county_name, " + genre_column + \
-            " FROM county_level_data WHERE state_abbr = " + "'" + filter_state + "'" + \
-            " ORDER BY " + genre_column + ' DESC;'
+    select_query = "SELECT county_name, " + genre_column + ", " + genre_num + \
+            " FROM county_level_data WHERE state_abbr = " + "'" + filter_state + "'"\
+            " ORDER BY " + genre_column + " DESC;"
 
     cur.execute(select_query)
     data = cur.fetchall()
@@ -232,19 +233,18 @@ def get_venue_stats():
 
     cur = mysql.connection.cursor()
 
-    genre_column = genre if genre != 'top' else 'dom_genre'
+    genre_column = genre \
+        if genre != 'top' \
+        else 'pop, rock, hip_hop, rnb, classical_and_jazz, electronic, country_and_folk'
 
-    if genre == "top":
-        select_query = "SELECT pop, rock, hip_hop, rnb, classical_and_jazz, electronic, country_and_folk, venue, " + \
-            "county_name FROM venue_level_data WHERE state_abbr = " + "'" + filter_state + "'" + \
-            " AND county_name = " + "'" + filter_county + "';"
+    genre_num = genre + '_num' \
+        if genre != 'top' \
+        else 'pop_num, rock_num, hip_hop_num, rnb_num, classical_and_jazz_num, electronic_num, country_and_folk_num'
 
-    else:
-        select_query = "SELECT venue, venue_lat, venue_long, " + \
-            genre_column + \
-            " FROM venue_level_data WHERE state_abbr = " + "'" + filter_state + "'" + \
-            " AND county_name = " + "'" + filter_county + "'"\
-            " ORDER BY " + genre_column + ' DESC;'
+    select_query = "SELECT venue, " + genre_column + ", " + genre_num + \
+        " FROM venue_level_data WHERE state_abbr = " + "'" + filter_state + "'" + \
+        " AND county_name = " + "'" + filter_county + "'" + \
+        " ORDER BY " + genre_column + " DESC;"
 
     cur.execute(select_query)
     data = cur.fetchall()

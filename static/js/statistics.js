@@ -77,7 +77,7 @@ stats.draw = function(genre) {
 
         if (geo_level == "state") {
           d3.select("#stats-tooltip")
-            .html(Math.round(d.value * 10000 / 100) + " " + GENRES[current_genre].label + " shows per 1M people");
+            .html((d.value * 100).toFixed(0) + " " + GENRES[current_genre].label + " shows per 1M people");
         } else if (geo_level == "county") {
           d3.select("#stats-tooltip")
             .html(d.value.toFixed(4) + " " + GENRES[current_genre].label + " shows per 1000 people")
