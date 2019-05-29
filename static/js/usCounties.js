@@ -169,6 +169,7 @@ button.on('click', function() {
     usCounties.draw(state_bbox, current_genre); //function that draws leaflet
     geo_level = 'county';
     updateInfoBox(current_state)
+    updateSums(current_genre)
   } else {
     ////this is also adapated from uStates.js
     // removing state map and statistics
@@ -178,6 +179,7 @@ button.on('click', function() {
     geo_level = "state";
     uStates.draw(current_genre);
     updateInfoBox();
+    updateSums(current_genre)
   }
 
   // adding stats
