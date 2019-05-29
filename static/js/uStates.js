@@ -147,7 +147,7 @@ uStates.draw = function(genre) {
           if (d.properties.value) {
             d3.select("#tooltip").html(
                 "<h4 class='state-head'>" + d.properties.name + " (" + d.properties.abbr + ")</h4>" +
-                "<table><tr><th>Rank:</th><td>" + (d.properties.value) + " out of 51</td></tr>" +
+                "<table><tr><th>Rank:</th><td>" + (d.properties.value) + " out of "+ max + "</td></tr>" +
                 "<th>Number of upcoming " + GENRES[genre].label + " shows</th><td>" + d.properties.num + "</td></table>" +
                 "<small>(click to zoom)</small>")
           } else {
@@ -161,7 +161,7 @@ uStates.draw = function(genre) {
           d3.selectAll(".map-path").style('opacity', 0.7)
           d3.select("#tooltip").transition().duration(500).style("opacity", 0);
         }
-
+        
         var map = d3.select("#statesvg")
           //Binding the data to the SVG and create one path per json feature
           .selectAll("path")
