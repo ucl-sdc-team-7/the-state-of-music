@@ -36,16 +36,16 @@
 				<!-- Nav tabs -->
 	<ul class="nav nav-tabs">
 		<li class="nav-item">
-			<a class="nav-link active" data-toggle="tab" href="#home">the Website</a>
+			<a class="nav-link active" data-toggle="tab" href="#home">An Introduction</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" data-toggle="tab" href="#menu1">the Methodology</a>
+			<a class="nav-link" data-toggle="tab" href="#menu1">Our Methods</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" data-toggle="tab" href="#menu2">the API</a>
+			<a class="nav-link" data-toggle="tab" href="#menu2">Our API</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" data-toggle="tab" href="#menu3">the Team</a>
+			<a class="nav-link" data-toggle="tab" href="#menu3">Our Team</a>
 		</li>
 	</ul>
 
@@ -54,18 +54,17 @@
 	<div class="tab-pane container active" id="home">
 		<div style="margin-top: 10px;">
 		<h3>The State of Music</h3>
-		<p>The State of Music is a coursework presented by Group 7 - International Super Friends for
-			<a href="https://www.ucl.ac.uk/bartlett/casa/">UCL CASA's</a> module CASA0009 Spatial Data Capture, Storage and Analysis.</p>
-		<p> The website utilises music performance information (name, event location and genre) extracted from <a href="https://developer.ticketmaster.com/products-and-docs/apis/getting-started/">ticketmaster's</a> and <a
-						href="https://www.eventbrite.com/platform/api">eventbrite's</a> API for the next 30 days. </p>
-		<p> The genre of playing artists are then match with the one classified by <a href="https://developer.spotify.com/documentation/web-api/">Spotify’s API</a> to further enrich our dataset. </p>
-		<p> All events are then grouped by genre according to a dictionary created from web-scraping <a href="https://en.wikipedia.org/wiki/List_of_music_styles">the List of Music Styles in Wikipedia</a>.</p>
-		<p> Please see the Methodology page for further information about how we analysed the data.</p>
-		<p>	Feel free to check our project on <a href="https://github.com/ucl-sdc-team-7/the-state-of-music"> Github</a>. Have fun investigating the music genre geography of live music events in the United States.</p>
+		<p>The State of Music is a project completed as part of a Master in Smart Cities and Urban Analaytics at the Bartlett <a href="https://www.ucl.ac.uk/bartlett/casa/">Center of Advanced Spatial Analaysis</a>.</p>
+
+		<p> The website utilises data on live music events (name, event location and genre) extracted from <a href="https://developer.ticketmaster.com/products-and-docs/apis/getting-started/">ticketmaster's</a> and <a
+						href="https://www.eventbrite.com/platform/api">eventbrite's</a> APIs for the next 30 days. This data is further intersected with artist genres classified by <a href="https://developer.spotify.com/documentation/web-api/">Spotify’s API</a> to further enrich our dataset. </p>
+		<p> All genres of these events are then grouped according to <a href="https://en.wikipedia.org/wiki/List_of_music_styles">Wikipedia's List of Music Styles</a>, and the most recurring genres were selected.</p>
+		<p> Please refer to the Methods tab for further information on our data anlysis and visualisations.</p>
+		<p>	You can checkout our project on <a href="https://github.com/ucl-sdc-team-7/the-state-of-music"> Github</a>. Have fun exploring live music events in the United States!</p>
 	</div></div>
 		<div class="tab-pane container fade" id="menu1">
 		<div style="margin-top: 10px;">
-			<h3>The State of Music's Calculation</h3>
+			<h3>The State of Music's Methodology</h3>
 			<h4>How are genre weights calculated for an event?</h4>
 			<p>Genre weights are calculated similarly for Eventbrite and Ticketmaster events, but not identically.
 				For Eventbrite’s event, only event genre is returned by the API. This genre is given a weight of 1.0.</p>
@@ -119,7 +118,7 @@
 
 						<div class="tab-pane container fade" id="menu3">
 							<div style="margin-top: 10px;">
-								<h3>The State of Music's Member</h3>
+								<h3>The State of Music's Team Members</h3>
 								<table>
 									<thead>
 										<p> Group 7 - International Super Friends</p>
