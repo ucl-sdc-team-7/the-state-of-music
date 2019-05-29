@@ -57,16 +57,40 @@
 		<p>The state of music is a coursework presented by Group 7 - International Super Friends for
 			<a href="https://www.ucl.ac.uk/bartlett/casa/">UCL CASA's</a> module CASA0009 Spatial Data Capture, Storage and Analysis.
 			Feel free to check our project on <a href="https://github.com/ucl-sdc-team-7/the-state-of-music"> Github</a>.</p>
-		<div class='flowchart' id='flow'><img src="{{url_for('static',filename = 'images/flow.png')}}" width="100%"></div>
+		<div class='chart' id='flow'><img src="{{url_for('static',filename = 'images/flow.png')}}" width="100%"></div>
 		<p> The website utilises music performance information (name, event location and genre) extracted from <a href="https://developer.ticketmaster.com/products-and-docs/apis/getting-started/">ticketmaster's</a> and <a
 						href="https://www.eventbrite.com/platform/api">eventbrite's</a> API for the next 30 days. </p>
 		<p> The genre of playing artists were then match with the one classified by <a href="https://developer.spotify.com/documentation/web-api/">Spotify’s API</a> to ensure higher accuracy of the events' genre. </p>
 		<p> All events are then grouped by genre according to a dictionary created from web-scraping <a href="https://en.wikipedia.org/wiki/List_of_music_styles">the List of Music Styles in Wikipedia</a>.</p>
 	</div></div>
-		<div class="tab-pane container active" id="menu1">
+		<div class="tab-pane container fade" id="menu1">
 		<div style="margin-top: 10px;">
 			<h3>The State of Music's Calculation</h3>
-			<p> Explaination of the normalisation method here </p>
+			<h4>How are genre weights calculated for an event?</h4>
+			<p>Genre weights are calculated similarly for Eventbrite and Ticketmaster events, but not identically.
+				For Eventbrite’s event, only event genre is returned by the API. This genre is given a weight of 1.0.</p>
+			<p>For Ticketmaster’s events, the API returns event genre, event subgenre, and artist genre.
+				Furthermore, the Spotify API returns a list of genres if the artist name exists in their database.
+				Event genre and event subgenre are given half weights of 0.5, while artist genre and Spotify genres are given weights of 1.</p>
+			<p>The example below shows how genre weights would be calculated for an event with:
+				event genre as pop, event subgenre as rock, artist genre as country, and Spotify genres as pop, rock, county, and indie.</p>
+			<div class='chart' id='genre_dist'><img src="{{url_for('static',filename = 'images/genre_dist.png')}}" width="100%"></div> <br>
+			<h4>How is the dominant genre of an event identified?</h4>
+			<p>The event above would be classified as having a dominant genre of country,
+				because the weight for this genre is highest; however, if an event had tying genre weights of pop, rock and country,
+				then its dominant genre would be shared between all three. </p>
+			<h4>How are ‘genre’ event counts calculated? </h4>
+			<p>For each ‘level’ (state, county, or venue), each genre has a number of events with that genre listed as its dominant.
+				An event with multiple dominant genres would contribute to each genre count equally. </p>
+			<h4>How are ‘genre’ event counts normalized?</h4>
+			<p>‘Genre’ event counts are normalized for state- and county-level visualizations.
+				At the state-level,  ‘genre’ event counts are normalized by dividing each by the population of the state.
+				This figure is then multiplied by one hundred thousand, as the example below illustrates. </p>
+			<p>(Note: For the state-level visualization, data is normalized by 1,000,000, for visualization purposes)</p>
+			<div class='chart' id='pop_count'><img src="{{url_for('static',filename = 'images/pop_count.png')}}" width="100%"></div><br>
+			<p>At the county-level, ‘genre’ event counts are normalized by dividing the population of the county.
+				This figure is then multiplied by one thousand, as the example below illustrates.</p>
+			<div class='chart' id='rock_count'><img src="{{url_for('static',filename = 'images/rock_count.png')}}" width="100%"></div>
 		</div></div>
 	<div class="tab-pane container fade" id="menu2">
 		<div style="margin-top: 10px;">
