@@ -13,7 +13,7 @@ function marker_opacity(d, left, right) {
 
   function split(left, right) {
     var array = [];
-    delta = (right - left) / 9;
+    delta = (right - left) / 8;
 
     while (left < right) {
       array.push(left);
@@ -25,13 +25,13 @@ function marker_opacity(d, left, right) {
 
   var result = split(left, right);
 
-  return d > result[9] ? 0.9 :
-    d > result[8] ? 0.8 :
-    d > result[7] ? 0.7 :
-    d > result[6] ? 0.6 :
-    d > result[5] ? 0.5 :
-    d > result[4] ? 0.4 :
-    d > result[3] ? 0.3 :
+  return d > result[7] ? 0.9 :
+    d > result[6] ? 0.8 :
+    d > result[5] ? 0.7 :
+    d > result[4] ? 0.6 :
+    d > result[3] ? 0.5 :
+    d > result[2] ? 0.4 :
+    d > result[1] ? 0.3 :
     0.2;
 }
 
