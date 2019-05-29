@@ -143,7 +143,7 @@ function updateSums(genre) {
     }
 
 
-    if (genre != "top") {
+    if (genre != "top" && d.length > 0) {
 
       var nums = [];
       var key = genre + '_num'
@@ -161,7 +161,7 @@ function updateSums(genre) {
       $("#infoText").html("<small>There are " + nums_arr.num + " " + GENRES[nums_arr.genre].label + " shows playing in " + level + " in the next 30 days. </br>" +
       " Some examples of this genre include " + GENRES[nums_arr.genre].sub_genres + ".</small>");
 
-    } else {
+    } else if (genre == "top" && d.length > 0){
       var mygenres = Object.keys(GENRES);
 
       var nums_arr = [];
@@ -212,7 +212,6 @@ function updateSums(genre) {
 
 
       $("#infoText").empty()
-
       $("#infoText").html("<small>There are a total of " + total_shows + " shows playing in " + level + " this month." +
         " Out of which, " +
         pop_perc + "% are pop shows, " +
@@ -223,6 +222,9 @@ function updateSums(genre) {
         electronic_perc + "% are electronic and " +
         countryfolk_perc + "% are country & folk.</small>"
       );
+    } else {
+      $("#infoText").empty()
+      $("#infoText").html("<small>No upcoming shows this month.</small>")
     }
   });
 }
