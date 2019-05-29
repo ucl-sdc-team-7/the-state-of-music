@@ -55,9 +55,9 @@ def get_states_data(genre, state):
         if genre != 'top' \
         else 'pop_num, rock_num, hip_hop_num, rnb_num, classical_and_jazz_num, electronic_num, country_and_folk_num'
 
-    where_clause = ''
+    where_clause = 'WHERE state_abbr != "DC"'
     if state:
-        where_clause = "WHERE state_abbr = '" + state + "'"
+        where_clause = " AND state_abbr = '" + state + "'"
     select_query = "SELECT state_code, state_name, state_abbr, " + \
         genre_column + ", " + genre_num + " FROM state_level_data " + \
         where_clause + " ORDER BY " + \
@@ -161,13 +161,14 @@ def get_state_stats():
         if genre != 'top' \
         else 'pop_norm, rock_norm, hip_hop_norm, rnb_norm, classical_and_jazz_norm, electronic_norm, country_and_folk_norm'
 
-    genre_num = genre + '_num' \
-        if genre != 'top' \
-        else 'pop_num, rock_num, hip_hop_num, rnb_num, classical_and_jazz_num, electronic_num, country_and_folk_num'
+    if genre != "top":
+        select_query = "SELECT state_code, state_name, state_abbr, " + \
+            genre_column + " FROM state_level_data WHERE state_abbr != 'DC' ORDER BY " + \
+            genre_column + ' DESC;'
 
-
-    select_query = "SELECT state_name, " + genre_column + ", " + genre_num + " FROM state_level_data" + \
-        " ORDER BY " + genre_column + " DESC;"
+    else:
+        select_query = "SELECT pop_norm, rock_norm, hip_hop_norm, rnb_norm, classical_and_jazz_norm, electronic_norm, country_and_folk_norm, " + \
+            "state_name FROM state_level_data WHERE state_abbr != 'DC';"
 
     cur.execute(select_query)
     data = cur.fetchall()
@@ -204,8 +205,8 @@ def get_county_stats():
     cur = mysql.connection.cursor()
 
     select_query = "SELECT county_name, " + genre_column + ", " + genre_num + \
-            " FROM county_level_data WHERE state_abbr = " + "'" + filter_state + "'"\
-            " ORDER BY " + genre_column + " DESC;"
+        " FROM county_level_data WHERE state_abbr = " + "'" + filter_state + "'"\
+        " ORDER BY " + genre_column + " DESC;"
 
     cur.execute(select_query)
     data = cur.fetchall()
