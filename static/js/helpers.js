@@ -35,6 +35,7 @@ function marker_opacity(d, left, right) {
     0.2;
 }
 
+// source: https://blockbuilder.org/FrissAnalytics/eb357a1e75320cb37993b95c77d0907e
 function wrap(text, width) {
   text.each(function() {
 
