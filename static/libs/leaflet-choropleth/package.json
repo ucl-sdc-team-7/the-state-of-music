@@ -39,7 +39,7 @@
   "deprecated": false,
   "description": "Choropleth plugin for Leaflet (color scale based on value)",
   "devDependencies": {
-    "jsdom": "^7.2.0",
+    "jsdom": "^16.5.0",
     "mocha": "^2.3.4",
     "mocha-jsdom": "^1.0.0",
     "should": "^8.0.0",
